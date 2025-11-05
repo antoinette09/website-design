@@ -2,32 +2,67 @@
 
 <head>
     <title>Website Design</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<header>
-    <div class="header" id="links">
-        <ul>
-            <li><a href="index.html">Home</li>
-            <li><a href="resources.html">Resources</a></li>
-            <li><a href="schedule.html">Schedule (Tutoring and Group Study)</a></li>
-        </ul>
+<body>
+    <!-- header with navigation-->
+    <header>
+        <a href=#home" class ="logo-link">
+            <span>Estudiar Español</span>
+        </a>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#resources">Resources</a>
+            <a href="#schedule">Schedule (Tutoring and Group Study)</a>
+    </header>
+
+    <!-- home section  -->
+    <div class="home" id="home">
+        <div class="home-content">
+            <h1>Resource Library for Learning Spanishs</h1>
+            <h3>Created by students, for students!</h3>
+        </div>
     </div>
 
-</header>
+<!-- resources section -->
+    <div class="container" id="resources">
+        <h2>Resources Across Proficiency Levels</h2>
+    <div class="image-grid">
+        <!-- A1-A2: beginner -->
+        <div class="resources-info">
+            <div class="container">
+                <h3 style ="text-align: center;">A1-A2: Beginner</h3>
+                <img src="photo" alt="photo">
+                <a href="photo" class="view-resources-button">View Resources</a>
+            </div>
+        </div>
+        
+    <!-- B1-B2: intermediate -->
+    <div class="resources-info">
+        <div class="container">
+            <h3 style ="text-align: center;">B1-B2: Intermediate</h3>
+            <img src="photo" alt="photo">
+            <a href="photo" class="view-resources-button">View Resources</a>
+        </div>
+    </div>
+    
+    <!-- C1-C2: advanced -->
+    <div class="resources-info">
+        <div class="container">
+            <h3 style ="text-align: center;">C1-C2: Advanced</h3>
+            <img src="photo" alt="photo">
+            <a href="photo" class="view-resources-button">View Resources</a>
+        </div>
+    </div>
 
+</div>
 
-
-<body>
-
-<link rel="stylesheet" href="styles.css">
-
-<h1>Estudiar Español</h1>
-
-<h3 style="color:#3A3F87;">Resource Library for Learning Spanish!</h3>
-
-<h3 style="color: #5DC7A4;">Created by students, for students!</h3>
-
-
-
+    <script src="script.js"></script>
 </body>
+</html>
