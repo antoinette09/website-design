@@ -9,7 +9,7 @@ Estudiar Español - A Spanish Learning Hub
         This project was built to demonstrate proficiency in fundamental front-end web development, focusing on robust UI/UX design, interactive features, and dynamic content management using JavaScript.
 
     Key Features
-        1. 📚 Structured Resource Library (A1 - C2)
+        1. Structured Resource Library (A1 - C2)
         The platform is organized by levels, allowing students to navigate based on their proficiency.
 
             A1-A2 (Beginner): Core vocabulary, basic conjugations, simple sentence structure.
@@ -18,21 +18,21 @@ Estudiar Español - A Spanish Learning Hub
 
             C-C2 (Advanced): Idioms, literary analysis, and specialized academic/professional vocabulary.
 
-        2. 🗓️ Dynamic Scheduling Hub
+        2. Dynamic Scheduling Hub
         A dedicated page for managing supplemental learning opportunities.
 
             Tutoring Sign-Up: A clear schedule of available 1-on-1 sessions with button-based sign-up/booking (simulated).
 
             Group Study Sessions: A schedule for collaborative language practice (speaking, grammar review) vital for fluency, using a simulated sign-up/confirmation process.
 
-        3. 📈 Student Dashboard & Progress Tracking
+        3. Student Dashboard & Progress Tracking
         The main page provides a personalized view of the student's learning journey.
         
             Completion Tracker: Displays overall progress through the levels levels (A1-C2) with visual progress bars (CSS/JS controlled).
             
             Activity Log: A chronological list of recently completed lessons, quizzes, and attended study sessions.
 
-            4. 🛠️ Interactive Learning Tools (Simulated)
+            4. Interactive Learning Tools (Simulated)
             Custom-built JavaScript tools enhance active learning:
                 
                 Verb Conjugator: A tool that allows students to input a verb and instantly see its conjugation across multiple tenses.
