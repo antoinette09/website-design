@@ -4,6 +4,7 @@
     <title>Website Design</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -62,6 +63,34 @@
     </div>
 
 </div>
+
+    <!-- schedule section -->
+    <div class="container">
+        <!-- Calendar will be rendered inside this div -->
+        <div id="calendar"></div>
+    </div>
+    
+    <!-- Event Modal (A simple form to add events) -->
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Add New Event</h2>
+            <form id="event-form">
+                <input type="hidden" id="event-date">
+                <label for="event-title-input">Title:</label>
+                <input type="text" id="event-title-input" required><br>
+                
+                <label for="event-description-input">Description (Optional):</label>
+                <textarea id="event-description-input"></textarea><br>
+
+                <button type="submit">Save Event</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. IMPORT FULLCALENDAR JAVASCRIPT -->
+    <!-- FullCalendar Core JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
 
     <script src="script.js"></script>
 </body>
