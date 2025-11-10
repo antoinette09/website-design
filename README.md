@@ -1,7 +1,7 @@
-Estudiar Español - A Spanish Learning Hub
+Español a Espacio - A Spanish Learning Hub
 
     Project Overview
-        Estudiar Español is an online learning hub designed to provide students with a structured, engaging, and community-focused path to mastering the Spanish language, from beginner (A1) to fluent (C2).
+        Español a Espacio is an online learning hub designed to provide students with a structured, engaging, and community-focused path to mastering the Spanish language, from beginner (A1) to fluent (C2).
 
         This platform addresses the common challenge of scattered online resources by consolidating essential grammar, vocabulary, and interactive tools into a single space. Moreover, it integrates tutoring and group study scheduling to ensure students receive the direct practice and support vital for language learning.
 
