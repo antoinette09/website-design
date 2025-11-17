@@ -2,6 +2,7 @@
 :root {
     --white: #f1f8e9;
     --black: #000000;
+    --light-pink: #ea6ba6;
     --pink: #d65691;
     --purple: #3e44a5;
     --light-purple: #888ff5;
@@ -36,7 +37,7 @@ header {
     box-shadow: 0 4px 12px var(--light-purple)
 }
 
-/* === logo link style === */
+/* logo link styling */
 .logo-link {
     text-decoration: none;
     font-size: 2rem;
@@ -141,7 +142,7 @@ nav a.active {
     object-fit: cover;
 }
 
-/* === sections and styling === */
+/* sections and styling */
 section {
     background: var(--beige);
     border-radius: 12px;
@@ -256,23 +257,14 @@ footer {
     text-decoration: none;
     font-size: 1rem;
     font-weight: 700;
-    color: var(--pink);
+    color: var(--light-pink);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
 
-.view-resources-button a {
-    color: var(--pink);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    position: relative;
-    padding: 0 1.5rem;
-}
-
-.view-resources-button a::after {
+.view-resources-button::after {
     content: '';
     position: absolute;
     bottom: -5px;
@@ -284,87 +276,15 @@ footer {
     transition: width 0.3s ease;
 }
 
-.view-resources-button a:hover::after,
-nav a.active::after {
+.view-resources-button:hover::after,
+view-resources-button.active::after {
     width: 80%;
 }
 
-.view-resources-button a:hover,
-.view-resources-button a.active {
-    color: var(--green);
+.view-resources-button:hover,
+view-resources-button.active {
+    color: var(--pink);
     transform: translateY(-2px);
 }
 
-
-/* calendar styling */
-#calendar {
-    max-height: 80vh;
-}
-
-/* --- modal styling --- */
-.modal {
-    display: none; /* hidden by default */
-    position: fixed; /* stays in place */
-    z-index: 1000; /* sits on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* full width */
-    height: 100%; /* full height */
-    overflow: auto; /* enables scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* black with opacity */
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 400px;
-    border-radius: 8px;
-}
-
-.close-btn {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close-btn:hover,
-.close-btn:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* form styling */
-#event-form input[type="text"], #event-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-#event-form button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-#delete-event-btn {
-    background-color: #f44336; /* red */
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-left: 10px; /* spaced from the save button */
-}
+/* schedule styling */
