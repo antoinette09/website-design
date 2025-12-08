@@ -37,12 +37,48 @@ header {
     box-shadow: 0 4px 12px var(--light-purple)
 }
 
+/* login link styling */
+.login-link {
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--light-green);
+    display: flex;
+    top: 0;
+    right: 0;
+    position: absolute;
+    gap: 10px;
+}
+
+.login-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--green);
+    transition: width 0.3s ease;
+}
+
+.login-link:hover::after,
+login-link::after {
+    width: 80%;
+}
+
+.login-link:hover,
+login-link.active {
+    color: var(--green);
+    transform: translateY(-2px);
+}
+
 /* logo link styling */
 .logo-link {
     text-decoration: none;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--pink);
+    color: var(--green);
     display: flex;
     align-items: center;
     justify-content: center;

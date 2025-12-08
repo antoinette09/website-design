@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+    <title>Website Design</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js"></script> 
+</head>
+
+<body>
+
+    <header>
+        <!-- login -->
+        <a href="login.html" class="login-link">Login</a>
+
+        <!-- logo -->
+        <a href="#home" class ="logo-link">
+            <i class="fa-solid fa-user-astronaut"></i>
+            <span>Español a Espacio</span>
+        </a>
+
+        <!-- navigation -->
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#resources">Resources</a>
+            <a href="#schedule">Schedule (Tutoring and Group Study)</a>
+        </nav>
+    </header>
+
+    <!-- login form -->
+    <form action="action_page.php" method="post">
+        <!-- input username -->
+        <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname" required>
+        <!-- input password -->
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+        <!-- login button -->
+            <button type="submit">Login</button>
+            <label>
+            <input type="checkbox" checked="checked" name="remember"> Remember me
+            </label>
+            </div>
+        <!-- button to reset password -->
+            <span class="view-resources-button">Forgot <a href="#">password?</a></span>
+        </div>
+    </form>
+
+</body>
+</html>
