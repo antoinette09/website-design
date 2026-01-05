@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-  // ==========================================
-  // 1. GLOBAL HEADER LOGIC (Runs on every page)
-  // ==========================================
+  // global header
   const loginLink = document.getElementById('login-status-link');
   const currentUserJSON = localStorage.getItem('currentUser');
   const currentUser = currentUserJSON ? JSON.parse(currentUserJSON) : null;
@@ -27,9 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   }
 
-  // ==========================================
-  // 2. GLOBAL ANNOUNCEMENT LOGIC (Runs on every page)
-  // ==========================================
+  // global announcement
   const announcementBanner = document.getElementById('announcement-banner');
   if (announcementBanner) {
       const savedAnnouncement = localStorage.getItem('siteAnnouncement');
@@ -39,9 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   }
 
-  // ==========================================
-  // 3. GLOBAL FUNCTIONS (Exposed for onclick)
-  // ==========================================
+  // global functions
   
   window.saveAnnouncement = function(e) {
       e.preventDefault();
@@ -68,17 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
           users = users.filter(user => user.id !== userId);
           localStorage.setItem('users', JSON.stringify(users));
           
-          // Call the render function if it exists
+          // calls the render function if it exists
           if (renderUserList) {
               renderUserList();
           }
       }
   };
 
-  // ==========================================
-  // 4. PROGRESS BAR LOGIC (Specific pages)
-  // ==========================================
-  const buttons = document.querySelectorAll('.complete-btn');
+  // progress bar
+  const buttons = document.querySelectorAll('.complete-button');
   if (buttons.length > 0) {
       const total = buttons.length;
       let done = 0;
@@ -92,24 +84,24 @@ document.addEventListener('DOMContentLoaded', () => {
           text.textContent = `${done} of ${total} activities completed`;
       }
 
-      buttons.forEach(btn => {
-          btn.addEventListener('click', () => {
-              const card = btn.closest('.activity-card');
-              const isDone = btn.textContent === 'Undo';
+      buttons.forEach(button => {
+          button.addEventListener('click', () => {
+              const card = button.closest('.activity-card');
+              const isDone = button.textContent === 'Undo';
 
               if (isDone) {
                   card.querySelectorAll('h4, p').forEach(el => {
                       el.style.textDecoration = 'none';
                       el.style.color = '';
                   });
-                  btn.textContent = 'Mark as Done';
+                  button.textContent = 'Mark as Done';
                   done--;
               } else {
                   card.querySelectorAll('h4, p').forEach(el => {
                       el.style.textDecoration = 'line-through';
                       el.style.color = '#888';
                   });
-                  btn.textContent = 'Undo';
+                  button.textContent = 'Undo';
                   done++;
               }
               update();
@@ -118,9 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
       update();
   }
 
-  // ==========================================
-  // 5. LOGIN SYSTEM LOGIC (Login page only)
-  // ==========================================
+  // login system
   if (document.getElementById('auth-form')) {
       
       const ADMIN_SECRET_CODE = "oa9043570"; 
@@ -131,14 +121,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const formTitle = document.getElementById('form-title');
       const formSubtitle = document.getElementById('form-subtitle');
       const authForm = document.getElementById('auth-form');
-      const submitBtn = document.getElementById('submit-btn');
+      const submitbutton = document.getElementById('submit-button');
       const toggleTextSpan = document.getElementById('toggle-text-span');
-      const toggleModeBtn = document.querySelector('.auth-container button[onclick="toggleAuthMode()"]');
+      const toggleModebutton = document.querySelector('.auth-container button[onclick="toggleAuthMode()"]');
       const adminCodeGroup = document.getElementById('admin-code-group');
       const messageArea = document.getElementById('message-area');
       const userListContainer = document.getElementById('user-list-container');
 
-      // Check Session on Load
+      // checks session once loaded
       if (currentUser) {
           if (currentUser.role === 'admin') {
               showAdminDashboard();
@@ -168,14 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const roleClass = user.role === 'admin' ? 'role-admin' : 'role-user';
             
-            // Logic: Add delete button IF the logged-in user is NOT the user being displayed
-            // (Optional: You can prevent deleting admins if you want, but here I'll allow deleting anyone except yourself maybe?)
+            // adds delete button if the logged-in user is not the user being displayed
             const isCurrentUser = (currentUser && currentUser.id === user.id);
             let deleteButtonHtml = '';
             
-            // Allow deleting unless it is yourself (deleting yourself while logged in causes weirdness)
+            // allows deleting unless it is yourself
             if (!isCurrentUser) {
-                deleteButtonHtml = `<button class="delete-user-btn" onclick="deleteUser(${user.id})">Delete</button>`;
+                deleteButtonHtml = `<button class="delete-user-button" onclick="deleteUser(${user.id})">Delete</button>`;
             }
 
             div.innerHTML = `
@@ -191,14 +180,57 @@ document.addEventListener('DOMContentLoaded', () => {
             userListContainer.appendChild(div);
         });
         
-        // Pre-fill the announcement box with current value if it exists
+        // autofills the announcement box with current value if it exists
         const currentAnnouncement = localStorage.getItem('siteAnnouncement');
         const annInput = document.getElementById('announcement-input');
         if (annInput && currentAnnouncement) {
             annInput.value = currentAnnouncement;
         }
-    }
+    };
 
+        if(toggleModebutton) {
+            toggleModebutton.addEventListener('click', toggleAuthMode);
+        }
+        authForm.addEventListener('submit', handleAuth);
+
+      function toggleAuthMode() {
+        isLoginMode = !isLoginMode;
+        clearMessage();
+        if (isLoginMode) {
+            formTitle.textContent = "Student Login";
+            formSubtitle.textContent = "Welcome back to the Learning Hub";
+            submitButton.textContent = "Log In";
+            toggleTextSpan.textContent = "Don't have an account?";
+            toggleModebutton.textContent = "Sign Up";
+            adminCodeGroup.classList.add('hidden');
+        } else {
+            formTitle.textContent = "Create Account";
+            formSubtitle.textContent = "Join the Spanish community today";
+            submitButton.textContent = "Sign Up";
+            toggleTextSpan.textContent = "Already have an account?";
+            toggleModebutton.textContent = "Log In";
+            adminCodeGroup.classList.add('hidden');
+        }
+      }
+
+      function handleAuth(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const admindCodeInput = document.getElementById('admin-code').value.trim();
+
+        if (!username || !password || !password) {
+            showMessage("Please fill in all required fields.", "error");
+            return;
+        }
+
+        if (isLoginMode) {
+            loginUser(username, password);
+        } else {
+            registerUser(username, password, adminCodeInput);
+        }
+
+      }
       function registerUser(username, password, adminCode) {
           const users = JSON.parse(localStorage.getItem('users')) || [];
           if (users.find(u => u.username === username)) {

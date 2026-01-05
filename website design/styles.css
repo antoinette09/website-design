@@ -1,4 +1,4 @@
-/* styles.css color scheme*/
+/* color scheme */
 :root {
     --white: #f1f8e9;
     --black: #000000;
@@ -37,7 +37,7 @@ header {
     box-shadow: 0 4px 12px var(--light-purple)
 }
 
-/* login link styling */
+/* login link */
 .login-link {
     text-decoration: none;
     font-size: 2rem;
@@ -73,7 +73,7 @@ login-link.active {
     transform: translateY(-2px);
 }
 
-/* logo link styling */
+/* logo link */
 .logo-link {
     text-decoration: none;
     font-size: 2rem;
@@ -178,7 +178,7 @@ nav a.active {
     object-fit: cover;
 }
 
-/* sections and styling */
+/* sections and headers */
 section {
     background: var(--beige);
     border-radius: 12px;
@@ -213,10 +213,13 @@ img {
     margin: 1rem 0;
 }
 
-.link-button {
+/* link buttons */
+.form-button { 
     background: var(--pink);
     color: var(--white);
     border: none;
+    display: inline-block;
+    width: auto;
     padding: 0.8rem 1.8rem;
     border-radius: 20px;
     cursor: pointer;
@@ -225,12 +228,11 @@ img {
     font-family: 'Quicksand', sans-serif;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px var(--black);
-    display: inline-block;
     text-decoration: none;
     margin-top: 1rem;
 }
 
-.link-button:hover {
+.form-button:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 15px var(--black);
     background: var(--green);
@@ -277,7 +279,7 @@ footer {
     margin-right: auto;
 }
 
-/* resources styling */
+/* resources section */
 .resource-info {
     padding: 1.5rem;
     text-align: center;
@@ -323,76 +325,14 @@ view-resources-button.active {
     transform: translateY(-2px);
 }
 
-/* schedule styling */
-
-/* progress bar styling */
+/* progress bar */
 .sticky-header {
     position: sticky;
     top: 0;
     background: white;
     padding: 20px;
     box-shadow: 0 2px 10px var(--light-purple);
-    z-index: 100; /* ensures it stays on top of other things */
-}
-
-
-/* --- section styling --- */
-.hub-section {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 0 20px;
-}
-
-.section-title {
-    color: #2d3436;
-    border-bottom: 2px solid var(--purple);
-    display: inline-block;
-    margin-bottom: 20px;
-}
-
-/* box that holds a video/activity */
-.activity-card {
-    background: white;
-    padding: 20px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px var(--light-purple);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.activity-info h4 {
-    margin: 0 0 5px 0;
-}
-
-.activity-info p {
-    margin: 0;
-    color: var(--purple);
-    font-size: 0.9em;
-}
-
-/* --- button styling --- */
-.complete-btn {
-    padding: 10px 20px;
-    border: 2px solid var(--light-purple);
-    background: transparent;
-    color: var(--light-purple);
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.complete-btn:hover {
-    background-color: var(--light-green);
-}
-
-
-.activity-card.completed .activity-info h4,
-.activity-card.completed .activity-info p {
-    text-decoration: line-through;
-    color: var(--white);
+    z-index: 100;
 }
 
 .progress-container {
@@ -416,7 +356,66 @@ view-resources-button.active {
     transition: width 0.3s;
 }
 
-/* Login Container */
+/* --- section styling --- */
+.hub-section {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    color: #2d3436;
+    border-bottom: 2px solid var(--purple);
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+/* activity box */
+.activity-card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px var(--light-purple);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.activity-info h4 {
+    margin: 0 0 5px 0;
+}
+
+.activity-info p {
+    margin: 0;
+    color: var(--purple);
+    font-size: 0.9em;
+}
+
+/* --- completed button styling --- */
+.complete-button {
+    padding: 10px 20px;
+    border: 2px solid var(--light-purple);
+    background: transparent;
+    color: var(--light-purple);
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.complete-button:hover {
+    background-color: var(--light-green);
+}
+
+
+.activity-card.completed .activity-info h4,
+.activity-card.completed .activity-info p {
+    text-decoration: line-through;
+    color: var(--white);
+}
+
+/* login section */
 .login {
     display: flex;
     justify-content: center;
@@ -451,7 +450,7 @@ view-resources-button.active {
     margin-top: 0.5rem;
 }
 
-/* Form Elements */
+/* sign up + login form */
 .form-group {
     margin-bottom: 1.5rem;
     position: relative;
@@ -467,13 +466,13 @@ view-resources-button.active {
 
 .form-group input {
     width: 100%;
-    padding: 12px 15px 12px 40px; /* Space for icon */
+    padding: 12px 15px 12px 40px;
     border: 2px solid #ecf0f1;
     border-radius: 8px;
     font-family: 'Quicksand', sans-serif;
     font-size: 1rem;
     transition: all 0.3s ease;
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    box-sizing: border-box;
 }
 
 .form-group input:focus {
@@ -486,13 +485,13 @@ view-resources-button.active {
     color: var(--primary-color);
 }
 
-/* Feedback Messages */
+/* feedback messages */
 .message-box {
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 1rem;
     font-size: 0.9rem;
-    display: none; /* Hidden by default */
+    display: none; /* hidden by default */
     text-align: center;
 }
 
@@ -510,7 +509,7 @@ view-resources-button.active {
     display: block;
 }
 
-/* Admin Dashboard (Hidden by default) */
+/* admin view (hidden by default) */
 #admin-view {
     display: none;
     width: 100%;
@@ -565,7 +564,7 @@ view-resources-button.active {
     color: #0c5460;
 }
 
-.btn-logout {
+.buton-logout {
     background-color: var(--error-color);
     color: white;
     padding: 8px 16px;
@@ -575,16 +574,16 @@ view-resources-button.active {
     font-family: 'Quicksand', sans-serif;
 }
 
-.btn-logout:hover {
+.button-logout:hover {
     background-color: #c0392b;
 }
 
-/* Helper to switch views */
+/* to switch views */
 .hidden {
     display: none !important;
 }
 
-/* Mobile Adjustments */
+/* mobile adjustments */
 @media (max-width: 600px) {
     .auth-container {
         padding: 1.5rem;
@@ -594,9 +593,8 @@ view-resources-button.active {
     }
 }
 
-/* Fixes for Login Page Buttons */
-.auth-container .link-button {
-    width: 100%; /* Make buttons full width */
+.auth-container .form-button {
+    width: 100%; 
     display: flex; 
     justify-content: center;
     align-items: center;
@@ -604,36 +602,36 @@ view-resources-button.active {
     text-align: center;
 }
 
-/* Specific fix for the toggle button to not be huge */
-.auth-container form div[style*="text-align: center"] .link-button {
-    width: auto; /* Revert to auto width for the small toggle link */
+/* toggle button */
+.auth-container form div[style*="text-align: center"] .form-button {
+    width: auto;
     margin-top: 5px;
-    box-shadow: none; /* Optional: remove shadow for the small link */
+    box-shadow: none;
     background: transparent;
     border: 2px solid var(--pink);
     color: var(--pink);
 }
 
-.auth-container form div[style*="text-align: center"] .link-button:hover {
+.auth-container form div[style*="text-align: center"] .form-button:hover {
     background: var(--pink);
     color: var(--white);
 }
 
-/* Announcement Banner Styling */
+/* annoucement banner */
 #announcement-banner {
-    background-color: var(--orange); /* Use your defined orange */
+    background-color: var(--orange);
     color: var(--white);
     text-align: center;
     padding: 1rem;
     font-weight: 700;
-    display: none; /* Hidden by default */
+    display: none; /* hidden by default */
     margin-bottom: 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Delete User Button */
-.delete-user-btn {
-    background-color: var(--pink); /* Use your pink as error color */
+/* delete user button */
+.delete-user-button {
+    background-color: var(--pink);
     color: var(--white);
     border: none;
     padding: 5px 10px;
@@ -644,11 +642,11 @@ view-resources-button.active {
     transition: background 0.3s;
 }
 
-.delete-user-btn:hover {
-    background-color: #c0392b; /* Darker red on hover */
+.delete-user-button:hover {
+    background-color: #c0392b;
 }
 
-/* Admin Form Styling for Announcements */
+/* for admin announcements */
 .admin-form-group {
     margin-bottom: 1rem;
 }

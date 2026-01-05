@@ -30,7 +30,7 @@
 
     <div class="login">
         
-        <!-- form to login/register -->
+        <!-- form to sign up + login -->
         <div class="auth-container" id="auth-forms">
             <div class="auth-header">
                 <h2 id="form-title">Student Login</h2>
@@ -43,17 +43,14 @@
             <form id="auth-form">
                 <!-- to put username -->
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username">Username <i class="fa-solid fa-user input-icon fa-sm"></i></label>
                     <input type="text" id="username" placeholder="Enter your username" required>
-                    <!-- Icon moved here for CSS compatibility -->
-                    <i class="fa-solid fa-user input-icon"></i>
                 </div>
 
                 <!-- to put password -->
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Password <i class="fa-solid fa-lock input-icon fa-sm"></i></label>
                     <input type="password" id="password" placeholder="Enter your password" required>
-                    <i class="fa-solid fa-lock input-icon"></i>
                 </div>
 
                 <!-- to put admin code -->
@@ -65,30 +62,30 @@
                 </div>
 
                 <!-- submit button -->
-                <button type="submit" class="link-button" id="submit-btn">Log In</button>
+                <button type="submit" class="form-button" id="submit-button">Log In</button>
 
                 <!-- to change between log in/sign up -->
                 <div style="text-align: center; margin-top: 1rem;">
                     <span id="toggle-text-span" style="color: var(--pink);">Don't have an account? </span>
-                    <button type="button" class="link-button" onclick="toggleAuthMode()" style="display: inline-block; width: auto; padding: 0.5rem 1rem; font-size: 0.9rem;">Sign Up</button>
+                    <button type="button" class="form-button" onclick="toggleAuthMode()"" style="display: inline-block; width: auto; padding: 0.5rem 1.5rem;">Sign Up</button>
                 </div>
             </form>
         </div>
 
-        <!-- ADMIN VIEW (Cleaned up structure) -->
+        <!-- admin view -->
         <div id="admin-view">
             <div class="admin-header">
                 <div>
                     <h2 style="color: var(--pink);">Admin Dashboard</h2>
-                    <p>Manage user accounts and access.</p>
+                    <p>Manage user accounts and access</p>
                 </div>
-                <button class="link-button" onclick="handleLogout()">Log Out</button>
+                <button class="form-button" onclick="handleLogout()">Log Out</button>
             </div>
 
-            <!-- Announcements Section -->
+            <!-- annoucements section -->
             <section style="background: var(--white); border: 2px solid var(--light-purple); margin-bottom: 2rem; padding: 1.5rem;">
                 <h3 style="color: var(--purple);">Post an Announcement</h3>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">This will appear at the top of the home page for all users.</p>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">This will appear at the top of the home page for all users</p>
                 <form onsubmit="saveAnnouncement(event)">
                     <div class="admin-form-group">
                         <textarea id="announcement-input" class="admin-textarea" rows="3" placeholder="Type your announcement here..."></textarea>
@@ -98,7 +95,7 @@
                 </form>
             </section>
 
-            <!-- User List -->
+            <!-- user list -->
             <div class="user-list" id="user-list-container"></div>
         </div>
 
