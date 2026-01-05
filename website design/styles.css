@@ -415,3 +415,256 @@ view-resources-button.active {
     justify-content: center;
     transition: width 0.3s;
 }
+
+/* Login Container */
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding: 2rem;
+}
+
+.auth-container {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 450px;
+    position: center;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+    margin: 0;
+    color: var(--secondary-color);
+}
+
+.auth-header p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px 12px 40px; /* Space for icon */
+    border: 2px solid #ecf0f1;
+    border-radius: 8px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.form-group input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.form-group input:focus + .input-icon {
+    color: var(--primary-color);
+}
+
+/* Feedback Messages */
+.message-box {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    display: none; /* Hidden by default */
+    text-align: center;
+}
+
+.message-box.error {
+    background-color: #fadbd8;
+    color: #c0392b;
+    border: 1px solid #f5b7b1;
+    display: block;
+}
+
+.message-box.success {
+    background-color: #d4efdf;
+    color: #27ae60;
+    border: 1px solid #a9dfbf;
+    display: block;
+}
+
+/* Admin Dashboard (Hidden by default) */
+#admin-view {
+    display: none;
+    width: 100%;
+    max-width: 800px;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.user-list {
+    background: var(--white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #ecf0f1;
+    align-items: center;
+}
+
+.user-item:last-child {
+    border-bottom: none;
+}
+
+.user-role-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.role-admin {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.role-user {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.btn-logout {
+    background-color: var(--error-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.btn-logout:hover {
+    background-color: #c0392b;
+}
+
+/* Helper to switch views */
+.hidden {
+    display: none !important;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+    .auth-container {
+        padding: 1.5rem;
+    }
+    .login-wrapper {
+        padding: 1rem;
+    }
+}
+
+/* Fixes for Login Page Buttons */
+.auth-container .link-button {
+    width: 100%; /* Make buttons full width */
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Specific fix for the toggle button to not be huge */
+.auth-container form div[style*="text-align: center"] .link-button {
+    width: auto; /* Revert to auto width for the small toggle link */
+    margin-top: 5px;
+    box-shadow: none; /* Optional: remove shadow for the small link */
+    background: transparent;
+    border: 2px solid var(--pink);
+    color: var(--pink);
+}
+
+.auth-container form div[style*="text-align: center"] .link-button:hover {
+    background: var(--pink);
+    color: var(--white);
+}
+
+/* Announcement Banner Styling */
+#announcement-banner {
+    background-color: var(--orange); /* Use your defined orange */
+    color: var(--white);
+    text-align: center;
+    padding: 1rem;
+    font-weight: 700;
+    display: none; /* Hidden by default */
+    margin-bottom: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Delete User Button */
+.delete-user-btn {
+    background-color: var(--pink); /* Use your pink as error color */
+    color: var(--white);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 10px;
+    transition: background 0.3s;
+}
+
+.delete-user-btn:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
+/* Admin Form Styling for Announcements */
+.admin-form-group {
+    margin-bottom: 1rem;
+}
+
+.admin-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--purple);
+    font-weight: 600;
+}
+
+.admin-textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid var(--light-purple);
+    font-family: 'Quicksand', sans-serif;
+    resize: vertical;
+}
