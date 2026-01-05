@@ -62,12 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   };
 
-  // Helper to render list (Defined globally so deleteUser can see it)
-  // We will define the actual function inside the Login System block below,
-  // but we need to make sure deleteUser can access it. 
-  // Actually, defining it in the shared scope is safer.
-  let renderUserList = null; 
-
   window.deleteUser = function(userId) {
       if (confirm("Are you sure you want to delete this user? This cannot be undone.")) {
           let users = JSON.parse(localStorage.getItem('users')) || [];
