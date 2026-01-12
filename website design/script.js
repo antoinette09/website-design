@@ -206,14 +206,13 @@ document.addEventListener('DOMContentLoaded', () => {
               submitbutton.textContent = "Log In";
               toggleTextSpan.textContent = "Don't have an account?";
               toggleModeButton.textContent = "Sign Up";
-              adminCodeGroup.classList.add('hidden'); // Hide in Login Mode
+              adminCodeGroup.classList.add('hidden'); // hide in login mode
           } else {
               formTitle.textContent = "Create Account";
               formSubtitle.textContent = "Join the Spanish community today";
               submitbutton.textContent = "Sign Up";
               toggleTextSpan.textContent = "Already have an account?";
               toggleModeButton.textContent = "Log In";
-              // FIXED: Removed .add('hidden') and replaced with .remove('hidden')
               adminCodeGroup.classList.remove('hidden');
           }
         }
@@ -222,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
           e.preventDefault();
           const username = document.getElementById('username').value.trim();
           const password = document.getElementById('password').value.trim();
-          // FIXED: Variable typo admindCodeInput -> adminCodeInput
           const adminCodeInput = document.getElementById('admin-code').value.trim();
   
           if (!username || !password) {
@@ -280,7 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
   
-        // FIXED: Expose handleLogout to the window object so HTML onclick works
         window.handleLogout = function() {
             localStorage.removeItem('currentUser');
             window.location.reload();

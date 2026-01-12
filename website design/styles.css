@@ -9,7 +9,15 @@
     --orange: #F0983E;
     --green: #5bd7ae;
     --light-green: #a9e7d2;
-    --beige: #FFF9D1;
+    --beige: #FFFCEC;
+    --dark-beige: #E2DECD;
+    --background: #FFFEF4;
+    --red: #A51313;
+    --dark-red: #8B0000;
+    --brown: #8D4000;
+    --dark-yellow: #6F5E00;
+    --gray: #2D2D2D;
+    
 }
 
 * {
@@ -19,8 +27,8 @@
 }
 
 body {
-    background: var(--white);
-    color: var(--pink);
+    background: var(--beige);
+    color: var(--red);
     font-family: 'Quicksand', sans-serif;
     line-height: 1.6;
     padding-top: 0px;
@@ -31,10 +39,10 @@ header {
     position: sticky;
     top: 0;
     z-index:1000;
-    background: linear-gradient(var(--light-purple), var(--purple));
+    background: var(--red);
     padding: 2.5rem 0;
     text-align: center;
-    box-shadow: 0 4px 12px var(--light-purple)
+    box-shadow: 0 4px 12px var(--dark-beige)
 }
 
 /* login link */
@@ -42,7 +50,7 @@ header {
     text-decoration: none;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--light-green);
+    color: var(--red);
     display: flex;
     top: 0;
     right: 0;
@@ -58,7 +66,7 @@ header {
     transform: translateX(-50%);
     width: 0;
     height: 2px;
-    background: var(--green);
+    background: var(--dark-red);
     transition: width 0.3s ease;
 }
 
@@ -69,7 +77,7 @@ login-link::after {
 
 .login-link:hover,
 login-link.active {
-    color: var(--green);
+    color: var(--red);
     transform: translateY(-2px);
 }
 
@@ -78,7 +86,7 @@ login-link.active {
     text-decoration: none;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--green);
+    color: var(--red);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -86,11 +94,11 @@ login-link.active {
 }
 
 .logo-link i {
-    color: var(--green);
+    color: var(--red);
 }
 
 .logo-link span {
-    color: var(--green);
+    color: var(--red);
 }
 
 /* navigation menu */
@@ -103,7 +111,7 @@ nav {
 }
 
 nav a {
-    color: var(--light-green);
+    color: var(--red);
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
@@ -119,7 +127,7 @@ nav a::after {
     transform: translateX(-50%);
     width: 0;
     height: 2px;
-    background: var(--green);
+    background: var(--dark-red);
     transition: width 0.3s ease;
 }
 
@@ -130,7 +138,7 @@ nav a.active::after {
 
 nav a:hover,
 nav a.active {
-    color: var(--green);
+    color: var(--dark-red);
     transform: translateY(-2px);
 }
 
@@ -164,12 +172,12 @@ nav a.active {
     background: var(--beige);
     border: 1px solid var(--border);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 8px var(--black);
+    box-shadow: 0 4px 8px var(--dark-beige);
 }
 
 .image-grid > div:hover {
     transform: translateY(-10px);
-    box-shadow: 0 10px 20px var(--black);
+    box-shadow: 0 10px 20px var(--dark-beige);
 }
 
 .image-grid img {
@@ -184,20 +192,20 @@ section {
     border-radius: 12px;
     padding: 2rem;
     margin-bottom: 2rem;
-    border: 1px solid var(--green);
+    border: 1px solid var(--red);
     width: 100%;
     max-width: 1000px;
     text-align: center;
 }
 
 h2 {
-    color: var(--green);
+    color: var(--red);
     margin-bottom: 1rem;
     font-size: 2.2rem;
 }
 
 h3 {
-    color: var(--pink);
+    color: var(--brown);
     margin: 1rem 0 0.5rem;
     font-size: 1.4rem;
 }
@@ -209,13 +217,13 @@ img {
     max-width: 300px;
     height: 300px;
     object-fit: cover;
-    border: 2px solid var(--green);
+    border: 2px solid var(--red);
     margin: 1rem 0;
 }
 
 /* link buttons */
 .form-button { 
-    background: var(--pink);
+    background: var(--brown);
     color: var(--white);
     border: none;
     display: inline-block;
@@ -227,29 +235,29 @@ img {
     font-weight: 600;
     font-family: 'Quicksand', sans-serif;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px var(--black);
+    box-shadow: 0 2px 8px var(--dark-beige);
     text-decoration: none;
     margin-top: 1rem;
 }
 
 .form-button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 15px var(--black);
-    background: var(--green);
+    box-shadow: 0 6px 15px var(--dark-beige);
+    background: var(--red);
 }
 
 footer {
     text-align: center;
     padding: 2rem;
     background: #e8f5e9;
-    color: var(--pink);
+    color: var(--brown);
     margin-top: 3rem;
     width: 100%;
 }
 
 /* home section */
 .home {
-    background: linear-gradient(var(--white), var(--light-purple)), url() center/cover no-repeat;
+    background: var(--beige))
     height: 60vh;
     display: flex;
     align-items: center;
@@ -257,7 +265,7 @@ footer {
     text-align: center;
     margin-bottom: 2rem;
     border-radius: 12px;
-    border: 1px solid var(--green);
+    border: 1px solid var(--red);
 }
 
 .home-content {
@@ -268,7 +276,7 @@ footer {
 .home h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
-    color: var(--pink);
+    color: var(--brown);
 }
 
 .home p {
@@ -295,7 +303,7 @@ footer {
     text-decoration: none;
     font-size: 1rem;
     font-weight: 700;
-    color: var(--light-pink);
+    color: var(--red);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -310,7 +318,7 @@ footer {
     transform: translateX(-50%);
     width: 0;
     height: 2px;
-    background: var(--pink);
+    background: var(--brown);
     transition: width 0.3s ease;
 }
 
@@ -321,7 +329,7 @@ view-resources-button.active::after {
 
 .view-resources-button:hover,
 view-resources-button.active {
-    color: var(--pink);
+    color: var(--dark-red);
     transform: translateY(-2px);
 }
 
@@ -331,14 +339,14 @@ view-resources-button.active {
     top: 0;
     background: white;
     padding: 20px;
-    box-shadow: 0 2px 10px var(--light-purple);
+    box-shadow: 0 2px 10px var(--red);
     z-index: 100;
 }
 
 .progress-container {
     width: 100%;
     height: 20px;
-    background: var(--white);
+    background: var(--beige);
     border-radius: 10px;
     margin: 10px 0;
     overflow: hidden;
@@ -347,7 +355,7 @@ view-resources-button.active {
 #mainProgressBar {
     height: 100%;
     width: 0%;
-    background: var(--green);
+    background: var(--red);
     color: white;
     font-size: 0.8em;
     display: flex;
@@ -365,7 +373,7 @@ view-resources-button.active {
 
 .section-title {
     color: #2d3436;
-    border-bottom: 2px solid var(--purple);
+    border-bottom: 2px solid var(--red);
     display: inline-block;
     margin-bottom: 20px;
 }
@@ -376,7 +384,7 @@ view-resources-button.active {
     padding: 20px;
     margin-bottom: 15px;
     border-radius: 10px;
-    box-shadow: 0 2px 5px var(--light-purple);
+    box-shadow: 0 2px 5px var(--dark-red);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -395,9 +403,9 @@ view-resources-button.active {
 /* --- completed button styling --- */
 .complete-button {
     padding: 10px 20px;
-    border: 2px solid var(--light-purple);
+    border: 2px solid var(--dark-red);
     background: transparent;
-    color: var(--light-purple);
+    color: var(--dark-red);
     border-radius: 25px;
     cursor: pointer;
     font-weight: bold;
@@ -405,14 +413,14 @@ view-resources-button.active {
 }
 
 .complete-button:hover {
-    background-color: var(--light-green);
+    background-color: var(--red);
 }
 
 
 .activity-card.completed .activity-info h4,
 .activity-card.completed .activity-info p {
     text-decoration: line-through;
-    color: var(--white);
+    color: var(--beige);
 }
 
 /* login section */
@@ -425,7 +433,7 @@ view-resources-button.active {
 }
 
 .auth-container {
-    background: var(--white);
+    background: var(--beige);
     padding: 2.5rem;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
@@ -441,7 +449,7 @@ view-resources-button.active {
 
 .auth-header h2 {
     margin: 0;
-    color: var(--secondary-color);
+    color: var(--red);
 }
 
 .auth-header p {
@@ -461,7 +469,7 @@ view-resources-button.active {
     margin-bottom: 0.5rem;
     font-weight: 600;
     font-size: 0.9rem;
-    color: var(--secondary-color);
+    color: var(--red);
 }
 
 .form-group input {
@@ -476,13 +484,13 @@ view-resources-button.active {
 }
 
 .form-group input:focus {
-    border-color: var(--primary-color);
+    border-color: var(--red);
     outline: none;
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
 }
 
 .form-group input:focus + .input-icon {
-    color: var(--primary-color);
+    color: var(--red);
 }
 
 /* feedback messages */
@@ -496,16 +504,16 @@ view-resources-button.active {
 }
 
 .message-box.error {
-    background-color: #fadbd8;
-    color: #c0392b;
-    border: 1px solid #f5b7b1;
+    background-color: var(--beige);
+    color: var(--dark-red);
+    border: 1px solid (--red);
     display: block;
 }
 
 .message-box.success {
-    background-color: #d4efdf;
-    color: #27ae60;
-    border: 1px solid #a9dfbf;
+    background-color: var(--beige);
+    color: var(--green);
+    border: 1px solid var(--light-green);
     display: block;
 }
 
@@ -521,24 +529,24 @@ view-resources-button.active {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
-    background: var(--white);
+    background: var(--beige);
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
 .user-list {
-    background: var(--white);
+    background: var(--beige);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px var(--dark-beige);
 }
 
 .user-item {
     display: flex;
     justify-content: space-between;
     padding: 1rem 1.5rem;
-    border-bottom: 1px solid #ecf0f1;
+    border-bottom: 1px solid var(--beige);
     align-items: center;
 }
 
@@ -555,8 +563,8 @@ view-resources-button.active {
 }
 
 .role-admin {
-    background-color: #fff3cd;
-    color: #856404;
+    background-color:var(--beige);
+    color: var(--dark-beige);
 }
 
 .role-user {
@@ -566,7 +574,7 @@ view-resources-button.active {
 
 .buton-logout {
     background-color: var(--error-color);
-    color: white;
+    color: var(--white);
     padding: 8px 16px;
     border-radius: 6px;
     border: none;
@@ -575,7 +583,7 @@ view-resources-button.active {
 }
 
 .button-logout:hover {
-    background-color: #c0392b;
+    background-color: var(--red);
 }
 
 /* to switch views */
@@ -608,30 +616,30 @@ view-resources-button.active {
     margin-top: 5px;
     box-shadow: none;
     background: transparent;
-    border: 2px solid var(--pink);
-    color: var(--pink);
+    border: 2px solid var(--red);
+    color: var(--red);
 }
 
 .auth-container form div[style*="text-align: center"] .form-button:hover {
-    background: var(--pink);
-    color: var(--white);
+    background: var(--red);
+    color: var(--dark-red);
 }
 
 /* annoucement banner */
 #announcement-banner {
-    background-color: var(--orange);
-    color: var(--white);
+    background-color: var(--brown);
+    color: var(--beige);
     text-align: center;
     padding: 1rem;
     font-weight: 700;
     display: none; /* hidden by default */
     margin-bottom: 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px var(--dark-beige);
 }
 
 /* delete user button */
 .delete-user-button {
-    background-color: var(--pink);
+    background-color: var(--red);
     color: var(--white);
     border: none;
     padding: 5px 10px;
@@ -643,7 +651,7 @@ view-resources-button.active {
 }
 
 .delete-user-button:hover {
-    background-color: #c0392b;
+    background-color: var(--dark-red);
 }
 
 /* for admin announcements */
@@ -654,7 +662,7 @@ view-resources-button.active {
 .admin-form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--purple);
+    color: var(--dark-red);
     font-weight: 600;
 }
 
@@ -662,7 +670,7 @@ view-resources-button.active {
     width: 100%;
     padding: 10px;
     border-radius: 8px;
-    border: 2px solid var(--light-purple);
+    border: 2px solid var(--red);
     font-family: 'Quicksand', sans-serif;
     resize: vertical;
 }
