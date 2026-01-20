@@ -15,8 +15,8 @@
 
     <header>
         <!-- logo -->
-        <a href="index.html#home" class ="logo-link">
-            <i class="fa-solid fa-user-astronaut"></i>
+        <a href="#home" class ="logo-link">
+            <img src="astronaut.png" class="level-icon" alt="Astronaut Icon" style="border: none;">
             <span>Español a Espacio</span>
         </a>
 
@@ -43,31 +43,29 @@
             <form id="auth-form">
                 <!-- to put username -->
                 <div class="form-group">
-                    <label for="username">Username <i class="fa-solid fa-user input-icon fa-sm"></i></label>
+                    <label for="username">Username</label>
                     <input type="text" id="username" placeholder="Enter your username" required>
                 </div>
 
                 <!-- to put password -->
                 <div class="form-group">
-                    <label for="password">Password <i class="fa-solid fa-lock input-icon fa-sm"></i></label>
+                    <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Enter your password" required>
                 </div>
 
                 <!-- to put admin code -->
                 <div class="form-group hidden" id="admin-code-group">
-                    <label for="admin-code">Admin Code (Optional)  <i class="fa-solid fa-shield-halved input-icon fa-sm"></i></label>
+                    <label for="admin-code">Admin Code (Optional)</label>
                     <input type="text" id="admin-code" placeholder="Enter secret code for Admin privileges">
                     <p style="font-size: 0.8rem; margin-top: 5px;">Leave empty for standard student access.</p>
                 </div>
 
                 <!-- submit button -->
-                <!-- Changed ID to submitbutton to match JS -->
                 <button type="submit" class="form-button" id="submitbutton">Log In</button>
 
                 <!-- to change between log in/sign up -->
                 <div style="text-align: center; margin-top: 1rem;">
                     <span id="toggle-text-span" style="color: var(--pink);">Don't have an account? </span>
-                    <!-- FIXED: Removed the extra quote here -->
                     <button type="button" class="form-button" onclick="toggleAuthMode()" style="display: inline-block; width: auto; padding: 0.5rem 1.5rem;">Sign Up</button>
                 </div>
             </form>
