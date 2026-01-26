@@ -692,3 +692,7 @@ iframe {
     font-family: 'Outfit', sans-serif;
     resize: vertical;
 }
+
+.hidden {
+    display: none !important;
+}
