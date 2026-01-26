@@ -610,6 +610,28 @@ a {
     .auth-container { padding: 1.5rem; }
     .login-wrapper { padding: 1rem; }
     .home h1 { font-size: 2.5rem; }
+
+    .activity-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .activity-info {
+        width: 100%;
+    }
+
+    .activity-info iframe {
+        width: 100%;    
+        height: auto;    
+        aspect-ratio: 16/9; 
+    }
+
+
+    .complete-button {
+        width: 100%;
+        margin-left: 0; 
+    }
 }
 
 /* announcement banner */
