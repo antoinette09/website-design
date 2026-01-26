@@ -627,11 +627,16 @@ a {
         aspect-ratio: 16/9; 
     }
 
-
     .complete-button {
         width: 100%;
         margin-left: 0; 
     }
+}
+
+iframe { 
+    width: 100%;    
+    height: auto;    
+    aspect-ratio: 16/9; 
 }
 
 /* announcement banner */
