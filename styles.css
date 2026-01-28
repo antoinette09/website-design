@@ -94,7 +94,7 @@ header {
     text-shadow: var(--glow-primary);
 }
 
-/* --- GRID CARD STYLING --- */
+/*  GRID CARD STYLING  */
 .image-grid > div {
     position: relative;
     width: 100%;
@@ -234,6 +234,24 @@ img {
     filter: none;          
     border-radius: 0;  
     border: none;
+}
+
+.link-button { 
+    background: var(--accent-cyan);
+    color: #000; 
+    border: none;
+    display: inline-block;
+    width: auto;
+    padding: 0.8rem 2rem;
+    border-radius: 50px; 
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin-top: 1rem;
+    box-shadow: var(--glow-primary);
 }
 
 /* link buttons */
@@ -380,13 +398,6 @@ footer {
     justify-content: center;
     transition: width 0.3s;
     box-shadow: 0 0 10px rgba(255, 183, 3, 0.5);
-}
-
-/* section styling */
-.hub-section {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 0 20px;
 }
 
 .section-title {
@@ -693,6 +704,226 @@ iframe {
     resize: vertical;
 }
 
+.hidden {
+    display: none !important;
+}
+
+/*  toast notification  */
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--accent-cyan);
+    color: #000;
+    padding: 15px 25px;
+    border-radius: 50px;
+    font-weight: 700;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    transform: translateY(100px);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toast-notification.show {
+    transform: translateY(0);
+}
+
+/*  faq accordion  */
+.faq-item {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    margin-bottom: 0px;
+    max-width: 500px;
+    border-radius: 2px;
+    overflow: hidden;
+    justify-content: center;
+}
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 10px;
+    text-align: left;
+    color: var(--accent-cyan);
+    font-weight: 700;
+    font-size: 1.1rem;
+    font-family: 'Quicksand', sans-serif;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: rgba(0,0,0,0.2);
+}
+
+.faq-answer p {
+    padding: 20px;
+    margin: 0;
+    color: var(--text-main);
+}
+
+/* open state for accordion */
+.faq-item.active .faq-answer {
+    max-height: 100px;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+}
+
+/* calendar styles */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto; 
+    margin-right: auto;
+}
+
+.nav-btn {
+    background: transparent;
+    border: 1px solid var(--accent-cyan);
+    color: var(--accent-cyan);
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.nav-btn:hover {
+    background: rgba(0, 212, 255, 0.1);
+}
+
+/* grid system */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Creates 7 equal columns */
+    gap: 10px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* individual days */
+.calendar-day {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    aspect-ratio: 1/1;
+    padding: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+    color: var(--text-main);
+}
+
+.calendar-day:hover {
+    border-color: var(--accent-cyan);
+    transform: scale(1.05);
+    background: rgba(0, 212, 255, 0.05);
+}
+
+.day-number {
+    font-weight: bold;
+    font-size: 0.9rem;
+    position: absolute;
+    top: 5px;
+    left: 8px;
+}
+
+/* highlights today */
+.today {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 10px rgba(255, 183, 3, 0.2);
+}
+
+/* event dots */
+.event-dot {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 20px 2px 0 2px;
+}
+.dot-tutoring { background-color: var(--accent-gold); }
+.dot-group { background-color: var(--accent-cyan); }
+
+/*  popup styles  */
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--bg-panel);
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid var(--accent-cyan);
+    position: relative;
+    text-align: left;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px; right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.close-modal:hover { color: var(--accent-pink); }
+
+/* events inside the modal */
+.event-item {
+    background: var(--bg-deep);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-cyan);
+    margin-top: 10px;
+}
+
+.join-btn {
+    background: var(--accent-cyan);
+    border: none;
+    color: #000;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    font-weight: bold;
+    width: 100%;
+}
+
+.join-btn:disabled {
+    background: #555;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* important utility class */
 .hidden {
     display: none !important;
 }
