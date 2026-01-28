@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Settings</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js"></script> 
+</head>
+<body>
+    <header>
+        <h3>
+            <a href="login.html" id="login-status-link" class="login-link">Login</a>
+        </h3>
+
+        <a href="index.html" class ="logo-link">
+            <img src="astronaut.png" class="level-icon" alt="Astronaut Icon" style="border: none;">
+            <span>Español a Espacio</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="index.html#resources.html">Resources</a>
+            <a href="index.html#schedule">Schedule (Tutoring and Group Study)</a>
+            <a href="settings.html">Settings</a>
+        </nav>
+    </header>
+
+    <div class="container" style="max-width: 600px; margin-top: 2rem;">
+        <div class="hub-section">
+            <h2 class="section-title">Account Settings</h2>
+            
+            <!-- updates profile -->
+            <div class="form-group">
+                <label>Update Username</label>
+                <input type="text" id="edit-username" placeholder="New Username">
+            </div>
+            <div class="form-group">
+                <label>Update Password</label>
+                <input type="password" id="edit-password" placeholder="New Password">
+            </div>
+            
+            <button class="form-button" onclick="updateProfile()">Save Changes</button>
+            
+            <hr style="border: 1px solid var(--border-color); margin: 2rem 0;">
+            
+            <!-- deletes account -->
+            <h3 style="color: var(--accent-pink);">Danger Zone</h3>
+            <p style="margin-bottom: 15px;">Abort Mission? This will permanently delete your account.</p>
+            <button class="form-button" onclick="deleteMyAccount()" style="background: var(--accent-pink); color: white; border: none;">Delete Account</button>
+        </div>
+    </div>
+    
+    <!-- toast notification container -->
+    <div id="toast-container"></div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Website Design</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js"></script> 
+</head>
+
+<body>
+
+    <header>
+        <!-- login -->
+        <h3>
+            <a href="login.html" id="login-status-link" class="login-link">Login</a>
+        </h3>
+
+        <!-- logo -->
+        <a href="#home" class ="logo-link">
+            <img src="astronaut.png" class="level-icon" alt="Astronaut Icon" style="border: none;">
+            <span>Español a Espacio</span>
+        </a>
+
+        <!-- navigation -->
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#resources">Resources</a>
+            <a href="#schedule">Schedule (Tutoring and Group Study)</a>
+            <a href="settings.html">Settings</a>
+        </nav>
+    </header>
+
+
+    <!-- announcement banner -->
+    <div id="announcement-banner">
+        <!-- annoucement put here by js -->
+    </div>
+
+    <!-- home section  -->
+    <div class="home" id="home">
+        <div class="home-content">
+            <h1>Online Spanish Learning Hub</h1>
+            <h3>Created by students, for students!</h3>
+        </div>
+    </div>
+
+    <!-- activities + resources section -->
+    <div class="container" id="resources">
+        <h2  class="section-title" style="font-size: 2rem;"></font-size>Activities and Resources Across Proficiency Levels</h2>
+    </div>
+
+    <!-- fluency sections -->
+    <div class="image-grid">
+        <!-- A1-A2: beginner -->
+        <div class="resources-info">
+            <div class="container">
+            <h3>A1-A2: Beginner</h3>
+            <img src="baby.png" class="level-icon" alt="Baby Level" style="border: none;">
+            <a href="beginner.html" class="view-resources-button">View Beginner Topics</a>
+            </div>
+        </div>
+          
+            
+        <!-- B1-B2: intermediate -->
+        <div class="resources-info">
+            <div class="container">
+                <h3>B1-B2: Intermediate</h3>
+                <img src="children.png" class="level-icon" alt="Child Level" style="border: none;">
+                <a href="intermediate.html" class="view-resources-button">View Intermediate Topics</a>
+            </div>
+        </div>
+        
+        <!-- C1-C2: advanced -->
+        <div class="resources-info">
+            <div class="container">
+                <h3>C1-C2: Advanced</h3>
+                <img src="teamwork.png" class="level-icon" alt="Adult Level" style="border: none;">
+                <a href="advanced.html" class="view-resources-button">View Advanced Topics</a>
+            </div>
+        </div>
+    </div>
+
+<div class="container" id="schedule">
+    <h2 class="section-title">Meetings Schedule</h2>
+    
+    <!-- calendar header -->
+    <div class="calendar-header">
+        <button id="prevMonth" class="nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+        <h3 id="monthYear">Month Year</h3>
+        <button id="nextMonth" class="nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <!-- grid -->
+    <div class="calendar-grid" id="calendar">
+    </div>
+    
+    <!-- key -->
+    <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center;">
+        <span style="font-size: 0.9rem;"><span style="color: var(--accent-gold);">●</span> Tutoring Session</span>
+        <span style="font-size: 0.9rem;"><span style="color: var(--accent-cyan);">●</span> Group Study</span>
+    </div>
+</div>
+
+<!-- popup modal (hidden by default) -->
+<div id="eventModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3 id="modalDate" style="color: var(--accent-cyan);">Date</h3>
+        
+        <!-- view events -->
+        <div id="existingEvents"></div>
+
+        <!-- admin only add event form -->
+        <div id="adminEventForm" class="hidden" style="margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
+            <h4 style="font-size: 1rem;">Admin: Schedule Meeting</h4>
+            <input type="text" id="eventTitle" placeholder="Topic (e.g. Subjunctive)" style="width: 100%; margin-bottom: 10px; padding: 5px;">
+            <select id="eventType" style="width: 100%; margin-bottom: 10px; padding: 5px;">
+                <option value="tutoring">Tutoring</option>
+                <option value="group">Group Study</option>
+            </select>
+            <input type="number" id="eventSpots" placeholder="Max Students (e.g. 5)" style="width: 100%; margin-bottom: 10px; padding: 5px;">
+            <button class="form-button" onclick="addEvent()">Add Session</button>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="schedule">
+    <h2 class="section-title">Common Questions</h2>
+
+    <div class="faq-item">
+        <button class="faq-question">How do I track my fluency progress? <i class="fa-solid fa-chevron-down"></i></button>
+        <div class="faq-answer">
+            <p>Your dashboard automatically updates as you click "Mark as Done" on activity cards. Data is saved to your local browser storage.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">Is the tutoring schedule in my time zone?  <i class="fa-solid fa-chevron-down"></i></button>
+        <div class="faq-answer">
+            <p>All meeting times are according to the mountain standard time (MST) timezone</p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
