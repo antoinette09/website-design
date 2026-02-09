@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const adminCode = document.getElementById('admin-code').value.trim();
 
             if (!username || !password) {
-                showMessage("Please fill in username and password.", "error");
+                showMessage("Please fill in username+password.", "error");
                 return;
             }
 
@@ -404,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${deleteBtn}
                     <strong>${evt.title}</strong><br>
                     <small>${evt.type.toUpperCase()}</small><br>
-                    <small style="color: var(--accent-gold);">Spots: ${spotsLeft} / ${evt.totalSpots}</small><br>
+                    <small style="color: var(--accent-blue);">Spots: ${spotsLeft} / ${evt.totalSpots}</small><br>
                     ${hasJoined 
                         ? '<button class="join-btn" disabled style="background:green;">Registered!</button>' 
                         : `<button class="join-btn" onclick="joinEvent('${evt.id}')" ${isFull ? 'disabled' : ''}>${isFull ? 'Full' : 'Join Meeting'}</button>`

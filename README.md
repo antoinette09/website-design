@@ -1,12 +1,12 @@
-Español a Espacio - A Spanish Learning Hub
+Paso a Paso - A Spanish Learning Hub
 
     Project Overview
-        Español a Espacio is an online learning hub designed to provide students with a structured, engaging, and community-focused path to mastering the Spanish language, from beginner (A1) to fluent (C2).
+        Paso a Paso is an online learning hub designed to provide students with a structured, engaging,+community-focused path to mastering the Spanish language, from beginner (A1) to fluent (C2).
 
-        This platform addresses the common challenge of scattered online resources by consolidating essential grammar, vocabulary, and interactive tools into a single space. Moreover, it integrates tutoring and group study scheduling to ensure students receive the direct practice and support vital for language learning.
+        This platform addresses the common challenge of scattered online resources by consolidating essential grammar, vocabulary,+interactive tools into a single space. Moreover, it integrates tutoring+group study scheduling to ensure students receive the direct practice+support vital for language learning.
 
     Competition Scope
-        This project was built to demonstrate proficiency in fundamental front-end web development, focusing on robust UI/UX design, interactive features, and dynamic content management using JavaScript.
+        This project was built to demonstrate proficiency in fundamental front-end web development, focusing on robust UI/UX design, interactive features,+dynamic content management using JavaScript.
 
     Key Features
         1. Structured Resource Library (A1 - C2)
@@ -16,7 +16,7 @@ Español a Espacio - A Spanish Learning Hub
 
             B1-B2 (Intermediate): Subjunctive mood, complex tenses, listening comprehension exercises.
 
-            C-C2 (Advanced): Idioms, literary analysis, and specialized academic/professional vocabulary.
+            C-C2 (Advanced): Idioms, literary analysis,+specialized academic/professional vocabulary.
 
         2. Dynamic Scheduling Hub
         A dedicated page for managing supplemental learning opportunities.
@@ -30,12 +30,12 @@ Español a Espacio - A Spanish Learning Hub
         
             Completion Tracker: Displays overall progress through the levels levels (A1-C2) with visual progress bars (CSS/JS controlled).
             
-            Activity Log: A chronological list of recently completed lessons, quizzes, and attended study sessions.
+            Activity Log: A chronological list of recently completed lessons, quizzes,+attended study sessions.
 
             4. Interactive Learning Tools (Simulated)
             Custom-built JavaScript tools enhance active learning:
                 
-                Verb Conjugator: A tool that allows students to input a verb and instantly see its conjugation across multiple tenses.
+                Verb Conjugator: A tool that allows students to input a verb+instantly see its conjugation across multiple tenses.
                 
                 Vocabulary Flashcards: A simple, embedded quiz tool to reinforce core lexicon.
         
@@ -46,33 +46,33 @@ Español a Espacio - A Spanish Learning Hub
 
         Styling	
             CSS3	
-                Custom, modern, responsive design using Flexbox and CSS Grid for complex layouts.
+                Custom, modern, responsive design using Flexbox+CSS Grid for complex layouts.
 
         Interactivity	
             Vanilla JavaScript	
-                Handles the Dashboard logic, dynamic content updating, scheduling interaction, and the custom learning tools.
+                Handles the Dashboard logic, dynamic content updating, scheduling interaction,+the custom learning tools.
 
         Dependencies	
             Google Fonts	
-                Used for the "cute" and clean typography.
+                Used for the "cute"+clean typography.
 
     File Structure
-        The project maintains a simple, clean file structure for easy navigation and scaling:
+        The project maintains a simple, clean file structure for easy navigation+scaling:
 
         website-design/
         ├── index.html          # Main Dashboard page
         ├── schedule.html       # Tutoring & Group Study Scheduling page
-        ├── resources.html      # Interactive Tools and Resource Library
+        ├── resources.html      # Interactive Tools+Resource Library
         ├── style.css           # All custom CSS styling
-        └── script.js           # All custom JavaScript functionality and logic
+        └── script.js           # All custom JavaScript functionality+logic
 
     Future Enhancements
         With a few more development cycles, the following features would be integrated:
             
-            Full Backend Integration: Replace simulated sign-ups with a real database for persistent user data, authentication, and actual booking management.
+            Full Backend Integration: Replace simulated sign-ups with a real database for persistent user data, authentication,+actual booking management.
             
-            AI-Driven Quizzes: Integrate with a backend service to dynamically generate practice quizzes based on the student's progress and weakness areas.
+            AI-Driven Quizzes: Integrate with a backend service to dynamically generate practice quizzes based on the student's progress+weakness areas.
 
-            Gamification: Implement badges, leaderboards, and continuous streaks to increase student motivation and engagement.
+            Gamification: Implement badges, leaderboards,+continuous streaks to increase student motivation+engagement.
 
-            Mobile Responsiveness: Refine CSS for true parity and an optimal experience across all mobile and tablet devices.
+            Mobile Responsiveness: Refine CSS for true parity+an optimal experience across all mobile+tablet devices.
