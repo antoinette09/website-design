@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const daysEvents = events.filter(e => e.date === selectedDate);
 
             if (daysEvents.length === 0) {
-                eventList.innerHTML = '<p style="font-size: 0.9rem; color: #888;">No meetings scheduled for this date.</p>';
+                eventList.innerHTML = '<p style="font-size: 0.9rem; color: #000000;">No meetings scheduled for this date.</p>';
             }
 
             daysEvents.forEach((evt) => {
@@ -397,14 +397,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const hasJoined = currentUser && evt.attendees.includes(currentUser.username);
                 
                 const deleteBtn = (currentUser && currentUser.role === 'admin') 
-                    ? `<button onclick="deleteEvent('${evt.id}')" style="float:right; color:red; background:none; border:none; cursor:pointer;">&times;</button>` 
+                    ? `<button onclick="deleteEvent('${evt.id}')" style="float:right; color: var(--text-muted); background:none; border:none; cursor:pointer;">&times;</button>` 
                     : '';
 
                 div.innerHTML = `
                     ${deleteBtn}
                     <strong>${evt.title}</strong><br>
                     <small>${evt.type.toUpperCase()}</small><br>
-                    <small style="color: var(--accent-blue);">Spots: ${spotsLeft} / ${evt.totalSpots}</small><br>
+                    <small style="color: var(--accent-black);">Spots: ${spotsLeft} / ${evt.totalSpots}</small><br>
                     ${hasJoined 
                         ? '<button class="join-btn" disabled style="background:green;">Registered!</button>' 
                         : `<button class="join-btn" onclick="joinEvent('${evt.id}')" ${isFull ? 'disabled' : ''}>${isFull ? 'Full' : 'Join Meeting'}</button>`

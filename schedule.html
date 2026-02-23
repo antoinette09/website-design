@@ -14,14 +14,34 @@
 
 <body>
 
+    <header>
+        <!-- login -->
+        <h3>
+            <a href="login.html" id="login-status-link" class="login-link">Login</a>
+        </h3>
+
+        <!-- logo -->
+        <a href="#home" class ="logo-link">
+            <span>Paso a Paso</span> <img style="height: 45px; width: 45px;"; src="orange.svg">
+        </a>
+
+        <!-- navigation -->
+        <nav>
+            <a href="#home">Home</a>
+            <a href="resources.html">Resources</a>
+            <a href="schedule.html">Schedule (Tutoring+Group Study)</a>
+            <a href="settings.html">Settings</a>
+        </nav>
+    </header>
+
 <div class="container" id="schedule">
     <h2 class="section-title">Meetings Schedule</h2>
     
     <!-- calendar header -->
     <div class="calendar-header">
-        <button id="prevMonth" class="nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+        <button id="prevMonth" class="nav-btn"><img style="height: 50px; width: 50px;" src="leftarrow.svg"></button>
         <h3 id="monthYear">Month Year</h3>
-        <button id="nextMonth" class="nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+        <button id="nextMonth" class="nav-btn"><img style="height: 50px; width: 50px;" src="rightarrow.svg"></button>
     </div>
 
     <!-- grid -->
@@ -30,8 +50,8 @@
     
     <!-- key -->
     <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center;">
-        <span style="font-size: 0.9rem;"><span style="color: var(--accent-blue);">●</span> Tutoring Session</span>
-        <span style="font-size: 0.9rem;"><span style="color: var(--accent-sky);">●</span> Group Study</span>
+        <span style="font-size: 0.9rem;"><span style="color: var(--text-muted);">●</span> Tutoring Session</span>
+        <span style="font-size: 0.9rem;"><span style="color: var(--accent-black);">●</span> Group Study</span>
     </div>
 </div>
 
@@ -39,7 +59,7 @@
 <div id="eventModal" class="modal hidden">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
-        <h3 id="modalDate" style="color: var(--accent-sky);">Date</h3>
+        <h3 id="modalDate" style="color: var(--text-muted);">Date</h3>
         
         <!-- view events -->
         <div id="existingEvents"></div>
