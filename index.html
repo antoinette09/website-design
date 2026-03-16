@@ -1,120 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <title>Website Design</title>
+    <title>Paso a Paso - Spanish Learning Hub</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Special Gothic Expanded One&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="script.js"></script> 
+    <script src="script.js" defer></script> 
 </head>
-
 <body>
+    <!-- Announcement Banner -->
+    <div id="announcement-banner"></div>
 
-    <header>
-        <!-- login -->
-        <h3>
+    <header class="main-header">
+        <div class="header-content">
+            <!-- Login Link -->
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
-        </h3>
 
-        <!-- logo -->
-        <a href="#home" class ="logo-link">
-            <span>Paso a Paso</span> <img style="height: 45px; width: 45px;"; src="orange.svg">
-        </a>
+            <!-- Logo -->
+            <a href="index.html" class="logo-link">
+                <span>Paso a Paso</span> <img src="orange.svg" alt="Paso a Paso Logo">
+            </a>
 
-        <!-- navigation -->
-        <nav>
-            <a href="#home">Home</a>
-            <a href="resources.html">Resources</a>
-            <a href="schedule.html">Schedule</a>
-            <a href="settings.html">Settings</a>
-        </nav>
+            <!-- Navigation -->
+            <nav class="main-nav">
+                <a href="index.html" class="active">Home</a>
+                <a href="resources.html">Resources</a>
+                <a href="schedule.html">Schedule</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </div>
     </header>
 
-
-
-
-    <!-- announcement banner -->
-    <div id="announcement-banner">
-        <!-- annoucement put here by js -->
-    </div>
-
-    <!-- home section  -->
-    <div class="container" id="resources">
-        <h2  class="section-title" style="font-size: 2rem;"></font-size>¡Hola, Student!</h2>
-            <h3>You're doing great. Keep the streak alive!</h3>
-            <button class="cta-btn">Continue Lesson 5</button>
-        </div>
+    <!-- Main Content -->
+    <main class="container">
         
-        <div class="stats-container">
-            <div class="stat-box">
-                <strong>5 Day Streak</strong>
-            </div>
-            <div class="stat-box">
-                <strong>1200 XP</strong>
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
+        <!-- Greeting & Stats Section -->
+        <section class="hero-section">
+            <div class="hero-card">
+                <div class="greeting">
+                    <h1 id="greeting-text">¡Hola, Student!</h1>
+                    <p id="greeting-subtext">You're doing great. Keep the streak alive!</p>
                 </div>
-                <small>Level 4</small>
-            </div>
-        </div>
-    </div>
-
-    <!-- MAIN DASHBOARD GRID -->
-    <main class="dashboard-grid">
-        
-        <!-- Card 1: Word of the Day -->
-        <div class="card">
-            <div class="card-header">Word of the Day
-            </div>
-            <div class="spanish-word">El mar</div>
-            <div class="english-def">The sea</div>
-            <button class="listen-btn">🔊 Listen</button>
-        </div>
-
-        <!-- Card 2: Schedule Preview -->
-        <div class="card">
-            <div class="card-header">Coming Up
-            </div>
-            
-            <div class="event-item">
-                <div class="event-date">TUE</div>
-                <div>
-                    <strong>Grammar Quiz</strong>
-                    <p style="font-size:0.8rem; color:#666;">10:00 AM</p>
+                
+                <!-- Stats -->
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <img src="fire.svg" alt="Streak Icon">
+                        <span id="streak-display">0</span>
+                        <span style="color: var(--secondary-orange);">Day Streak</span>
+                    </div>
+                    <div class="stat-box">
+                        <img src="star.svg" alt="XP Icon">
+                        <span id="xp-display">0</span>
+                        <span style="color: var(--secondary-orange);">XP</span>
+                    </div>
+                    <div class="stat-box">
+                        <img src="plus.svg" alt="Level Icon"> <!-- Assuming you have a level.svg or similar -->
+                        <span id="level-display">1</span>
+                        <span style="color: var(--secondary-orange);">Level</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="event-item">
-                <div class="event-date">THU</div>
-                <div>
-                    <strong>Conversation Club</strong>
-                    <p style="font-size:0.8rem; color:#666;">3:30 PM</p>
-                </div>
+                <!-- Continue Button -->
+                <button id="continue-lesson-btn" class="cta-btn">
+                    <img src="refresh.svg" alt="Continue Lesson Icon"> Continue Lesson
+                </button>
             </div>
-        </div>
+        </section>
 
-        <!-- Card 3: Quick Links (Resources) -->
-        <div class="card">
-            <div class="card-header">Quick Access
+        <!-- Word of the Day Section -->
+        <section class="card-section">
+            <h2 class="section-title">Word of the Day</h2>
+            <div class="card word-of-day-card">
+                <div class="spanish-word" id="word-spanish">El mar</div>
+                <div class="english-def" id="word-english">The sea</div>
+                <button class="listen-btn" id="listen-btn">
+                    <img src="listen.svg" alt="Listen Icon"> Listen
+                </button>
             </div>
-            <div class="quick-links">
-                <a href="#" class="quick-link-btn">
-                    <div class="circle-icon">📝</div>
-                    <span>Verbs</span>
+        </section>
+
+        <!-- Coming Up Section -->
+        <section class="card-section">
+            <h2 class="section-title">Coming Up</h2>
+            <div id="coming-up-list" class="coming-up-list">
+                <p>Loading schedule...</p>
+            </div>
+            <a href="schedule.html" class="view-all-link">
+                View Full Schedule <img src="rightarrow.svg" alt="Arrow Right">
+            </a>
+        </section>
+
+        <!-- Quick Access Section -->
+        <section class="card-section">
+            <h2 class="section-title">Quick Access</h2>
+            <div class="dashboard-grid">
+                <a href="vocabulary.html" class="quick-link-btn">
+                    <div class="circle-icon">
+                        <img src="spring.svg" alt="Vocabulary Icon">
+                    </div>
+                    <span>Vocabulary</span>
                 </a>
-                <a href="#" class="quick-link-btn">
-                    <div class="circle-icon">📚</div>
-                    <span>Dict</span>
+                <a href="conjugation.html" class="quick-link-btn">
+                    <div class="circle-icon">
+                        <img src="fall.svg" alt="Conjugation Icon">
+                    </div>
+                    <span>Conjugation</span>
                 </a>
-                <a href="#" class="quick-link-btn">
-                    <div class="circle-icon">🎧</div>
-                    <span>Audio</span>
+                <a href="grammar.html" class="quick-link-btn">
+                    <div class="circle-icon">
+                        <img src="summer.svg" alt="Grammar Icon">
+                    </div>
+                    <span>Grammar</span>
+                </a>
+            </div>
+        </section>
 
-</div>
+        <!-- FAQ Section -->
+        <section class="card-section">
+            <h2 class="section-title">FAQ</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I track my progress?
+                        <img src="downarrow.svg" alt="Toggle" class="faq-icon">
+                    </button>
+                    <div class="faq-answer">
+                        <p>Click "Mark as Done" on each activity card to track your completion. Your progress bar will update automatically!</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How does the streak work?
+                        <img src="downarrow.svg" alt="Toggle" class="faq-icon">
+                    </button>
+                    <div class="faq-answer">
+                        <p>Complete at least one activity each day to maintain your streak. Don't break the chain!</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        What if I miss a day in my streak?
+                        <img src="downarrow.svg" alt="Toggle" class="faq-icon">
+                    </button>
+                    <div class="faq-answer">
+                        <p>No worries! Your streak will reset, but you can always start a new one tomorrow. Consistency is key!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Paso a Paso. Good luck! ¡Buena suerte!</p>
+    </footer>
 </body>
 </html>

@@ -1,35 +1,348 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Website Design</title>
+    <title>Paso a Paso - Vocabulary</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Special Gothic Expanded One&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="script.js"></script> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script> 
+    <style>
+        .activity-card.completed { border: 2px solid var(--accent-blue-light); opacity: 0.7; }
+        .activity-card.completed h3, .activity-card.completed p { text-decoration: line-through; }
+    </style>
 </head>
 
 <body>
 
-    <header>
-        <!-- login -->
-        <h3>
+    <header class="main-header">
+        <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
-        </h3>
-
-        <!-- logo -->
-        <a href="#home" class ="logo-link">
-            <span>Paso a Paso</span> <img style="height: 45px; width: 45px;"; src="orange.svg">
-        </a>
-
-        <!-- navigation -->
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="resources.html">Resources</a>
-            <a href="schedule.html">Schedule</a>
-            <a href="settings.html">Settings</a>
-        </nav>
+            <a href="index.html" class="logo-link">
+                <span>Paso a Paso</span> <img src="orange.svg" alt="Logo">
+            </a>
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="resources.html" class="active">Resources</a>
+                <a href="schedule.html">Schedule</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </div>
     </header>
+
+    <main class="container">
+        
+        <!-- Hero: Progress Dashboard -->
+        <section class="hero-section">
+            <div class="hero-card">
+                <h1 style="color: var(--primary-orange);">Vocabulary Builder</h1>
+                <p style="color: var(--secondary-orange); font-size: 1.1rem;">Expand your Spanish word power</p>
+                
+                <div class="stats-container" style="margin-top: 1.5rem;">
+                    <div class="stat-box">
+                        <img src="chart.svg" alt="Progress">
+                        <span id="vocab-progress" style="color: var(--secondary-orange);">0</span>
+                        <span style="color: var(--secondary-orange); font-size: 0.9rem;">% Complete</span>
+                    </div>
+                    <div class="stat-box">
+                        <img src="book.svg" alt="Words">
+                        <span id="words-learned" style="color: var(--secondary-orange);">0</span>
+                        <span style="color: var(--secondary-orange); font-size: 0.9rem;">Words Learned</span>
+                    </div>
+                    <div class="stat-box">
+                        <img src="plus.svg" alt="Level">
+                        <span id="vocab-level" style="color: var(--secondary-orange);">1</span>
+                        <span style="color: var(--secondary-orange); font-size: 0.9rem;">Level</span>
+                    </div>
+                </div>
+
+                <div style="margin: 1rem auto; width: 100%; max-width: 400px; height: 12px; background: rgba(255,255,255,0.3); border-radius: 10px; overflow: hidden;">
+                    <div id="vocabProgressBar" style="width: 0%; height: 100%; background: var(--secondary-orange); transition: width 0.3s ease;"></div>
+                </div>
+                <p id="vocabProgressText" style="font-size: 0.9rem; color: var(--secondary-orange);">0 of 10 categories completed</p>
+            </div>
+        </section>
+
+        <!-- Vocabulary Category Modules -->
+        <section class="card-section">
+            <h2 class="section-title">Choose a Category</h2>
+            
+            <div class="dashboard-grid" style="max-width: 1000px;">
+                
+                <div class="card activity-card" data-module="greetings">
+                    <img src="hands.svg" alt="Greetings" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Greetings & Basics</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Hola, adiós, por favor, gracias...</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('greetings')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('greetings')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('greetings')"><img src="download.svg" alt="Download"> Word List</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('greetings')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="numbers">
+                    <img src="hashtag.svg" alt="Numbers" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Numbers & Time</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">1-100, days, months, telling time</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('numbers')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('numbers')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('numbers')"><img src="download.svg" alt="Download"> Word List</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('numbers')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="family">
+                    <img src="users.svg" alt="Family" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Family & People</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Madre, padre, hermano, amigo...</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('family')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('family')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('family')"><img src="download.svg" alt="Download"> Word List</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('family')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="food">
+                    <img src="food.svg" alt="Food" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Food & Drink</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Comida, bebida, restaurante...</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('food')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('food')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('food')"><img src="download.svg" alt="Download"> Word List</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('food')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="colors">
+                    <img src="palette.svg" alt="Colors" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Colors & Shapes</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Rojo, azul, círculo, cuadrado...</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('colors')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('colors')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('colors')"><img src="download.svg" alt="Download"> Word List</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('colors')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="travel">
+                    <img src="plane.svg" alt="Travel" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Travel & Directions</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Aeropuerto, izquierda, derecha...</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('travel')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('travel')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('travel')"><img src="download.svg" alt="Download"> Word List</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('travel')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="house">
+                    <img src="house.svg" alt="House" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">House & Home</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Casa, habitación, cocina, muebles</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('house')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('house')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('house')"><img src="download.svg" alt="Download"> Word List</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('house')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="clothing">
+                    <img src="shirt.svg" alt="Clothing" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Clothing</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Ropa, zapatos, accesorios</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('clothing')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('clothing')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('clothing')"><img src="download.svg" alt="Download"> Word List</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('clothing')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="body">
+                    <img src="heart.svg" alt="Body" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Body & Health</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Cuerpo, médico, síntomas</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('body')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('body')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('body')"><img src="download.svg" alt="Download"> Word List</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('body')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="nature">
+                    <img src="tree.svg" alt="Nature" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Nature & Animals</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Animales, plantas, clima, paisaje</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('nature')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('nature')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('nature')"><img src="download.svg" alt="Download"> Word List</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('nature')">Mark as Complete</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Quick Practice Tools -->
+        <section class="card-section">
+            <h2 class="section-title">⚡ Quick Practice</h2>
+            <div class="dashboard-grid">
+                
+                <div class="card">
+                    <img src="shuffle.svg" alt="Drill" style="height: 50px; width: 50px; margin-bottom: 15px;">
+                    <h3 style="color: var(--primary-orange);">Random Word Drill</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Test yourself on random vocabulary</p>
+                    <button class="form-button" onclick="startRandomDrill()">Start Drill</button>
+                </div>
+
+                <div class="card">
+                    <img src="stopwatch.svg" alt="Match" style="height: 50px; width: 50px; margin-bottom: 15px;">
+                    <h3 style="color: var(--primary-orange);">Speed Match</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Match Spanish-English pairs against time</p>
+                    <button class="form-button" onclick="startSpeedMatch()">Start Game</button>
+                </div>
+
+                <div class="card">
+                    <img src="noplus.svg" alt="Challenge" style="height: 50px; width: 50px; margin-bottom: 15px;">
+                    <h3 style="color: var(--primary-orange);">Vocabulary Challenge</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">50 words in 5 minutes - master them?</p>
+                    <button class="form-button" style="background-color: var(--accent-blue-light);" onclick="startChallenge()">Start Challenge</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Downloadable Resources -->
+        <section class="card-section">
+            <h2 class="section-title">📥 Downloadables</h2>
+            <div class="dashboard-grid">
+                <a href="#" class="card" style="text-decoration: none;" onclick="downloadAllWordLists()">
+                    <img src="pdf.svg" alt="PDF Pack" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h4 style="color: var(--primary-orange);">Complete Vocab Pack</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-dark);">All 10 categories with audio (5.5 MB)</p>
+                </a>
+                <a href="#" class="card" style="text-decoration: none;" onclick="downloadFlashcardDeck()">
+                    <img src="stack.svg" alt="Flashcards" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h4 style="color: var(--primary-orange);">Printable Flashcards</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-dark);">Cut & study cards for all topics (2.8 MB)</p>
+                </a>
+                <a href="#" class="card" style="text-decoration: none;" onclick="downloadAudioPack()">
+                    <img src="headphones.svg" alt="Audio Pack" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h4 style="color: var(--primary-orange);">Pronunciation Pack</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-dark);">Native speaker recordings (ZIP, 25 MB)</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Most Common Words Reference -->
+        <section class="card-section">
+            <h2 class="section-title">🔥 Top 10 Common Words</h2>
+            <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">1. el / la</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">the (definite article)</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">2. de</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">of, from</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">3. que</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">that, which, who</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">4. y</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">and</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">5. a</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">to, at</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">6. en</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">in, on, at</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">7. un / una</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">a, an</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">8. ser</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">to be (permanent)</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">9. estar</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">to be (temporary)</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">10. tener</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">to have</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Flashcard Modal -->
+    <div id="flashcardModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeFlashcards()">&times;</span>
+            <h3 id="flashcardTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Flashcards</h3>
+            <div id="flashcardContent" style="margin-top: 1rem; text-align: center;">
+                <div id="flashcard" style="background: var(--bg-light-orange); padding: 3rem; border-radius: 15px; cursor: pointer; min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; border: 2px solid var(--border-gray);">
+                    <p id="flashcardFront" style="font-size: 2rem; color: var(--primary-orange); font-family: var(--font-heading);">Click to flip</p>
+                    <p id="flashcardBack" class="hidden" style="font-size: 1.5rem; color: var(--accent-blue-dark);">English translation</p>
+                </div>
+                <div style="margin-top: 1rem; display: flex; gap: 10px; justify-content: center; align-items: center;">
+                    <button class="form-button" style="background-color: var(--border-gray); color: var(--text-dark);" onclick="prevCard()">
+                        <img src="leftarrow.svg" alt="Prev" style="height: 15px; display: inline; margin-right: 5px;"> Prev
+                    </button>
+                    <span id="cardCounter" style="padding: 10px; font-weight: 600;">1 / 10</span>
+                    <button class="form-button" onclick="nextCard()">
+                        Next <img src="rightarrow.svg" alt="Next" style="height: 15px; display: inline; margin-left: 5px;">
+                    </button>
+                </div>
+                <button class="form-button" style="margin-top: 1rem; background-color: var(--accent-blue-light);" onclick="playFlashcardAudio()">
+                    <img src="listen.svg" alt="Listen" style="height: 20px; display: inline; margin-right: 5px;"> Listen
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeQuiz()">&times;</span>
+            <h3 id="quizTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Practice Quiz</h3>
+            <div id="quizContent" style="margin-top: 1rem; text-align: left;">
+                <!-- Quiz loads here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Paso a Paso. Good luck! ¡Buena suerte!</p>
+    </footer>
+</body>
+</html>

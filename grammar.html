@@ -1,35 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Website Design</title>
+    <title>Paso a Paso - Grammar Mastery</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Special Gothic Expanded One&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="script.js"></script> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script> 
+    <style>
+        /* Specific styles for completed cards */
+        .activity-card.completed { border: 2px solid var(--accent-blue-light); opacity: 0.7; }
+        .activity-card.completed h3, .activity-card.completed p { text-decoration: line-through; }
+    </style>
 </head>
 
 <body>
 
-    <header>
-        <!-- login -->
-        <h3>
+    <header class="main-header">
+        <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
-        </h3>
-
-        <!-- logo -->
-        <a href="#home" class ="logo-link">
-            <span>Paso a Paso</span> <img style="height: 45px; width: 45px;"; src="orange.svg">
-        </a>
-
-        <!-- navigation -->
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="resources.html">Resources</a>
-            <a href="schedule.html">Schedule</a>
-            <a href="settings.html">Settings</a>
-        </nav>
+            <a href="index.html" class="logo-link">
+                <span>Paso a Paso</span> <img src="orange.svg" alt="Logo">
+            </a>
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="resources.html" class="active">Resources</a>
+                <a href="schedule.html">Schedule</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </div>
     </header>
+
+    <main class="container">
+        
+        <!-- Hero: Progress Dashboard -->
+        <section class="hero-section">
+            <div class="hero-card">
+                <h1 style="color: var(--primary-orange);">Grammar Mastery</h1>
+                <p style="color: var(--secondary-orange); font-size: 1.1rem;">Master essential Spanish grammar concepts</p>
+                
+                <div class="stats-container" style="margin-top: 1.5rem;">
+                    <div class="stat-box">
+                        <img src="chart.svg" alt="Progress">
+                        <span id="grammar-progress" style="color: var(--secondary-orange);">0</span>
+                        <span style="color: var(--secondary-orange); font-size: 0.9rem;">% Complete</span>
+                    </div>
+                    <div class="stat-box">
+                        <img src="check.svg" alt="Mastered">
+                        <span id="topics-mastered" style="color: var(--secondary-orange);">0</span>
+                        <span style="color: var(--secondary-orange); font-size: 0.9rem;">Topics Mastered</span>
+                    </div>
+                    <div class="stat-box">
+                        <img src="plus.svg" alt="Level">
+                        <span id="grammar-level" style="color: var(--secondary-orange);">1</span>
+                        <span style="color: var(--secondary-orange); font-size: 0.9rem;">Level</span>
+                    </div>
+                </div>
+
+                <div style="margin: 1rem auto; width: 100%; max-width: 400px; height: 12px; background: rgba(255,255,255,0.3); border-radius: 10px; overflow: hidden;">
+                    <div id="grammarProgressBar" style="width: 0%; height: 100%; background: var(--secondary-orange); transition: width 0.3s ease;"></div>
+                </div>
+                <p id="grammarProgressText" style="font-size: 0.9rem; color: var(--secondary-orange);">0 of 8 modules completed</p>
+            </div>
+        </section>
+
+        <!-- Grammar Topic Modules -->
+        <section class="card-section">
+            <h2 class="section-title">Choose a Grammar Topic</h2>
+            
+            <div class="dashboard-grid" style="max-width: 1000px;">
+                
+                <!-- Topic Cards -->
+                <div class="card activity-card" data-module="gender">
+                    <img src="users.svg" alt="Gender" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Gender & Number</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">El/La, Los/Las, masculine & feminine nouns</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('gender')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('gender')"><img src="memomemopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('gender')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('gender')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="pronouns">
+                    <img src="users.svg" alt="Pronouns" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Subject Pronouns</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Yo, tú, él, ella, nosotros, ustedes, ellos</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('pronouns')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('pronouns')"><img src="memomemopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('pronouns')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('pronouns')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="ser-estar">
+                    <img src="scale.svg" alt="Ser vs Estar" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Ser vs Estar</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">When to use each "to be" verb</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('ser-estar')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('ser-estar')"><img src="memomemopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('ser-estar')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('ser-estar')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="por-para">
+                    <img src="scale.svg" alt="Por vs Para" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Por vs Para</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Understanding these tricky prepositions</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('por-para')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('por-para')"><img src="memomemopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('por-para')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('por-para')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="adjectives">
+                    <img src="brush.svg" alt="Adjectives" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Adjective Agreement</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Matching adjectives to nouns in gender & number</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('adjectives')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('adjectives')"><img src="memomemopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('adjectives')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('adjectives')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="objects">
+                    <img src="hands.svg" alt="Objects" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Object Pronouns</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Lo, la, le, los, las, les + placement rules</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('objects')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('objects')"><img src="memomemopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('objects')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('objects')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="reflexive">
+                    <img src="rotate.svg" alt="Reflexive" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Reflexive Verbs</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Me, te, se, nos, os, se + daily routines</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('reflexive')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('reflexive')"><img src="memomemopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('reflexive')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('reflexive')">Mark as Complete</button>
+                </div>
+
+                <div class="card activity-card" data-module="subjunctive">
+                    <img src="magic.svg" alt="Subjunctive" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h3 style="color: var(--accent-blue-dark);">Subjunctive Triggers</h3>
+                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">WEIRDO acronym + when to use subjunctive</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('subjunctive')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('subjunctive')"><img src="memomemopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('subjunctive')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    </div>
+                    <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('subjunctive')">Mark as Complete</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Quick Practice Tools -->
+        <section class="card-section">
+            <h2 class="section-title">⚡ Quick Practice</h2>
+            <div class="dashboard-grid">
+                
+                <div class="card">
+                    <img src="dice.svg" alt="Drill" style="height: 50px; width: 50px; margin-bottom: 15px;">
+                    <h3 style="color: var(--primary-orange);">Random Drill</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Test yourself on a random grammar concept</p>
+                    <button class="form-button" onclick="startRandomDrill()">Start Drill</button>
+                </div>
+
+                <div class="card">
+                    <img src="search.svg" alt="Checker" style="height: 50px; width: 50px; margin-bottom: 15px;">
+                    <h3 style="color: var(--primary-orange);">Grammar Checker</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Identify errors in sample sentences</p>
+                    <button class="form-button" onclick="openGrammarChecker()">Start Checker</button>
+                </div>
+
+                <div class="card">
+                    <img src="noplus.svg" alt="Challenge" style="height: 50px; width: 50px; margin-bottom: 15px;">
+                    <h3 style="color: var(--primary-orange);">Challenge Mode</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Timed quiz: 15 questions in 3 minutes</p>
+                    <button class="form-button" style="background-color: var(--accent-blue-light);" onclick="startChallenge()">Start Challenge</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Downloadable Resources -->
+        <section class="card-section">
+            <h2 class="section-title">📥 Downloadables</h2>
+            <div class="dashboard-grid">
+                <a href="#" class="card" style="text-decoration: none;" onclick="downloadAllCheatSheets()">
+                    <img src="pdf.svg" alt="PDF" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h4 style="color: var(--primary-orange);">Complete Grammar Pack</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-dark);">All 8 topics reference guide (3.2 MB)</p>
+                </a>
+                <a href="#" class="card" style="text-decoration: none;" onclick="downloadPracticeWorkbook()">
+                    <img src="nobook.svg" alt="Workbook" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h4 style="color: var(--primary-orange);">Grammar Workbook</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-dark);">100+ exercises with answer key (2.5 MB)</p>
+                </a>
+                <a href="#" class="card" style="text-decoration: none;" onclick="downloadFlashcards()">
+                    <img src="stack.svg" alt="Flashcards" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <h4 style="color: var(--primary-orange);">Printable Flashcards</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-dark);">Study cards for all topics (PDF, 1.1 MB)</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Common Mistakes Reference -->
+        <section class="card-section">
+            <h2 class="section-title">⚠️ Common Mistakes</h2>
+            <div class="dashboard-grid">
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">"I am hungry"</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">❌ Yo soy hambre<br>✅ <strong>Yo tengo hambre</strong> (You "have" hunger)</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">"I am 20 years old"</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">❌ Yo soy 20 años<br>✅ <strong>Yo tengo 20 años</strong> (You "have" years)</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">"The red house"</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">❌ La rojo casa<br>✅ <strong>La casa roja</strong> (Adjective AFTER noun)</p>
+                </div>
+                <div class="card" style="align-items: flex-start; text-align: left;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 5px;">"I like pizza"</h4>
+                    <p style="font-size: 0.9rem; margin: 0;">❌ Yo gusto pizza<br>✅ <strong>Me gusta la pizza</strong> (Pizza pleases me)</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Lesson Modal -->
+    <div id="lessonModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLesson()">&times;</span>
+            <h3 id="lessonTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Grammar Lesson</h3>
+            <div id="lessonContent" style="margin-top: 1rem; text-align: left;">
+                <p>Loading lesson...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeQuiz()">&times;</span>
+            <h3 id="quizTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Practice Quiz</h3>
+            <div id="quizContent" style="margin-top: 1rem; text-align: left;">
+                <!-- Quiz loads here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Paso a Paso. Good luck! ¡Buena suerte!</p>
+    </footer>
+
+</body>
+</html>

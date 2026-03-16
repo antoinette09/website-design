@@ -1,35 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Website Design</title>
+    <title>Paso a Paso - Dictionary</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Special Gothic Expanded One&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="script.js"></script> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script> 
+    <style>
+        /* Adds a nice spinning effect to the loading icon */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .spin-animation { animation: spin 1.5s linear infinite; }
+    </style>
 </head>
 
 <body>
 
-    <header>
-        <!-- login -->
-        <h3>
+    <header class="main-header">
+        <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
-        </h3>
-
-        <!-- logo -->
-        <a href="#home" class ="logo-link">
-            <span>Paso a Paso</span> <img style="height: 45px; width: 45px;"; src="orange.svg">
-        </a>
-
-        <!-- navigation -->
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="resources.html">Resources</a>
-            <a href="schedule.html">Schedule</a>
-            <a href="settings.html">Settings</a>
-        </nav>
+            <a href="index.html" class="logo-link">
+                <span>Paso a Paso</span> <img src="orange.svg" alt="Logo">
+            </a>
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="resources.html" class="active">Resources</a>
+                <a href="schedule.html">Schedule</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </div>
     </header>
+
+    <main class="container">
+        
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-card">
+                <h1 style="color: var(--primary-orange);">Spanish Dictionary</h1>
+                <p style="color: var(--secondary-orange); font-size: 1.1rem;">Search for words, get definitions, and hear audio pronunciations.</p>
+            </div>
+        </section>
+
+        <!-- Search Interface -->
+        <section class="card-section">
+            <div class="card" style="width: 100%; max-width: 600px; margin: 0 auto; text-align: center;">
+                
+                <!-- Language Direction Selector -->
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 1rem; color: var(--text-dark); font-weight: 700; font-size: 1.1rem;">
+                        <img src="arrows.svg" alt="Direction" style="height: 20px; display: inline; vertical-align: middle;"> Search Direction
+                    </label>
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <!-- JS toggles the .secondary class on these buttons to show which is active -->
+                        <button type="button" id="btn-spanish" class="form-button" style="flex: 1; min-width: 200px; margin-top: 0; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="setSearchDirection('spanish')">
+                            <img src="globe.svg" alt="ES to EN" style="height: 20px;"> Spanish → English
+                        </button>
+                        <button type="button" id="btn-english" class="form-button secondary" style="flex: 1; min-width: 200px; margin-top: 0; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="setSearchDirection('english')">
+                            <img src="globe.svg" alt="EN to ES" style="height: 20px;"> English → Spanish
+                        </button>
+                    </div>
+                    <p id="direction-hint" style="font-size: 0.9rem; color: var(--secondary-orange); margin-top: 1rem; font-weight: 600;">
+                        Searching Spanish words with English definitions
+                    </p>
+                </div>
+
+                <!-- Search Input -->
+                <div class="form-group" style="margin-top: 1.5rem; text-align: left;">
+                    <label for="search-word" id="search-label" style="color: var(--primary-orange);">Enter a Spanish Word</label>
+                    <input type="text" id="search-word" placeholder="e.g. hola, gracias, amigo..." autocomplete="off" style="font-size: 1.1rem; padding: 12px;">
+                </div>
+                
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 1rem;">
+                    <button class="form-button" style="margin-top: 0; display: flex; align-items: center; gap: 8px;" onclick="searchWord()">
+                        <img src="search.svg" alt="Search" style="height: 20px; filter: brightness(0) invert(1);"> Search
+                    </button>
+                    <button class="form-button secondary" style="margin-top: 0; display: flex; align-items: center; gap: 8px; border-color: var(--border-gray); color: var(--text-dark);" onclick="clearResults()">
+                        <img src="eraser.svg" alt="Clear" style="height: 20px;"> Clear
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Dynamic Results & Feedback Area -->
+        <section class="card-section" style="padding-top: 0; box-shadow: none; background: transparent;">
+            
+            <!-- Ambiguity Warning -->
+            <div id="ambiguity-warning" class="hidden" style="width: 100%; max-width: 800px; margin: 0 auto 1rem auto;">
+                <div class="message-box" style="background: var(--bg-light-orange); border: 2px solid var(--accent-blue-light); display: flex; align-items: center; gap: 15px; padding: 1rem; border-radius: var(--border-radius-md); text-align: left;">
+                    <img src="info.svg" alt="Info" style="height: 30px;">
+                    <span id="ambiguity-text" style="color: var(--text-dark); font-weight: 600;">This word exists in both languages. Make sure you're searching in the correct direction!</span>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-message" class="hidden" style="width: 100%; max-width: 800px; margin: 0 auto 1rem auto;">
+                <div class="message-box error" style="display: flex; align-items: center; gap: 15px; padding: 1rem; border-radius: var(--border-radius-md); text-align: left;">
+                    <img src="alert.svg" alt="Error" style="height: 30px; filter: brightness(0) invert(1);">
+                    <span id="error-text" style="font-weight: 600;">Word not found.</span>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="hidden" style="text-align: center; padding: 2rem;">
+                <img src="search.svg" alt="Loading" class="spin-animation" style="height: 40px; margin: 0 auto 1rem auto; opacity: 0.5;">
+                <p style="color: var(--secondary-orange); font-weight: 700; font-size: 1.2rem;">Searching Dictionary...</p>
+            </div>
+
+            <!-- Actual Results List -->
+            <div id="dictionary-results" style="width: 100%; max-width: 800px; margin: 0 auto;">
+                
+                <!-- Default Placeholder (Shows before a search is made) -->
+                <div class="card" id="placeholder-message" style="margin: 0 auto;">
+                    <p style="text-align: center; color: var(--secondary-orange); font-size: 1.1rem; font-weight: 600;">
+                        <img src="book.svg" alt="Dictionary" style="height: 60px; width: 60px; margin: 0 auto 1rem auto; opacity: 0.5;">
+                        Search for a word to see its definition
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Paso a Paso. Good luck! ¡Buena suerte!</p>
+    </footer>
+
+</body>
+</html>

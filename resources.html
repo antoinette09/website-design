@@ -1,88 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <title>Website Design</title>
+    <title>Paso a Paso - Resources</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Special Gothic Expanded One&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="script.js"></script> 
-</head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script> 
+</head> 
 
 <body>
+    <!-- Announcement Banner -->
+    <div id="announcement-banner"></div>
 
-    <header>
-        <!-- login -->
-        <h3>
+    <header class="main-header">
+        <div class="header-content">
+            <!-- Login Link -->
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
-        </h3>
 
-        <!-- logo -->
-        <a href="#home" class ="logo-link">
-            <span>Paso a Paso</span> <img style="height: 45px; width: 45px;"; src="orange.svg">
-        </a>
+            <!-- Logo -->
+            <a href="index.html" class="logo-link">
+                <span>Paso a Paso</span> <img src="orange.svg" alt="Paso a Paso Logo">
+            </a>
 
-        <!-- navigation -->
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="resources.html">Resources</a>
-            <a href="schedule.html">Schedule</a>
-            <a href="settings.html">Settings</a>
-        </nav>
+            <!-- Navigation (Resources is Active) -->
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="resources.html" class="active">Resources</a>
+                <a href="schedule.html">Schedule</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </div>
     </header>
 
-    <!-- activities + resources section -->
-    <div class="container" id="resources">
-        <h2  class="section-title" style="font-size: 2rem;"></font-size>Explore Resources</h2>
-        <h3>Made by Students, for Students</h3>
-    </div>
-
-    <!-- sections -->
-    <div class="image-grid">
-        <!-- vocab -->
-        <div class="resources-info">
-            <div class="container">
-            <a href="vocabulary.html" class="resources-link">
-                <h3 class="resources-link"">Vocabulary</h3>
-                <img src="spring.svg" class="level-icon" alt="Baby Level" style="border: none;">
-            </a>
-            </div>
-        </div>
-
-        <!-- grammar -->
-        <div class="resources-info">
-            <div class="container">
-                <a href="grammar.html" class="resources-link">
-                    <h3 class="resources-link"">Grammar</h3>
-                    <img src="summer.svg" class="level-icon" alt="Child Level" style="border: none;">
-                </a>
-            </div>
-        </div>
+    <!-- Main Content -->
+    <main class="container">
         
-        <!-- conjugation -->
-        <div class="resources-info">
-            <div class="container">
-                <a href="conjugation.html" class="resources-link">
-                    <h3 class="resources-link"">Conjugation</h3>
-                <img src="fall.svg" class="level-icon" alt="Adult Level" style="border: none;">
+        <!-- Page Title Header -->
+        <section class="hero-section" style="padding: var(--spacing-lg);">
+            <div class="hero-card" style="gap: var(--spacing-xs);">
+                <h1 style="color: var(--primary-orange);">Explore Resources</h1>
+                <p style="color: var(--secondary-orange); font-size: 1.2rem; font-weight: 600;">Made by Students, for Students</p>
+            </div>
+        </section>
+
+        <!-- Resources Grid -->
+        <section class="card-section">
+            <!-- Overriding max-width so the grid looks nice and spread out -->
+            <div class="dashboard-grid" style="max-width: 1000px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                
+                <!-- Vocabulary -->
+                <a href="vocabulary.html" class="quick-link-btn card">
+                    <div class="circle-icon" style="width: 80px; height: 80px;">
+                        <img src="spring.svg" alt="Vocabulary Level">
+                    </div>
+                    <span style="font-size: 1.2rem; margin-top: 10px;">Vocabulary</span>
                 </a>
-            </div>
-        </div>
 
-        <!-- dictionary -->
-        <div class="resources-info">
-            <div class="container">
-                <a href="dictionary.html" class="resources-link">
-                    <h3 class="resources-link"">Dictionary</h3>
-                <img src="winter.svg" class="level-icon" alt="Adult Level" style="border: none;">
-            </a>
-            </div>
-        </div>
+                <!-- Grammar -->
+                <a href="grammar.html" class="quick-link-btn card">
+                    <div class="circle-icon" style="width: 80px; height: 80px;">
+                        <img src="summer.svg" alt="Grammar Level">
+                    </div>
+                    <span style="font-size: 1.2rem; margin-top: 10px;">Grammar</span>
+                </a>
+                
+                <!-- Conjugation -->
+                <a href="conjugation.html" class="quick-link-btn card">
+                    <div class="circle-icon" style="width: 80px; height: 80px;">
+                        <img src="fall.svg" alt="Conjugation Level">
+                    </div>
+                    <span style="font-size: 1.2rem; margin-top: 10px;">Conjugation</span>
+                </a>
 
-    </div>
+                <!-- Dictionary -->
+                <a href="dictionary.html" class="quick-link-btn card">
+                    <div class="circle-icon" style="width: 80px; height: 80px;">
+                        <img src="winter.svg" alt="Dictionary Level">
+                    </div>
+                    <span style="font-size: 1.2rem; margin-top: 10px;">Dictionary</span>
+                </a>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Spanish Learning Hub. ¡Buena suerte!</p>
+    </footer>
 
 </body>
 </html>
