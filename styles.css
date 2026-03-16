@@ -1131,3 +1131,16 @@ footer {
 .dot-tutoring { background-color: var(--text-muted); }
 .dot-group { background-color: var(--accent-black); }
 .dot-pending { background-color: #95a5a6; opacity: 0.6; }
+
+/* --- NEW APP FEATURES: TABS, UGC, APPROVALS --- */
+.tabs-container { display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem; border-bottom: 2px solid var(--border-gray); padding-bottom: 10px; }
+.tab-btn { background: none; border: none; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); cursor: pointer; padding: 10px 20px; transition: 0.3s; opacity: 0.6; }
+.tab-btn.active { color: var(--primary-orange); border-bottom: 3px solid var(--primary-orange); opacity: 1; }
+.tab-btn:hover { opacity: 1; }
+
+.term-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; background: var(--bg-light-orange); padding: 10px; border-radius: var(--border-radius-sm); }
+.term-row input { flex: 1; }
+.remove-term-btn { background: #e74c3c; color: white; border: none; padding: 10px; border-radius: var(--border-radius-sm); cursor: pointer; }
+
+.dot-pending { background-color: #95a5a6; } /* Gray dot for unapproved events */
+.pending-event-card { background: var(--bg-light-orange); border-left: 5px solid var(--primary-orange); padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}

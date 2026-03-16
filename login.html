@@ -5,29 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    
     <script src="script.js" defer></script> 
 </head>
 <body>
-    <!-- Announcement Banner -->
     <div id="announcement-banner"></div>
-
     <header class="main-header">
         <div class="header-content">
-            <!-- Login Link (Hidden or changed to logout by JS when logged in) -->
             <a href="login.html" id="login-status-link" class="login-link active">Login</a>
-
-            <!-- Logo -->
-            <a href="index.html" class="logo-link">
-                <span>Paso a Paso</span> <img src="orange.svg" alt="Paso a Paso Logo">
-            </a>
-
-            <!-- Navigation -->
+            <a href="index.html" class="logo-link"><span>Paso a Paso</span> <img src="orange.svg" alt="Logo"></a>
             <nav class="main-nav">
                 <a href="index.html">Home</a>
                 <a href="resources.html">Resources</a>
@@ -37,108 +25,55 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="container" style="align-items: center; justify-content: center; flex-grow: 1; display: flex;">
-        
-        <!-- Student Auth Forms -->
         <div id="auth-forms" class="auth-container">
             <div class="auth-header">
-                <img src="user.svg" alt="User Icon" style="height: 50px; width: 50px; margin: 0 auto 10px auto;">
                 <h2 id="form-title" style="color: var(--primary-orange);">Student Login</h2>
-                <p id="form-subtitle" style="color: var(--text-dark); margin-bottom: 1.5rem;">Welcome back to the Learning Hub</p>
             </div>
-
-            <!-- Message Area -->
             <div id="message-area" class="message-box" style="margin-bottom: 1rem;"></div>
-
             <form id="auth-form" style="text-align: left;">
-                <div class="form-group">
-                    <label for="username"><img src="user.svg" style="height: 15px; display: inline;"> Username</label>
-                    <input type="text" id="username" placeholder="Enter your username" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password"><img src="lock.svg" style="height: 15px; display: inline;"> Password</label>
-                    <input type="password" id="password" placeholder="Enter your password" required>
-                </div>
-
-                <!-- Sign Up Only Fields -->
-                <div id="email-group" class="form-group hidden">
-                    <label for="email"><img src="mail.svg" style="height: 15px; display: inline;"> Email (Optional)</label>
-                    <input type="email" id="email" placeholder="student@example.com">
-                </div>
-
-                <div id="admin-code-group" class="form-group hidden">
-                    <label for="admin-code"><img src="key.svg" style="height: 15px; display: inline;"> Admin Code</label>
-                    <input type="password" id="admin-code" placeholder="Leave empty for student access">
-                    <small style="color: var(--secondary-orange); font-size: 0.8rem; display: block; margin-top: 5px;">Leave empty for standard student access.</small>
-                </div>
-
-                <button type="submit" id="submitbutton" class="form-button" style="width: 100%; margin-top: 1rem; font-size: 1.1rem;">Log In</button>
+                <div class="form-group"><input type="text" id="username" placeholder="Username" required></div>
+                <div class="form-group"><input type="password" id="password" placeholder="Password" required></div>
+                <div id="email-group" class="form-group hidden"><input type="email" id="email" placeholder="Email (Optional)"></div>
+                <div id="admin-code-group" class="form-group hidden"><input type="password" id="admin-code" placeholder="Admin Code (Optional)"></div>
+                <button type="submit" id="submitbutton" class="form-button" style="width: 100%;">Log In</button>
             </form>
-
-            <div style="margin-top: 2rem; border-top: 1px solid var(--border-gray); padding-top: 1.5rem;">
-                <span id="toggle-text-span" style="color: var(--text-dark); font-weight: 600;">Don't have an account? </span>
-                <button class="form-button secondary" onclick="toggleAuthMode()" style="padding: 0.4rem 1rem; font-size: 0.9rem; margin-left: 10px;">Sign Up</button>
+            <div style="margin-top: 1rem;">
+                <span id="toggle-text-span" style="color: var(--text-dark);">Don't have an account? </span>
+                <button class="form-button secondary" onclick="toggleAuthMode()" style="padding: 0.4rem 1rem;">Sign Up</button>
             </div>
         </div>
 
-        <!-- Admin Dashboard (Hidden by default, triggered by JS) -->
         <div id="admin-view" class="hidden" style="width: 100%; max-width: 900px; margin: 0 auto;">
-            
             <div class="admin-header">
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <img src="key.svg" alt="Admin" style="height: 40px; filter: invert(0.5) sepia(1) saturate(5) hue-rotate(180deg);">
-                    <h2 style="color: var(--accent-blue-dark); margin: 0;">Admin Dashboard</h2>
-                </div>
-                <button class="form-button secondary" style="max-width: 300px;" onclick="handleLogout()">Log Out</button>
+                <h2 style="color: var(--accent-blue-dark); margin: 0;">Admin Dashboard</h2>
+                <button class="form-button secondary" onclick="handleLogout()">Log Out</button>
             </div>
-
-            <!-- Pending Meeting Requests -->
-            <div class="card" style="margin-bottom: 2rem; text-align: left;">
-                <h3><i class="fa-solid fa-clock"></i> Pending Meeting Requests</h3>
-                <p>Review and approve meeting proposals from students</p>
-                <div id="pending-requests-container" class="user-list" style="margin-top: 1rem;">
-                    <!-- Pending requests load here -->
+            
+            <div class="card" style="text-align: left; margin-bottom: 2rem;">
+                <h3 style="color: #e67e22; margin-bottom: 1rem;">⏳ Pending Meeting Requests</h3>
+                <div id="pending-requests-container">
+                    <!-- Pending Requests loaded by JS -->
                 </div>
             </div>
 
             <div class="two-col-grid">
-                <!-- Announcement Box -->
                 <div class="card" style="text-align: left; height: fit-content;">
-                    <h3 style="color: var(--primary-orange); display: flex; align-items: center; gap: 10px;">
-                        <img src="nospeaker.svg" alt="Announcement" style="height: 25px;"> Post Announcement
-                    </h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">This will appear at the top of the home page for all users.</p>
+                    <h3 style="color: var(--primary-orange);">Post Announcement</h3>
                     <form onsubmit="saveAnnouncement(event)">
-                        <div class="form-group">
-                            <textarea id="announcement-input" class="admin-textarea" rows="4" placeholder="Type announcement here..." style="width: 100%; padding: 10px; border-radius: var(--border-radius-sm); border: 1px solid var(--border-gray); resize: vertical;"></textarea>
-                        </div>
-                        <div style="display: flex; gap: 10px; margin-top: 1rem;">
-                            <button type="submit" class="form-button" style="flex: 1; margin: 0;">Post</button>
-                            <button type="button" class="form-button secondary" onclick="clearAnnouncement()" style="flex: 1; margin: 0;">Remove</button>
+                        <div class="form-group"><textarea id="announcement-input" class="admin-textarea" rows="3" style="width: 100%; padding: 10px;"></textarea></div>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" class="form-button" style="flex: 1;">Post</button>
+                            <button type="button" class="form-button secondary" onclick="clearAnnouncement()" style="flex: 1;">Remove</button>
                         </div>
                     </form>
                 </div>
-
-                <!-- User Management Box -->
                 <div class="card" style="text-align: left;">
-                    <h3 style="color: var(--primary-orange); display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-                        <img src="users.svg" alt="Users" style="height: 25px;"> Manage Accounts
-                    </h3>
-                    <div id="user-list-container" class="user-list">
-                        <!-- Users load here via JS -->
-                    </div>
+                    <h3 style="color: var(--primary-orange);">Manage Accounts</h3>
+                    <div id="user-list-container" class="user-list"></div>
                 </div>
             </div>
-
         </div>
-
     </main>
-
-    <footer>
-        <p>&copy; 2026 Paso a Paso. Good luck! ¡Buena suerte!</p>
-    </footer>
-
 </body>
 </html>

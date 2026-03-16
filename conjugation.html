@@ -226,6 +226,62 @@
             </div>
         </div>
     </div>
+<!-- ====== PASTE THIS RIGHT ABOVE </main> ====== -->
+        <section class="card-section" style="margin-top: 2rem;">
+            <h2 class="section-title">Community Sets</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-dark);">Study flashcards created by other students, or create your own!</p>
+            
+            <div class="tabs-container">
+                <button class="tab-btn active" onclick="switchResourceTab('community')" id="tab-community">Community Sets</button>
+                <button class="tab-btn" onclick="switchResourceTab('my')" id="tab-my">My Sets</button>
+            </div>
+            
+            <div class="dashboard-grid" id="study-sets-container" style="max-width: 1000px;">
+                <!-- Sets loaded by JS -->
+            </div>
+
+            <button class="form-button" style="margin-top: 2rem;" onclick="openCreateSetModal()">+ Create New Set</button>
+        </section>
+        <!-- ============================================== -->
+    </main>
+
+    <!-- ====== PASTE THIS BELOW </main> BUT ABOVE <footer> ====== -->
+    <!-- Create Set Modal -->
+    <div id="createSetModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+            <span class="close-modal" onclick="closeCreateSetModal()">&times;</span>
+            <h3 style="color: var(--primary-orange); margin-bottom: 1rem;">Create a Study Set</h3>
+            <div class="form-group"><input type="text" id="set-title" placeholder="Set Title (e.g. Test 1 Review)" required></div>
+            <div class="form-group"><input type="text" id="set-desc" placeholder="Short description" required></div>
+            <div class="form-group" style="display:flex; align-items:center; gap: 10px; margin-bottom: 1rem;">
+                <input type="checkbox" id="set-public" checked style="width: auto;"> <label style="color: var(--text-dark);">Make public to community?</label>
+            </div>
+            
+            <div id="terms-container"></div>
+            <button class="form-button secondary" onclick="addTermRow()" style="width: 100%; margin-bottom: 1rem;">+ Add Term</button>
+            <button class="form-button" onclick="saveStudySet()" style="width: 100%; background: var(--accent-blue-light);">Save & Publish Set</button>
+        </div>
+    </div>
+
+    <!-- Custom Flashcard Modal -->
+    <div id="customFlashcardModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCustomFlashcards()">&times;</span>
+            <h3 id="customFlashcardTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Study Set</h3>
+            <div style="margin-top: 1rem; text-align: center;">
+                <div id="customFlashcard" style="background: var(--bg-light-orange); padding: 3rem; border-radius: 15px; cursor: pointer; min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; border: 2px solid var(--border-gray);">
+                    <p id="customFlashcardFront" style="font-size: 2rem; color: var(--primary-orange); font-family: var(--font-heading);">Click to flip</p>
+                    <p id="customFlashcardBack" class="hidden" style="font-size: 1.5rem; color: var(--accent-blue-dark);">Translation</p>
+                </div>
+                <div style="margin-top: 1rem; display: flex; gap: 10px; justify-content: center; align-items: center;">
+                    <button class="form-button secondary" onclick="prevCustomCard()">Prev</button>
+                    <span id="customCardCounter" style="padding: 10px; font-weight: 600;">1 / 10</span>
+                    <button class="form-button secondary" onclick="nextCustomCard()">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ========================================================== -->
 
     <footer>
         <p>&copy; 2026 Paso a Paso. Good luck! ¡Buena suerte!</p>
