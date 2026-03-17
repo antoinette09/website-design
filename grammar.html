@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Paso a Paso - Grammar Mastery</title>
+    <title>Paso a Paso - Q&A Forum</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
@@ -9,25 +9,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="script.js" defer></script> 
-    <style>
-        /* Specific styles for completed cards */
-        .activity-card.completed { border: 2px solid var(--accent-blue-light); opacity: 0.7; }
-        .activity-card.completed h3, .activity-card.completed p { text-decoration: line-through; }
-    </style>
 </head>
 
 <body>
-
+    <div id="announcement-banner"></div>
     <header class="main-header">
         <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
-            <a href="index.html" class="logo-link">
-                <span>Paso a Paso</span> <img src="orange.svg" alt="Logo">
-            </a>
+            <a href="index.html" class="logo-link"><span>Paso a Paso</span> <img src="orange.svg" alt="Logo"></a>
             <nav class="main-nav">
                 <a href="index.html">Home</a>
-                <a href="resources.html" class="active">Resources</a>
+                <a href="resources.html">Resources</a>
                 <a href="schedule.html">Schedule</a>
+                <a href="forum.html">Community Q&A</a>
                 <a href="settings.html">Settings</a>
             </nav>
         </div>
@@ -59,7 +53,7 @@
                     </div>
                 </div>
 
-                <div style="margin: 1rem auto; width: 100%; max-width: 400px; height: 12px; background: rgba(255,255,255,0.3); border-radius: 10px; overflow: hidden;">
+                <div style="margin: 1rem auto; width: 100%; max-width: 400px; height: 12px; background: rgb(237, 237, 237); border-radius: 10px; overflow: hidden;">
                     <div id="grammarProgressBar" style="width: 0%; height: 100%; background: var(--secondary-orange); transition: width 0.3s ease;"></div>
                 </div>
                 <p id="grammarProgressText" style="font-size: 0.9rem; color: var(--secondary-orange);">0 of 8 modules completed</p>
@@ -277,44 +271,124 @@
             </div>
         </div>
     </div>
-<!-- ====== PASTE THIS RIGHT ABOVE </main> ====== -->
-        <section class="card-section" style="margin-top: 2rem;">
-            <h2 class="section-title">Community Sets</h2>
-            <p style="margin-bottom: 1.5rem; color: var(--text-dark);">Study flashcards created by other students, or create your own!</p>
-            
-            <div class="tabs-container">
-                <button class="tab-btn active" onclick="switchResourceTab('community')" id="tab-community">Community Sets</button>
-                <button class="tab-btn" onclick="switchResourceTab('my')" id="tab-my">My Sets</button>
+    <!-- Community Sets Section -->
+    <section class="card-section" style="margin-top: 2rem;">
+        <h2 class="section-title">Community Sets</h2>
+        <p style="margin-bottom: 1.5rem; color: var(--text-dark);">Study flashcards, notes, and links created by other students!</p>
+        
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchResourceTab('community')" id="tab-community">Community Sets</button>
+            <button class="tab-btn" onclick="switchResourceTab('my')" id="tab-my">My Sets</button>
+        </div>
+
+        <!-- NEW: Search and Filter Bar -->
+        <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; max-width: 1000px; width: 100%; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px; position: relative;">
+                <img src="search.svg" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); height: 15px; filter: opacity(0.5);">
+                <input type="text" id="set-search" placeholder="Search by title or author..." onkeyup="renderStudySets()" style="width: 100%; padding: 10px 10px 10px 35px; border-radius: 8px; border: 1px solid var(--border-gray); font-family: var(--font-body);">
             </div>
-            
-            <div class="dashboard-grid" id="study-sets-container" style="max-width: 1000px;">
-                <!-- Sets loaded by JS -->
-            </div>
+            <select id="set-filter" onchange="renderStudySets()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-gray); font-family: var(--font-body); min-width: 150px;">
+                <option value="all">All Types</option>
+                <option value="flashcards">🃏 Flashcards Only</option>
+                <option value="notes">📝 Notes Only</option>
+                <option value="links">🔗 Links Only</option>
+            </select>
+        </div>
+        
+        <div class="dashboard-grid" id="study-sets-container" style="max-width: 1000px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <!-- Sets loaded by JS -->
+        </div>
 
             <button class="form-button" style="margin-top: 2rem;" onclick="openCreateSetModal()">+ Create New Set</button>
         </section>
-        <!-- ============================================== -->
+
     </main>
 
-    <!-- ====== PASTE THIS BELOW </main> BUT ABOVE <footer> ====== -->
+    <!-- ====== MODALS ====== -->
+    
+    <!-- Generic Lesson/Content Modal (CRITICAL FIX: REQUIRED TO OPEN STUDY SETS) -->
+    <div id="lessonModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+            <span class="close-modal" onclick="closeLesson()">&times;</span>
+            <h3 id="lessonTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Study Set</h3>
+            <div id="lessonContent" style="margin-top: 1rem; text-align: left;">
+                <!-- Content loads here -->
+            </div>
+        </div>
+    </div>
+
     <!-- Create Set Modal -->
     <div id="createSetModal" class="modal hidden">
         <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
             <span class="close-modal" onclick="closeCreateSetModal()">&times;</span>
             <h3 style="color: var(--primary-orange); margin-bottom: 1rem;">Create a Study Set</h3>
+            
+            <!-- Basic Info -->
             <div class="form-group"><input type="text" id="set-title" placeholder="Set Title (e.g. Test 1 Review)" required></div>
             <div class="form-group"><input type="text" id="set-desc" placeholder="Short description" required></div>
-            <div class="form-group" style="display:flex; align-items:center; gap: 10px; margin-bottom: 1rem;">
-                <input type="checkbox" id="set-public" checked style="width: auto;"> <label style="color: var(--text-dark);">Make public to community?</label>
-            </div>
             
-            <div id="terms-container"></div>
-            <button class="form-button secondary" onclick="addTermRow()" style="width: 100%; margin-bottom: 1rem;">+ Add Term</button>
+            <!-- Resource Type Selector -->
+            <div class="form-group">
+                <label style="color: var(--text-dark); font-weight: 600; display: block; margin-bottom: 0.5rem;">Resource Type</label>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <label class="resource-type-option">
+                        <input type="radio" name="resource-type" value="flashcards" checked onchange="toggleResourceFields()">
+                        <span class="resource-type-chip">🃏 Flashcards</span>
+                    </label>
+                    <label class="resource-type-option">
+                        <input type="radio" name="resource-type" value="notes" onchange="toggleResourceFields()">
+                        <span class="resource-type-chip">📝 Notes</span>
+                    </label>
+                    <label class="resource-type-option">
+                        <input type="radio" name="resource-type" value="links" onchange="toggleResourceFields()">
+                        <span class="resource-type-chip">🔗 Resources</span>
+                    </label>
+                    <label class="resource-type-option">
+                        <input type="radio" name="resource-type" value="mixed" onchange="toggleResourceFields()">
+                        <span class="resource-type-chip">✨ Mixed</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Flashcards Section -->
+            <div id="flashcards-section">
+                <h4 style="color: var(--accent-blue-dark); margin: 1rem 0 0.5rem;">Flashcard Terms</h4>
+                <div id="terms-container"></div>
+                <button class="form-button secondary" onclick="addTermRow()" style="width: 100%; margin: 0.5rem 0;">+ Add Term</button>
+            </div>
+
+            <!-- Notes Section -->
+            <div id="notes-section" class="hidden">
+                <h4 style="color: var(--accent-blue-dark); margin: 1rem 0 0.5rem;">Your Notes</h4>
+                <div class="form-group">
+                    <textarea id="notes-content" rows="10" placeholder="Write your study notes here... Supports basic markdown: **bold**, *italic*, - lists" style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-gray); border-radius: 8px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <!-- Links Section -->
+            <div id="links-section" class="hidden">
+                <h4 style="color: var(--accent-blue-dark); margin: 1rem 0 0.5rem;">Resource Links</h4>
+                <div id="links-container"></div>
+                <button class="form-button secondary" onclick="addLinkRow()" style="width: 100%; margin: 0.5rem 0;">+ Add Link</button>
+            </div>
+
+            <!-- Visibility & Tags -->
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0;">
+                <div class="form-group" style="flex: 1; min-width: 200px;">
+                    <label style="color: var(--text-dark);">Tags (comma-separated)</label>
+                    <input type="text" id="set-tags" placeholder="e.g. preterite, irregular">
+                </div>
+                <div class="form-group" style="display:flex; align-items:center; gap: 10px;">
+                    <input type="checkbox" id="set-public" checked style="width: auto;"> 
+                    <label style="color: var(--text-dark);">Make public to community?</label>
+                </div>
+            </div>
+
             <button class="form-button" onclick="saveStudySet()" style="width: 100%; background: var(--accent-blue-light);">Save & Publish Set</button>
         </div>
     </div>
 
-    <!-- Custom Flashcard Modal -->
+    <!-- Custom Flashcard Modal (For opening User Sets) -->
     <div id="customFlashcardModal" class="modal hidden">
         <div class="modal-content">
             <span class="close-modal" onclick="closeCustomFlashcards()">&times;</span>
@@ -332,11 +406,28 @@
             </div>
         </div>
     </div>
-    <!-- ========================================================== -->
+
+    <!-- Original Flashcard Modal (For the hard-coded vocab buttons) -->
+    <div id="flashcardModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeOldFlashcards()">&times;</span>
+            <h3 id="flashcardTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Flashcards</h3>
+            <div id="flashcardContent" style="margin-top: 1rem; text-align: center;">
+                <div id="flashcard" style="background: var(--bg-light-orange); padding: 3rem; border-radius: 15px; cursor: pointer; min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; border: 2px solid var(--border-gray);">
+                    <p id="flashcardFront" style="font-size: 2rem; color: var(--primary-orange); font-family: var(--font-heading);">Click to flip</p>
+                    <p id="flashcardBack" class="hidden" style="font-size: 1.5rem; color: var(--accent-blue-dark);">Translation</p>
+                </div>
+                <div style="margin-top: 1rem; display: flex; gap: 10px; justify-content: center; align-items: center;">
+                    <button class="form-button secondary" onclick="prevCard()">Prev</button>
+                    <span id="cardCounter" style="padding: 10px; font-weight: 600;">1 / 10</span>
+                    <button class="form-button secondary" onclick="nextCard()">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2026 Paso a Paso. Good luck! ¡Buena suerte!</p>
     </footer>
-
 </body>
 </html>

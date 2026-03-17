@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Paso a Paso - Q&A Forum</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script> 
+</head>
+
+<body>
+    <div id="announcement-banner"></div>
+    <header class="main-header">
+        <div class="header-content">
+            <a href="login.html" id="login-status-link" class="login-link">Login</a>
+            <a href="index.html" class="logo-link"><span>Paso a Paso</span> <img src="orange.svg" alt="Logo"></a>
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="resources.html">Resources</a>
+                <a href="schedule.html">Schedule</a>
+                <a href="forum.html" class="active">Community Q&A</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-section">
+            <div class="hero-card">
+                <h1 style="color: var(--primary-orange);">Peer-to-Peer Q&A</h1>
+                <p style="color: var(--secondary-orange); font-size: 1.1rem; overflow-wrap: break-word;">Ask questions, share tips, and help your fellow students learn!</p>
+                <button class="form-button" style="margin-top: 1.5rem; background: var(--bg-white); color: var(--primary-orange);" onclick="openCreatePostModal()">+ Ask a Question</button>
+            </div>
+        </section>
+
+        <section class="card-section" style="background: transparent; box-shadow: none; padding-top: 0; min-width: 0">
+            <div style="width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem;" id="forum-container">
+                <!-- Forum posts load here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Create Post Modal -->
+    <div id="createPostModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCreatePostModal()">&times;</span>
+            <h3 style="color: var(--primary-orange); margin-bottom: 1rem;">Ask the Community</h3>
+            <div class="form-group"><input type="text" id="post-title" placeholder="Question Title (e.g. Help with Ser vs Estar)" required></div>
+            <div class="form-group"><textarea id="post-content" rows="5" placeholder="Explain what you need help with..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-gray); font-family: inherit; resize: vertical;" required></textarea></div>
+            <button class="form-button" onclick="saveForumPost()" style="width: 100%;">Post Question</button>
+        </div>
+    </div>
+
+    <!-- View/Reply Post Modal -->
+    <div id="viewPostModal" class="modal hidden">
+        <div class="modal-content" style="min-width: 0; max-width: 700px; max-height: 90vh; background: var(--bg-light-orange); overflow-wrap: break-word;">
+            <span class="close-modal" onclick="closeViewPostModal()">&times;</span>
+            <div id="active-post-content" style="min-width: 0; width: 100%; word-break: break-word; text-align: left; margin-bottom: 2rem; overflow-wrap: break-word;"></div>
+            
+            <div style="border-top: 2px solid var(--border-gray); padding-top: 1rem;">
+                <h4 style="color: var(--accent-blue-dark); margin-bottom: 1rem; overflow-wrap: break-word;">Replies</h4>
+                <div id="replies-container" style="min-width: 0; display: flex; width: 100%; word-break: break-word; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; overflow-wrap: break-word;"></div>
+                
+                <div style="display: flex; gap: 10px; overflow-wrap: break-word;">
+                    <input type="text" id="reply-input" placeholder="Type your reply..." style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-gray); font-family: var(--font-body); overflow-wrap: break-word;">
+                    <button class="form-button" style="margin: 0;" onclick="addReply()">Reply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Paso a Paso. Good luck! ¡Buena suerte!</p>
+    </footer>
+</body>
+</html>
