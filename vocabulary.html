@@ -72,9 +72,9 @@
                 <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Hola, adiós, por favor, gracias...</p>
                 
                 <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
-                    <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openFlashcards('greetings')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
-                    <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('greetings')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
-                    <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('greetings')"><img src="download.svg" alt="Download"> Word List</a>
+                    <a href="#1" class="view-all-link" style="margin-top: 0;" onclick="openStudySet('1')"><img src="stack.svg" alt="Flashcards"> Flashcards</a>
+                    <a href="https://wayground.com/admin/quiz/5c826d44cce03e001a9d14a9/basic-spanish-greetings" target="_blank" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('greetings')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                    <a href="#https://sfponline.org/Uploads/3466/Spanish%20Greetings%20and%20Basics_1.pdf" download="GreetingsAndBasics" class="view-all-link" style="margin-top: 0;" onclick="downloadWordList('greetings')"><img src="download.svg" alt="Download"> Word List</a>
                 </div>
                 <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('greetings')">Mark as Complete</button>
             </div>
@@ -234,7 +234,7 @@
 
     <!-- ====== MODALS ====== -->
     
-    <!-- Generic Lesson/Content Modal (CRITICAL FIX: REQUIRED TO OPEN STUDY SETS) -->
+    <!-- Generic Lesson/Content Modal -->
     <div id="lessonModal" class="modal hidden">
         <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
             <span class="close-modal" onclick="closeLesson()">&times;</span>

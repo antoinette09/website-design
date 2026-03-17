@@ -855,7 +855,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 replies: []
             };
             
-            posts.push(newSet);
+            posts.unshift(newPost);
             localStorage.setItem('forumPosts', JSON.stringify(posts));
             closeCreatePostModal();
             showToast("Question posted!");
