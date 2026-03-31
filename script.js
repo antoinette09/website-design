@@ -1,8 +1,22 @@
 // ==========================================
-// GLOBAL UTILITIES & VARIABLES
+// GLOBAL UTILITIES & ACCESSIBILITY
 // ==========================================
 const currentUserJSON = localStorage.getItem('currentUser');
 const currentUser = currentUserJSON ? JSON.parse(currentUserJSON) : null;
+
+const a11ySettings = JSON.parse(localStorage.getItem('a11ySettings')) || { dark: false, dyslexia: false, colorblind: false };
+function applyA11y() {
+    if(a11ySettings.dark) document.body.classList.add('dark-mode'); else document.body.classList.remove('dark-mode');
+    if(a11ySettings.dyslexia) document.body.classList.add('dyslexia-mode'); else document.body.classList.remove('dyslexia-mode');
+    if(a11ySettings.colorblind) document.body.classList.add('colorblind-mode'); else document.body.classList.remove('colorblind-mode');
+}
+applyA11y();
+
+window.toggleA11y = function(type) {
+    a11ySettings[type] = document.getElementById(`toggle-${type}`).checked;
+    localStorage.setItem('a11ySettings', JSON.stringify(a11ySettings));
+    applyA11y();
+};
 
 window.showToast = function(message) {
     const toast = document.createElement('div');
@@ -10,41 +24,40 @@ window.showToast = function(message) {
     toast.innerHTML = message;
     document.body.appendChild(toast);
     setTimeout(() => toast.classList.add('show'), 100);
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 500);
-    }, 3000);
+    setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 500); }, 3000);
 };
 
 window.awardXP = function(amount, message) {
-    if(!currentUser) return; // Only logged in users get XP
-    const stats = JSON.parse(localStorage.getItem('userStats')) || { streak: 0, xp: 0, level: 1, lastActivity: null, lastLesson: 'Lesson 1' };
+    if(!currentUser) return; 
+    const stats = JSON.parse(localStorage.getItem(`stats_${currentUser.username}`)) || { streak: 0, xp: 0, level: 1, lastActivity: new Date().toLocaleDateString() };
     stats.xp += amount;
+    stats.lastActivity = new Date().toLocaleDateString(); 
     const newLevel = Math.floor(stats.xp / 500) + 1;
-    if (newLevel > stats.level) {
-        stats.level = newLevel;
-        window.showToast(`🎉 Level Up! You're now level ${stats.level}!`);
-    }
-    localStorage.setItem('userStats', JSON.stringify(stats));
-    window.showToast(`✨ +${amount} XP: ${message}`);
-    if(document.getElementById('xp-display')) {
-        document.getElementById('xp-display').textContent = stats.xp;
-        document.getElementById('level-display').textContent = stats.level;
-    }
+    if (newLevel > stats.level) { stats.level = newLevel; window.showToast(`🎉 Level Up! You're now level ${stats.level}!`); }
+    localStorage.setItem(`stats_${currentUser.username}`, JSON.stringify(stats));
+    window.showToast(`<img src="sparkle.svg" style="width: 50px; vertical-align: middle;"> +${amount} XP: ${message}`);
+    if(document.getElementById('xp-display')) { document.getElementById('xp-display').textContent = stats.xp; document.getElementById('level-display').textContent = stats.level; }
 };
 
-window.handleLogout = function(e) {
-    if(e) e.preventDefault();
-    localStorage.removeItem('currentUser');
-    window.location.href = 'index.html'; 
+window.handleLogout = function(e) { if(e) e.preventDefault(); localStorage.removeItem('currentUser'); window.location.href = 'index.html'; };
+
+window.closeYouTubeModal = function() {
+    const modal = document.getElementById('videoModal');
+    const container = document.getElementById('videoContainer');
+    if(modal) modal.classList.add('hidden');
+    if(container) container.innerHTML = ''; // Stops the video from playing in background
 };
 
 // ==========================================
-// INITIALIZATION ON PAGE LOAD
+// PAGE LOAD INITIALIZATION
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- HEADER ---
+    // Sync Checkboxes for A11y
+    if(document.getElementById('toggle-dark')) document.getElementById('toggle-dark').checked = a11ySettings.dark;
+    if(document.getElementById('toggle-dyslexia')) document.getElementById('toggle-dyslexia').checked = a11ySettings.dyslexia;
+    if(document.getElementById('toggle-colorblind')) document.getElementById('toggle-colorblind').checked = a11ySettings.colorblind;
+
     const loginLink = document.getElementById('login-status-link');
     const announcementBanner = document.getElementById('announcement-banner');
     
@@ -61,113 +74,75 @@ document.addEventListener('DOMContentLoaded', () => {
             announcementBanner.style.display = 'block';
         }
     }
-
-    // ---  FAQ ACCORDION (Fixed to close others) ---
+    // --- FAQ ACCORDION ---
     const faqQuestions = document.querySelectorAll('.faq-question');
     faqQuestions.forEach(button => {
         button.addEventListener('click', () => {
             const currentItem = button.parentElement;
-            // Close all other FAQs first
-            document.querySelectorAll('.faq-item').forEach(item => {
-                if(item !== currentItem) item.classList.remove('active');
-            });
-            // Toggle the one we clicked
+            document.querySelectorAll('.faq-item').forEach(item => { if(item !== currentItem) item.classList.remove('active'); });
             currentItem.classList.toggle('active');
         });
     });
 
-    // --- HOME PAGE (Index.html) ---
+    // --- 1. HOME PAGE LOGIC ---
     if(document.getElementById('greeting-text')) {
         if (currentUser) document.getElementById('greeting-text').textContent = `¡Hola, ${currentUser.username}!`;
 
-        // Stats System
         function loadStats() {
-            const stats = JSON.parse(localStorage.getItem('userStats')) || { streak: 0, xp: 0, level: 1, lastLesson: 'Lesson 1' };
+            if(!currentUser) return;
+            const stats = JSON.parse(localStorage.getItem(`stats_${currentUser.username}`)) || { streak: 0, xp: 0, level: 1, lastLesson: 'Lesson 1' };
             document.getElementById('streak-display').textContent = stats.streak;
             document.getElementById('xp-display').textContent = stats.xp;
             document.getElementById('level-display').textContent = stats.level;
-
             const continueBtn = document.getElementById('continue-lesson-btn');
             if(continueBtn) {
-                continueBtn.innerHTML = `<img src="refresh.svg" alt="Refresh" onerror="this.style.display='none'" style="height:25px; width:25px;"> Continue ${stats.lastLesson || 'Lesson 1'}`;
-                continueBtn.onclick = () => {
-                    window.awardXP(10, "Continued Learning!");
-                    stats.lastLesson = `Lesson ${Math.floor(stats.xp / 100) + 1}`;
-                    localStorage.setItem('userStats', JSON.stringify(stats));
-                    loadStats();
-                };
+                continueBtn.innerHTML = `<img src="arrows.svg" alt="Refresh" style="height:50px; width:50px;"> Continue ${stats.lastLesson || 'Lesson 1'}`;
+                continueBtn.onclick = () => { window.awardXP(10, "Continued Learning!"); stats.lastLesson = `Lesson ${Math.floor(stats.xp / 100) + 1}`; localStorage.setItem(`stats_${currentUser.username}`, JSON.stringify(stats)); loadStats(); };
             }
         }
         loadStats();
 
-                // Word of the Day
-                const words = [
-                    { spanish: 'El mar', english: 'The sea' },
-                    { spanish: 'La playa', english: 'The beach' },
-                    { spanish: 'El libro', english: 'The book' },
-                    { spanish: 'La casa', english: 'The house' },
-                    { spanish: 'El amigo', english: 'The friend' }
-                ];
-        
-                let wordOfDay = JSON.parse(localStorage.getItem('wordOfDay'));
-                if (!wordOfDay || new Date().toDateString() !== wordOfDay.date) {
-                    wordOfDay = { date: new Date().toDateString(), word: words[Math.floor(Math.random() * words.length)] };
-                    localStorage.setItem('wordOfDay', JSON.stringify(wordOfDay));
-                }
-        
-                document.getElementById('word-spanish').textContent = wordOfDay.word.spanish;
-                document.getElementById('word-english').textContent = wordOfDay.word.english;
-        
-                const listenBtn = document.getElementById('listen-btn');
-                if(listenBtn) {
-                    listenBtn.addEventListener('click', () => {
-                        window.speechSynthesis.cancel(); 
-                        const utterance = new SpeechSynthesisUtterance(wordOfDay.word.spanish);
-                        utterance.lang = 'es-ES'; 
-                        utterance.rate = 0.9;
-                        window.speechSynthesis.speak(utterance);
-                    });
-                }
+        // Word of the Day
+        const words = [
+            { spanish: 'El mar', english: 'The sea' }, { spanish: 'La playa', english: 'The beach' },
+            { spanish: 'El libro', english: 'The book' }, { spanish: 'La casa', english: 'The house' }
+        ];
+        let wordOfDay = JSON.parse(localStorage.getItem('wordOfDay'));
+        if (!wordOfDay || new Date().toDateString() !== wordOfDay.date) {
+            wordOfDay = { date: new Date().toDateString(), word: words[Math.floor(Math.random() * words.length)] };
+            localStorage.setItem('wordOfDay', JSON.stringify(wordOfDay));
+        }
+        if(document.getElementById('word-spanish')) document.getElementById('word-spanish').textContent = wordOfDay.word.spanish;
+        if(document.getElementById('word-english')) document.getElementById('word-english').textContent = wordOfDay.word.english;
 
+        const listenBtn = document.getElementById('listen-btn');
+        if(listenBtn) {
+            listenBtn.addEventListener('click', () => {
+                window.speechSynthesis.cancel(); 
+                const utterance = new SpeechSynthesisUtterance(wordOfDay.word.spanish);
+                utterance.lang = 'es-ES'; utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            });
+        }
+
+        // Coming Up Schedule 
         function loadComingUp() {
             const siteEvents = JSON.parse(localStorage.getItem('siteEvents')) || [];
             const pendingEvents = JSON.parse(localStorage.getItem('pendingEvents')) || [];
-            let myEvents = siteEvents;
+            let myEvents = currentUser ? [...siteEvents, ...pendingEvents.filter(e => e.proposer === currentUser.username)] : siteEvents;
             
-            if(currentUser) {
-                const myPending = pendingEvents.filter(e => e.proposer === currentUser.username);
-                myEvents = [...siteEvents, ...myPending];
-            }
-
             const comingUpList = document.getElementById('coming-up-list');
+            if(!comingUpList) return;
             const today = new Date(); today.setHours(0, 0, 0, 0);
-            
-            const futureEvents = myEvents.filter(event => {
-                const parts = event.date.split('-');
-                const eventDate = new Date(parts[0], parts[1] - 1, parts[2]); 
-                return eventDate >= today;
-            }).sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 3); 
+            const futureEvents = myEvents.filter(e => new Date(e.date.split('-')[0], e.date.split('-')[1] - 1, e.date.split('-')[2]) >= today).sort((a,b)=> new Date(a.date) - new Date(b.date)).slice(0, 3); 
 
-            if (futureEvents.length === 0) {
-                comingUpList.innerHTML = `<p style="color: #888;">No upcoming sessions.</p>`;
-                return;
-            }
-
-            comingUpList.innerHTML = futureEvents.map(event => {
-                const parts = event.date.split('-');
-                const eventDate = new Date(parts[0], parts[1] - 1, parts[2]);
-                const dateStr = eventDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                const isPending = event.proposer ? `<span style="color:#e67e22; font-size:0.8rem;">(Pending Approval)</span>` : '';
-                return `
-                    <div class="event-item">
-                        <div class="event-date" style="${event.proposer ? 'background:#95a5a6;' : ''}">${dateStr}</div>
-                        <div>
-                            <strong style="color: var(--primary-orange);">${event.title} ${isPending}</strong><br>
-                            <small style="color: var(--text-dark);">${event.type.toUpperCase()}</small>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            if (futureEvents.length === 0) return comingUpList.innerHTML = `<p style="font-size: 1.5rem;color: #888;">No upcoming sessions.</p>`;
+            comingUpList.innerHTML = futureEvents.map(e => `
+                <div class="event-item">
+                    <div class="event-date" style="${e.proposer ? 'background:#95a5a6;' : ''}">${new Date(e.date.split('-')[0], e.date.split('-')[1] - 1, e.date.split('-')[2]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+                    <div><strong style="color: var(--primary-orange);">${e.title} ${e.proposer ? '(Pending)' : ''}</strong><br><small>${e.type.toUpperCase()}</small></div>
+                </div>
+            `).join('');
         }
         loadComingUp();
     }
@@ -206,80 +181,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.renderAdminDashboard = function() {
             const users = JSON.parse(localStorage.getItem('users')) || [];
-            const container = document.getElementById('user-list-container');
-            container.innerHTML = '';
-            users.forEach(user => {
-                const roleClass = user.role === 'admin' ? 'role-admin' : 'role-user';
-                const deleteBtn = (currentUser.id === user.id) ? '' : `<button class="delete-user-button" onclick="deleteUser(${user.id})">Delete</button>`;
-                container.innerHTML += `
-                    <div class="user-item">
-                        <div><strong>${user.username}</strong><br><small>${user.email || 'No email'}</small></div>
-                        <div><span class="user-role-badge ${roleClass}">${user.role}</span> ${deleteBtn}</div>
-                    </div>`;
-            });
+            const tbody = document.getElementById('user-metrics-body');
+            if(tbody) {
+                tbody.innerHTML = '';
+                users.forEach(user => {
+                    if(user.role === 'admin') return; // Only show students in metrics
+                    // Pull mock metrics
+                    const stats = JSON.parse(localStorage.getItem(`stats_${user.username}`)) || { xp: 0, level: 1, lastActivity: 'Never', lastLesson: 'None' };
+                    
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong style="font-size: 1.5rem;">${user.username}</strong><br><small style="font-size: 1.5rem;">${user.email || 'No email'}</small></td>
+                            <td style="font-size: 1.5rem;">${user.joined}</td>
+                            <td><span style="font-size: 1.5rem;color: ${stats.lastActivity === new Date().toLocaleDateString() ? 'green' : 'var(--text-dark)'};">${stats.lastActivity}</span></td>
+                            <td style="font-size: 1.5rem;"><strong style="font-size: 1.5rem;">${stats.xp} XP</strong> (Lvl ${stats.level})</td>
+                            <td style="font-size: 1.5rem;">${stats.lastLesson}</td>
+                            <td>
+                                <button onclick="openDMModal('${user.username}')" style="font-size: 1.5rem;background:var(--accent-blue-light); color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Message</button>
+                                <button onclick="deleteUser(${user.id})" style="font-size: 1.5rem;background:#e74c3c; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Remove</button>
+                            </td>
+                        </tr>`;
+                });
+            }
 
-            const pendingEvents = JSON.parse(localStorage.getItem('pendingEvents')) || [];
+            const pending = JSON.parse(localStorage.getItem('pendingEvents')) || [];
             const reqContainer = document.getElementById('pending-requests-container');
-            reqContainer.innerHTML = '';
-            if(pendingEvents.length === 0) reqContainer.innerHTML = '<p style="color:#666;">No pending requests.</p>';
-            pendingEvents.forEach(evt => {
-                reqContainer.innerHTML += `
-                    <div class="pending-event-card">
-                        <div>
-                            <strong>${evt.title}</strong> (${evt.date})<br>
-                            <small>Requested by: ${evt.proposer} | Type: ${evt.type} | Spots: ${evt.totalSpots}</small>
+            if(reqContainer) {
+                reqContainer.innerHTML = pending.length === 0 ? '<p style="font-size: 1.5rem;">No pending requests.</p>' : pending.map(evt => `
+                    <div class="pending-event-card" style="border: 1px solid var(--border-gray); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                        <strong>${evt.title}</strong> (${evt.date})<br><small>By: ${evt.proposer} | Type: ${evt.type}</small>
+                        <div style="margin-top: 5px;">
+                            <button onclick="approveEvent('${evt.id}')" style="background:#2ecc71; color:white; border:none; padding:5px; border-radius:4px;">Approve</button>
+                            <button onclick="denyEvent('${evt.id}')" style="background:#e74c3c; color:white; border:none; padding:5px; border-radius:4px;">Deny</button>
                         </div>
-                        <div style="display:flex; gap:10px;">
-                            <button onclick="approveEvent('${evt.id}')" style="background:#2ecc71; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Approve</button>
-                            <button onclick="denyEvent('${evt.id}')" style="background:#e74c3c; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Deny</button>
-                        </div>
-                    </div>
-                `;
-            });
+                    </div>`).join('');
+            }
         };
 
         window.approveEvent = function(id) {
             let pending = JSON.parse(localStorage.getItem('pendingEvents')) || [];
-            let siteEvents = JSON.parse(localStorage.getItem('siteEvents')) || [];
+            let siteEvts = JSON.parse(localStorage.getItem('siteEvents')) || [];
             const evt = pending.find(e => e.id === id);
             if(evt) {
-                delete evt.proposer; 
-                siteEvents.push(evt);
-                pending = pending.filter(e => e.id !== id);
-                localStorage.setItem('siteEvents', JSON.stringify(siteEvents));
-                localStorage.setItem('pendingEvents', JSON.stringify(pending));
-                renderAdminDashboard();
-                showToast("Event Approved & Added to Calendar!");
+                delete evt.proposer; siteEvts.push(evt);
+                localStorage.setItem('siteEvents', JSON.stringify(siteEvts));
+                localStorage.setItem('pendingEvents', JSON.stringify(pending.filter(e => e.id !== id)));
+                renderAdminDashboard(); showToast("Event Approved!");
             }
         };
 
         window.denyEvent = function(id) {
             let pending = JSON.parse(localStorage.getItem('pendingEvents')) || [];
-            pending = pending.filter(e => e.id !== id);
-            localStorage.setItem('pendingEvents', JSON.stringify(pending));
-            renderAdminDashboard();
-            showToast("Event Denied.");
+            localStorage.setItem('pendingEvents', JSON.stringify(pending.filter(e => e.id !== id)));
+            renderAdminDashboard(); showToast("Event Denied.");
         };
 
-        window.deleteUser = function(userId) {
-            if (confirm("Permanently delete this user?")) {
+        window.deleteUser = function(id) {
+            if (confirm("Delete this student?")) {
                 let users = JSON.parse(localStorage.getItem('users')) || [];
-                localStorage.setItem('users', JSON.stringify(users.filter(u => u.id !== userId)));
+                localStorage.setItem('users', JSON.stringify(users.filter(u => u.id !== id)));
                 renderAdminDashboard();
             }
         };
 
-        window.saveAnnouncement = function(e) {
-            e.preventDefault();
-            localStorage.setItem('siteAnnouncement', document.getElementById('announcement-input').value.trim());
-            alert("Announcement Posted!");
+        window.openDMModal = function(username) {
+            document.getElementById('dm-title').textContent = `Message ${username}`;
+            document.getElementById('dm-message').value = '';
+            document.getElementById('dmModal').classList.remove('hidden');
         };
-        window.clearAnnouncement = function() {
-            localStorage.removeItem('siteAnnouncement');
-            document.getElementById('announcement-input').value = '';
-            alert("Banner Removed.");
+        window.sendDM = function() {
+            const msg = document.getElementById('dm-message').value.trim();
+            if(!msg) return alert("Type a message first.");
+            document.getElementById('dmModal').classList.add('hidden');
+            showToast("Message sent to student's inbox!");
         };
 
+        window.saveAnnouncement = function(e) { e.preventDefault(); localStorage.setItem('siteAnnouncement', document.getElementById('announcement-input').value.trim()); alert("Posted!"); };
+        window.clearAnnouncement = function() { localStorage.removeItem('siteAnnouncement'); document.getElementById('announcement-input').value = ''; alert("Removed."); };
+
+   
         document.getElementById('auth-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
@@ -314,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 5. CALENDAR SYSTEM ---
+    // --- 3. CALENDAR SYSTEM ---
     if (document.getElementById('calendar')) {
         let date = new Date();
         let selectedDate = null;
@@ -370,10 +350,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const eventList = document.getElementById('existingEvents');
             let siteEvents = JSON.parse(localStorage.getItem('siteEvents')) || [];
             let pendingEvents = JSON.parse(localStorage.getItem('pendingEvents')) || [];
-            
             const daysEvents = siteEvents.filter(e => e.date === selectedDate);
             
-            eventList.innerHTML = daysEvents.length ? '' : '<p style="color:var(--text-dark);">No official meetings.</p>';
+            eventList.innerHTML = daysEvents.length ? '' : '<p style="font-size: 1.5rem;">No official meetings.</p>';
             daysEvents.forEach(evt => {
                 const isFull = (evt.totalSpots - evt.attendees.length) <= 0;
                 const hasJoined = currentUser && evt.attendees.includes(currentUser.username);
@@ -418,7 +397,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('pendingEvents', JSON.stringify(pending));
                 showToast("Proposal sent to Admin!");
             }
-            
             document.getElementById('eventTitle').value = '';
             document.getElementById('eventSpots').value = '';
             window.renderEventsInModal();
@@ -446,387 +424,31 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCalendar();
     }
 
-
-    // --- 6. LEARNING MODULES & COMMUNITY SETS (WITH SEARCH/FILTER) ---
-    let currentModuleType = null;
-    let moduleConfig = {};
-    let customFlashcards = [];
-    let customCardIndex = 0;
-
-    if (document.getElementById('grammar-progress')) {
-        currentModuleType = 'grammar';
-        moduleConfig = { total: 8, xp: 50, statId: 'topics-mastered', multiplier: 1 };
-    } else if (document.getElementById('conjugation-progress')) {
-        currentModuleType = 'conjugation';
-        moduleConfig = { total: 6, xp: 50, statId: 'verbs-mastered', multiplier: 15 };
-    } else if (document.getElementById('vocab-progress')) {
-        currentModuleType = 'vocab';
-        moduleConfig = { total: 10, xp: 50, statId: 'words-learned', multiplier: 55 };
-    }
-
-    if (currentModuleType) {
-        
-        // --- Core Module Progress Tracking ---
-        const completedKey = `${currentModuleType}Completed`;
-        let completedItems = JSON.parse(localStorage.getItem(completedKey)) || [];
-
-        function updateProgressUI() {
-            const percent = Math.round((completedItems.length / moduleConfig.total) * 100);
-            document.getElementById(`${currentModuleType}-progress`).textContent = percent;
-            document.getElementById(`${currentModuleType}ProgressBar`).style.width = percent + '%';
-            document.getElementById(`${currentModuleType}ProgressText`).textContent = `${completedItems.length} of ${moduleConfig.total} modules completed`;
-            document.getElementById(moduleConfig.statId).textContent = completedItems.length * moduleConfig.multiplier;
-        }
-
-        completedItems.forEach(item => {
-            const card = document.querySelector(`.activity-card[data-module="${item}"]`);
-            if (card) {
-                card.classList.add('completed');
-                const btn = card.querySelector('.complete-button');
-                if (btn) {
-                    btn.textContent = 'Undo';
-                    btn.style.backgroundColor = 'var(--border-gray)';
-                    btn.style.color = 'var(--text-dark)';
-                }
-            }
-        });
-        updateProgressUI();
-
-        window.toggleModuleComplete = function(itemStr) {
-            const card = document.querySelector(`.activity-card[data-module="${itemStr}"]`);
-            const button = card.querySelector('.complete-button');
-            const isCompleted = completedItems.includes(itemStr);
-
-            if (isCompleted) {
-                card.classList.remove('completed');
-                button.textContent = 'Mark as Complete';
-                button.style.backgroundColor = 'var(--primary-orange)';
-                button.style.color = 'var(--text-light)';
-                completedItems = completedItems.filter(i => i !== itemStr);
-            } else {
-                card.classList.add('completed');
-                button.textContent = 'Undo';
-                button.style.backgroundColor = 'var(--border-gray)';
-                button.style.color = 'var(--text-dark)';
-                completedItems.push(itemStr);
-                window.awardXP(moduleConfig.xp, `Completed module!`);
-            }
-            
-            localStorage.setItem(completedKey, JSON.stringify(completedItems));
-            updateProgressUI();
-        };
-
-        // --- Community Sets Default Data ---
-        const defaultSets = [
-            { id: "1", title: "Greetings Review", category: "vocab", author: "Admin", isPublic: true, resourceType: "flashcards", terms: [{term: "Hola", def: "Hello"}, {term: "Adiós", def: "Goodbye"}], notes: "", links: [] },
-            { id: "2", title: "-AR Endings", category: "conjugation", author: "Admin", isPublic: true, resourceType: "notes", terms: [], notes: "**Rules for -AR verbs:**\n- yo = o\n- tú = as\n- él/ella = a", links: [] },
-            { id: "3", title: "Helpful Grammar Links", category: "grammar", author: "Admin", isPublic: true, resourceType: "links", terms: [], notes: "", links: [{title: "SpanishDict Grammar", url: "https://spanishdict.com", description: "Best reference tool"}] }
-        ];
-
-        if(!localStorage.getItem('studySets')) {
-            localStorage.setItem('studySets', JSON.stringify(defaultSets));
-        }
-
-        window.switchResourceTab = function(tab) {
-            document.getElementById('tab-community')?.classList.remove('active');
-            document.getElementById('tab-my')?.classList.remove('active');
-            document.getElementById(`tab-${tab}`)?.classList.add('active');
-            window.renderStudySets(); // Now relies on active tab class
-        };
-
-        // --- Render Community Sets (WITH SEARCH AND FILTER) ---
-        window.renderStudySets = function() {
-            const container = document.getElementById('study-sets-container');
-            if (!container) return;
-
-            const allSets = JSON.parse(localStorage.getItem('studySets')) || [];
-            
-            // 1. Filter by Page Category
-            let filteredSets = allSets.filter(s => s.category === currentModuleType);
-
-            // 2. Filter by Active Tab (Community vs My Sets)
-            const activeTab = document.querySelector('.tab-btn.active')?.id.replace('tab-', '') || 'community';
-            if(activeTab === 'community') {
-                filteredSets = filteredSets.filter(s => s.isPublic);
-            } else if (activeTab === 'my') {
-                if(!currentUser) { 
-                    container.innerHTML = '<p style="color:var(--text-dark); grid-column: 1 / -1;">Please log in to view your sets.</p>'; 
-                    return; 
-                }
-                filteredSets = filteredSets.filter(s => s.author === currentUser.username);
-            }
-
-            // 3. Filter by Search Bar Text
-            const searchQuery = document.getElementById('set-search')?.value.toLowerCase() || '';
-            if (searchQuery) {
-                filteredSets = filteredSets.filter(s => 
-                    s.title.toLowerCase().includes(searchQuery) || 
-                    s.author.toLowerCase().includes(searchQuery)
-                );
-            }
-
-            // 4. Filter by Dropdown Type
-            const typeFilter = document.getElementById('set-filter')?.value || 'all';
-            if (typeFilter !== 'all') {
-                filteredSets = filteredSets.filter(s => s.resourceType === typeFilter || s.resourceType === 'mixed');
-            }
-
-            // Render Results
-            if(filteredSets.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-dark); grid-column: 1 / -1;">No sets match your search/filter.</p>';
-                return;
-            }
-
-            container.innerHTML = filteredSets.map(set => {
-                const isMine = currentUser && set.author === currentUser.username;
-                const deleteBtn = isMine 
-                    ? `<button onclick="deleteStudySet('${set.id}', event)" style="margin-top:10px; background:#e74c3c; color:white; border:none; padding:5px 10px; border-radius:5px; width:100%; cursor:pointer;">Delete Set</button>` 
-                    : '';
-                
-                let preview = '';
-                if (set.resourceType === 'flashcards' || set.terms?.length) preview += `🃏 ${set.terms.length} cards `;
-                if (set.resourceType === 'notes' || set.notes) preview += `📝 notes `;
-                if (set.resourceType === 'links' || set.links?.length) preview += `🔗 ${set.links.length} links`;
-                if (set.resourceType === 'mixed') preview = `✨ Mixed resources`;
-                
-                return `
-                <div class="card" style="text-align:left; cursor:pointer; width: 100%; position: relative;" onclick="openStudySet('${set.id}')">
-                    <span class="resource-badge ${set.resourceType || 'flashcards'}" style="position:absolute; top:10px; right:10px; font-size:0.75rem; background:var(--bg-white); padding:3px 8px; border-radius:12px; border:1px solid var(--border-gray); font-weight:bold;">${set.resourceType || 'flashcards'}</span>
-                    <h3 style="color:var(--primary-orange); width:80%;">${set.title}</h3>
-                    <p style="font-size:0.9rem; color:var(--text-dark); margin-bottom: 5px;">By: ${set.author} | ${preview}</p>
-                    ${deleteBtn}
-                </div>
-                `;
-            }).join('');
-        };
-
-        window.openStudySet = function(id) {
-            const allSets = JSON.parse(localStorage.getItem('studySets')) || [];
-            const set = allSets.find(s => s.id === id);
-            if (!set) return alert("Set not found!");
-            
-            let contentHTML = '';
-            
-            if (set.terms?.length > 0) {
-                contentHTML += `
-                <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-gray);">
-                    <h4 style="color: var(--accent-blue-dark); margin-bottom: 0.5rem;">🃏 Flashcards</h4>
-                    <button class="form-button" onclick="startCustomFlashcardsFromSet('${set.id}')">Start Flashcard Mode</button>
-                </div>
-                `;
-            }
-            if (set.notes) {
-                contentHTML += `
-                <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-gray);">
-                    <h4 style="color: var(--accent-blue-dark); margin-bottom: 0.5rem;">📝 Notes</h4>
-                    <div style="background: var(--bg-light-orange); padding: 1rem; border-radius: 8px; text-align: left; white-space: pre-wrap; font-size: 0.95rem; color: var(--text-dark); border: 1px solid var(--border-gray);">${set.notes}</div>
-                </div>
-                `;
-            }
-            if (set.links?.length > 0) {
-                contentHTML += `
-                <div>
-                    <h4 style="color: var(--accent-blue-dark); margin-bottom: 0.5rem;">🔗 Resources</h4>
-                    ${set.links.map(link => `
-                    <a href="${link.url}" target="_blank" rel="noopener" style="display: block; padding: 0.75rem; background: var(--bg-light-orange); border-radius: 8px; margin-bottom: 0.5rem; text-decoration: none; color: var(--accent-blue-dark); border-left: 4px solid var(--primary-orange); border: 1px solid var(--border-gray);">
-                        <strong>${link.title}</strong>
-                        ${link.description ? `<p style="font-size: 0.9rem; color: var(--text-dark); margin: 0.25rem 0 0;">${link.description}</p>` : ''}
-                    </a>
-                    `).join('')}
-                </div>
-                `;
-            }
-            
-            document.getElementById('lessonTitle').textContent = set.title;
-            document.getElementById('lessonContent').innerHTML = contentHTML;
-            document.getElementById('lessonModal').classList.remove('hidden');
-        };
-
-        window.startCustomFlashcardsFromSet = function(setId) {
-            const allSets = JSON.parse(localStorage.getItem('studySets')) || [];
-            const set = allSets.find(s => s.id === setId);
-            if (!set || !set.terms?.length) return;
-            
-            document.getElementById('lessonModal').classList.add('hidden');
-            customFlashcards = set.terms;
-            customCardIndex = 0;
-            document.getElementById('customFlashcardTitle').textContent = set.title;
-            document.getElementById('customFlashcardModal').classList.remove('hidden');
-            updateCustomFlashcardUI();
-        };
-
-        function updateCustomFlashcardUI() {
-            const card = customFlashcards[customCardIndex];
-            document.getElementById('customFlashcardFront').textContent = card.term;
-            document.getElementById('customFlashcardBack').textContent = card.def;
-            document.getElementById('customFlashcardFront').classList.remove('hidden');
-            document.getElementById('customFlashcardBack').classList.add('hidden');
-            document.getElementById('customCardCounter').textContent = `${customCardIndex + 1} / ${customFlashcards.length}`;
-        }
-
-        document.getElementById('customFlashcard')?.addEventListener('click', function() {
-            document.getElementById('customFlashcardFront').classList.toggle('hidden');
-            document.getElementById('customFlashcardBack').classList.toggle('hidden');
-        });
-
-        window.nextCustomCard = function() { if (customCardIndex < customFlashcards.length - 1) { customCardIndex++; updateCustomFlashcardUI(); } };
-        window.prevCustomCard = function() { if (customCardIndex > 0) { customCardIndex--; updateCustomFlashcardUI(); } };
-        window.closeCustomFlashcards = function() { document.getElementById('customFlashcardModal').classList.add('hidden'); };
-
-        // Create Set Modal Flow
-        window.openCreateSetModal = function() {
-            if(!currentUser) return alert("You must be logged in to create sets.");
-            document.getElementById('createSetModal').classList.remove('hidden');
-            document.getElementById('terms-container').innerHTML = '';
-            document.getElementById('links-container').innerHTML = '';
-            if(document.getElementById('notes-content')) document.getElementById('notes-content').value = '';
-            toggleResourceFields();
-            addTermRow(); addTermRow();
-        };
-        window.closeCreateSetModal = function() { document.getElementById('createSetModal').classList.add('hidden'); };
-        
-        window.toggleResourceFields = function() {
-            const type = document.querySelector('input[name="resource-type"]:checked')?.value || 'flashcards';
-            const flashcardsSection = document.getElementById('flashcards-section');
-            const notesSection = document.getElementById('notes-section');
-            const linksSection = document.getElementById('links-section');
-            
-            if(flashcardsSection) flashcardsSection.classList.add('hidden');
-            if(notesSection) notesSection.classList.add('hidden');
-            if(linksSection) linksSection.classList.add('hidden');
-            
-            if (type === 'flashcards' || type === 'mixed') if(flashcardsSection) flashcardsSection.classList.remove('hidden');
-            if (type === 'notes' || type === 'mixed') if(notesSection) notesSection.classList.remove('hidden');
-            if (type === 'links' || type === 'mixed') if(linksSection) linksSection.classList.remove('hidden');
-        };
-        
-        window.addTermRow = function() {
-            const row = document.createElement('div');
-            row.className = 'term-row';
-            row.style.cssText = 'display:flex; gap:0.5rem; margin-bottom:0.5rem; align-items:center;';
-            row.innerHTML = `
-                <input type="text" class="term-input" placeholder="Term (e.g. Hola)" style="flex:1; padding:8px; border:1px solid var(--border-gray); border-radius:4px; font-family: var(--font-body);">
-                <input type="text" class="def-input" placeholder="Definition (e.g. Hello)" style="flex:1; padding:8px; border:1px solid var(--border-gray); border-radius:4px; font-family: var(--font-body);">
-                <button type="button" class="remove-term-btn" onclick="this.parentElement.remove()" style="background:#e74c3c; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">×</button>
-            `;
-            document.getElementById('terms-container').appendChild(row);
-        };
-        
-        window.addLinkRow = function() {
-            const container = document.getElementById('links-container');
-            const row = document.createElement('div');
-            row.className = 'link-row';
-            row.style.cssText = 'background:var(--bg-light-orange); padding:1rem; border-radius:8px; margin-bottom:0.75rem; border:1px solid var(--border-gray);';
-            row.innerHTML = `
-                <input type="text" placeholder="Link Title" class="link-title" required style="width:100%; padding:0.5rem; margin:0.25rem 0; border:1px solid var(--border-gray); border-radius:4px;">
-                <input type="url" placeholder="https://..." class="link-url" required style="width:100%; padding:0.5rem; margin:0.25rem 0; border:1px solid var(--border-gray); border-radius:4px;">
-                <input type="text" placeholder="Description (optional)" class="link-desc" style="width:100%; padding:0.5rem; margin:0.25rem 0; border:1px solid var(--border-gray); border-radius:4px;">
-                <button type="button" class="form-button secondary" onclick="this.parentElement.remove()" style="width:auto; padding:0.3rem 0.8rem; margin-top:0.5rem;">Remove</button>
-            `;
-            container.appendChild(row);
-        };
-        
-        window.saveStudySet = function() {
-            const type = document.querySelector('input[name="resource-type"]:checked')?.value || 'flashcards';
-            const setTitle = document.getElementById('set-title').value.trim();
-            const setDesc = document.getElementById('set-desc').value.trim();
-            const isPublic = document.getElementById('set-public').checked;
-            
-            if (!setTitle) return alert("Title is required!");
-            
-            const newSet = {
-                id: Date.now().toString(),
-                title: setTitle,
-                description: setDesc,
-                category: currentModuleType,
-                resourceType: type,
-                author: currentUser.username,
-                isPublic: isPublic,
-                terms: [], notes: '', links: []
-            };
-            
-            if (type === 'flashcards' || type === 'mixed') {
-                document.querySelectorAll('.term-row').forEach(row => {
-                    const term = row.querySelector('.term-input')?.value.trim();
-                    const def = row.querySelector('.def-input')?.value.trim();
-                    if (term && def) newSet.terms.push({ term, def });
-                });
-            }
-            if ((type === 'notes' || type === 'mixed') && document.getElementById('notes-content')) {
-                newSet.notes = document.getElementById('notes-content').value.trim();
-            }
-            if (type === 'links' || type === 'mixed') {
-                document.querySelectorAll('.link-row').forEach(row => {
-                    const title = row.querySelector('.link-title')?.value.trim();
-                    const url = row.querySelector('.link-url')?.value.trim();
-                    const desc = row.querySelector('.link-desc')?.value.trim();
-                    if (title && url) newSet.links.push({ title, url, description: desc });
-                });
-            }
-            
-            if (newSet.terms.length === 0 && !newSet.notes && newSet.links.length === 0) return alert("Add at least one flashcard, note, or link!");
-            
-            const sets = JSON.parse(localStorage.getItem('studySets')) || [];
-            sets.push(newSet);
-            localStorage.setItem('studySets', JSON.stringify(sets));
-            
-            closeCreateSetModal();
-            showToast("Study Set Created! ✨");
-            awardXP(25, "Created a Study Set!");
-            document.getElementById('tab-my').click(); // Auto switch to 'My Sets' tab
-        };
-        
-        window.deleteStudySet = function(id, event) {
-            event.stopPropagation();
-            if(confirm("Delete this study set?")) {
-                let sets = JSON.parse(localStorage.getItem('studySets')) || [];
-                sets = sets.filter(s => s.id !== id);
-                localStorage.setItem('studySets', JSON.stringify(sets));
-                renderStudySets();
-            }
-        };
-
-        // Initialize Sets list
-        window.renderStudySets();
-    }
-
-    // --- 7. NEW FORUM LOGIC (forum.html) ---
+    // --- 4. COMMUNITY Q&A FORUM ---
     if (document.getElementById('forum-container')) {
         let activePostId = null;
 
         const defaultPosts = [
-            { id: "f1", title: "Help with Ser vs Estar?", content: "I keep getting confused when to use which one for location. Any tips?", author: "Student123", timestamp: "Oct 24, 10:00 AM", replies: [{author: "Admin", content: "Remember the acronym PLACE for Estar: Position, Location, Action, Condition, Emotion!", timestamp: "Oct 24, 10:05 AM"}] },
-            { id: "f2", title: "Best way to memorize vocab?", content: "What works best for you guys? Flashcards or writing it down?", author: "SpanishLearner", timestamp: "Oct 23, 2:30 PM", replies: [] }
+            { id: "f1", title: "Help with Ser vs Estar?", content: "I keep getting confused when to use which one for location. Any tips?", author: "Student123", timestamp: "Oct 24, 10:00 AM", replies: [{author: "Admin", content: "Remember the acronym PLACE for Estar: Position, Location, Action, Condition, Emotion!", timestamp: "Oct 24, 10:05 AM"}] }
         ];
 
-        if(!localStorage.getItem('forumPosts')) {
-            localStorage.setItem('forumPosts', JSON.stringify(defaultPosts));
-        }
+        if(!localStorage.getItem('forumPosts')) localStorage.setItem('forumPosts', JSON.stringify(defaultPosts));
 
         window.renderForum = function() {
             const posts = JSON.parse(localStorage.getItem('forumPosts')) || [];
             const container = document.getElementById('forum-container');
             container.innerHTML = '';
-
-            if (posts.length === 0) {
-                container.innerHTML = '<p style="text-align:center;">No posts yet. Be the first to ask a question!</p>';
-                return;
-            }
-
-            // Render descending
+            if (posts.length === 0) return container.innerHTML = '<p style="text-align:center; font-size: 1.5rem;">No posts yet. Be the first to ask a question!</p>';
+            
             posts.slice().reverse().forEach(post => {
                 container.innerHTML += `
-                    <div class="card" style="text-align: left; width: 100%; box-sizing: border-box; cursor: pointer; border: 1px solid var(--border-gray); overflow: hidden;" onclick="openViewPostModal('${post.id}')">
-                        <!-- 1. Fix the Header: Add min-width: 0 to the H3 so it truncates instead of pushing the badge out -->
-                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 5px;">
-                            <h3 style="color: var(--primary-orange); margin: 0; min-width: 0; overflow: hidden;">${post.title}</h3>
-                            <span style="flex-shrink: 0; background: var(--accent-blue-light); color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;">${post.replies.length} Replies</span>
+                    <div class="card" style="font-size:1.5rem; text-align: left; width: 100%; cursor: pointer; border: 1px solid var(--border-gray);" onclick="openViewPostModal('${post.id}')">
+                        <div style="font-size: 1.5rem; display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <h3 style=" font-size: 1.75rem; color: var(--primary-orange); margin: 0;">${post.title}</h3>
+                            <span style="background: var(--accent-blue-light); height: 30px; width:120px; color: white; padding: 2px 10px; border-radius: 12px; font-size: 1.25rem; display: flex; font-weight: bold; align-items: center;">${post.replies.length} Replies</span>
                         </div>
-                        
-                        <!-- 2. Fix the Paragraph: Ensure it's a block and box-sizing is correct -->
-                        <p style="color: var(--text-dark); font-size: 0.95rem; margin-bottom: 10px; overflow: hidden; display: block; width: 100%; box-sizing: border-box;">${post.content}</p>
-                        
-                        <small style="color: #888;">Posted by ${post.author} • ${post.timestamp}</small>
+                        <p style="color: var(--text-dark); font-size: 1.25rem; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${post.content}</p>
+                        <small style="color: #888; font-size: 1.25rem;">Posted by ${post.author} • ${post.timestamp}</small>
                     </div>
                 `;
             });
@@ -846,16 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(!title || !content) return alert("Fill out both fields!");
 
             const posts = JSON.parse(localStorage.getItem('forumPosts')) || [];
-            const newPost = {
-                id: Date.now().toString(),
-                title: title,
-                content: content,
-                author: currentUser.username,
-                timestamp: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' }),
-                replies: []
-            };
-            
-            posts.unshift(newPost);
+            posts.push({ id: Date.now().toString(), title: title, content: content, author: currentUser.username, timestamp: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' }), replies: [] });
             localStorage.setItem('forumPosts', JSON.stringify(posts));
             closeCreatePostModal();
             showToast("Question posted!");
@@ -870,9 +483,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if(!post) return;
 
             document.getElementById('active-post-content').innerHTML = `
-                <h2 style="color: var(--primary-orange); margin-bottom: 10px;">${post.title}</h2>
-                <small style="color: #888;">Posted by <strong>${post.author}</strong> on ${post.timestamp}</small>
-                <div style="background: var(--bg-white); padding: 15px; border-radius: 8px; border: 1px solid var(--border-gray); margin-top: 15px; color: var(--text-dark);">
+                <h2 style="font-size: 1.5rem; color: var(--primary-orange); margin-bottom: 10px;">${post.title}</h2>
+                <small style="font-size: 1.25rem;color: #888;">Posted by <strong>${post.author}</strong> on ${post.timestamp}</small>
+                <div style="font-size: 1.5rem; background: var(--bg-white); padding: 15px; border-radius: 8px; border: 1px solid var(--border-gray); margin-top: 15px; color: var(--text-dark);">
                     ${post.content.replace(/\n/g, '<br>')}
                 </div>
             `;
@@ -880,20 +493,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const repliesContainer = document.getElementById('replies-container');
             repliesContainer.innerHTML = '';
             if (post.replies.length === 0) {
-                repliesContainer.innerHTML = '<p style="color: #888; font-style: italic;">No replies yet. Help them out!</p>';
+                repliesContainer.innerHTML = '<p style="font-size: 1.5rem; color: #888; font-style: italic;">No replies yet. Help them out!</p>';
             } else {
                 post.replies.forEach(reply => {
                     const isAuthor = reply.author === post.author;
-                    const badge = isAuthor ? `<span style="background:var(--primary-orange); color:white; padding:2px 6px; border-radius:4px; font-size:0.7rem; margin-left:5px;">Author</span>` : '';
+                    const badge = isAuthor ? `<span style="background:var(--primary-orange); color:white; padding:2px 6px; border-radius:4px; font-size:1.25rem; margin-left:5px;">Author</span>` : '';
                     repliesContainer.innerHTML += `
                         <div style="background: var(--bg-white); padding: 10px 15px; border-radius: 8px; border-left: 3px solid var(--accent-blue-light);">
-                            <small style="color: var(--accent-blue-dark); font-weight: bold;">${reply.author} ${badge} • <span style="color:#888; font-weight:normal;">${reply.timestamp}</span></small>
-                            <p style="color: var(--text-dark); margin-top: 5px; font-size: 0.95rem;">${reply.content.replace(/\n/g, '<br>')}</p>
+                            <small style="font-size: 1.25rem; color: var(--accent-blue-dark); font-weight: bold;">${reply.author} ${badge} • <span style="color:#888; font-weight:normal;">${reply.timestamp}</span></small>
+                            <p style="font-size: 1.5rem; color: var(--text-dark); margin-top: 5px;">${reply.content.replace(/\n/g, '<br>')}</p>
                         </div>
                     `;
                 });
             }
-
             document.getElementById('viewPostModal').classList.remove('hidden');
         };
         window.closeViewPostModal = function() { document.getElementById('viewPostModal').classList.add('hidden'); activePostId = null; };
@@ -907,25 +519,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const posts = JSON.parse(localStorage.getItem('forumPosts')) || [];
             const postIndex = posts.findIndex(p => p.id === activePostId);
             if(postIndex > -1) {
-                posts[postIndex].replies.push({
-                    author: currentUser.username,
-                    content: content,
-                    timestamp: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' })
-                });
+                posts[postIndex].replies.push({ author: currentUser.username, content: content, timestamp: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' }) });
                 localStorage.setItem('forumPosts', JSON.stringify(posts));
                 input.value = '';
                 showToast("Reply posted!");
                 awardXP(10, "Helped a peer!");
-                openViewPostModal(activePostId); // Refresh modal
-                renderForum(); // Refresh background list
+                openViewPostModal(activePostId); 
+                renderForum(); 
             }
         };
-
         renderForum();
     }
 
-
-    // --- DICTIONARY API ---
+    // --- 5. DICTIONARY API ---
     if(document.getElementById('search-word')) {
         const API_KEY = '48b75fd2-def5-424a-8a81-c5b139ece004';
         const API_URL = 'https://www.dictionaryapi.com/api/v3/references/spanish/json/';
@@ -991,15 +597,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             audioUrl = `https://media.merriam-webster.com/audio/prons/es/me/mp3/${subdir}/${audioFile}.mp3`;
                         }
                         html += `
-                        <div class="card" style="margin-bottom: 1.5rem; text-align: left; width: 100%; border: 1px solid var(--border-gray);">
+                        <div class="card" style="font-size: 1.5rem; margin-bottom: 1.5rem; text-align: left; width: 100%; border: 1px solid var(--border-gray);">
                             <div style="display:flex; justify-content:space-between; flex-wrap:wrap; align-items: center; border-bottom: 2px solid var(--bg-white); padding-bottom: 10px;">
                                 <h3 style="margin:0; font-size:1.8rem; color: var(--primary-orange); font-family: var(--font-heading);">${headword}</h3>
-                                <span style="font-style:italic; color: var(--accent-blue-dark); font-weight: 600; background: var(--bg-white); padding: 4px 12px; border-radius: 20px;">${partOfSpeech}</span>
+                                <span style="font-style:italic; color: var(--accent-blue-dark); font-weight: 600; background: var(--bg-white); padding: 4px 12px; border-radius: 50px;">${partOfSpeech}</span>
                             </div>
-                            ${audioUrl ? `<button class="form-button" onclick="playAudio('${audioUrl}')" style="margin: 1rem 0; padding: 6px 15px; font-size: 0.9rem; background-color: var(--accent-blue-light); display: inline-flex; align-items: center; gap: 8px;"><img src="listen.svg" alt="Listen" style="height: 16px; filter: brightness(0) invert(1);"> Listen</button>` : ''}
-                            <div style="margin-top: ${audioUrl ? '0' : '1rem'};">
+                            ${audioUrl ? `<button class="form-button" onclick="playAudio('${audioUrl}')" style="margin: 1.5rem 0; padding: 6px 15px; font-size: 1.5rem; background-color: var(--accent-blue-light); display: inline-flex; align-items: center; gap: 8px;"><img src="listen.svg" alt="Listen" style="height: 50px;"> Listen</button>` : ''}
+                            <div style="margin-top: ${audioUrl ? '0' : '1.5rem'};">
                                 <ul style="list-style-type: none; padding: 0;">
-                                    ${definitions.map((def, i) => `<li style="margin-bottom: 8px; font-size: 1.05rem; display: flex; gap: 10px;"><strong style="color: var(--secondary-orange);">${i+1}.</strong><span style="color: var(--text-dark);">${def}</span></li>`).join('')}
+                                    ${definitions.map((def, i) => `<li style="margin-bottom: 8px; font-size: 1.75rem; display: flex; gap: 10px;"><strong style="color: var(--secondary-orange);">${i+1}.</strong><span style="color: var(--text-dark);">${def}</span></li>`).join('')}
                                 </ul>
                             </div>
                         </div>
@@ -1015,41 +621,500 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         
-        window.playAudio = function(url) { 
-            new Audio(url).play(); 
-        };
+        window.playAudio = function(url) { new Audio(url).play().catch(e => console.error("Audio playback failed", e)); };
         
         window.clearResults = function() {
             document.getElementById('search-word').value = '';
             document.getElementById('error-message').classList.add('hidden');
-            document.getElementById('ambiguity-warning').classList.add('hidden');
-            document.getElementById('dictionary-results').innerHTML = `<div class="card" id="placeholder-message" style="margin: 0 auto;"><p style="text-align: center; color: var(--secondary-orange); font-size: 1.1rem; font-weight: 600;"><img src="book.svg" alt="Dictionary" style="height: 60px; width: 60px; margin: 0 auto 1rem auto; opacity: 0.5;">Search for a word to see its definition</p></div>`;
+            document.getElementById('dictionary-results').innerHTML = `<div class="card" id="placeholder-message" style="margin: 0 auto;"><p style="text-align: center; color: var(--secondary-orange); font-size: 1.1.5rem; font-weight: 600;"><img src="book.svg" alt="Dictionary" style="height: 60px; width: 60px; margin: 0 auto 1.5rem auto; opacity: 0.5;">Search for a word to see its definition</p></div>`;
         };
         
         document.getElementById('search-word').addEventListener('keypress', (e) => { if (e.key === 'Enter') window.searchWord(); });
-        window.setSearchDirection('spanish');
     }
 
-    // --- Modal Helpers ---
-    window.openLesson = function() { document.getElementById('lessonModal')?.classList.remove('hidden'); };
+    // ==========================================
+    // 6. LEARNING MODULES, QUIZLET IMPORT, YOUTUBE & QUIZZES
+    // ==========================================
+    let currentModuleType = null;
+    let moduleConfig = {};
+
+    if (document.getElementById('grammar-progress')) { currentModuleType = 'grammar'; moduleConfig = { total: 8, xp: 50, statId: 'topics-mastered', multiplier: 1 }; } 
+    else if (document.getElementById('conjugation-progress')) { currentModuleType = 'conjugation'; moduleConfig = { total: 6, xp: 50, statId: 'verbs-mastered', multiplier: 15 }; } 
+    else if (document.getElementById('vocab-progress')) { currentModuleType = 'vocab'; moduleConfig = { total: 10, xp: 50, statId: 'words-learned', multiplier: 55 }; }
+
+    if (currentModuleType) {
+        
+        // --- Progress Tracking ---
+        const completedKey = `${currentModuleType}Completed`;
+        let completedItems = JSON.parse(localStorage.getItem(completedKey)) || [];
+
+        function updateProgressUI() {
+            const percent = Math.round((completedItems.length / moduleConfig.total) * 100);
+            document.getElementById(`${currentModuleType}-progress`).textContent = percent;
+            document.getElementById(`${currentModuleType}ProgressBar`).style.width = percent + '%';
+            document.getElementById(`${currentModuleType}ProgressText`).textContent = `${completedItems.length} of ${moduleConfig.total} modules completed`;
+            document.getElementById(moduleConfig.statId).textContent = completedItems.length * moduleConfig.multiplier;
+        }
+        updateProgressUI();
+
+        window.toggleModuleComplete = function(itemStr) {
+            const card = document.querySelector(`.activity-card[data-module="${itemStr}"]`);
+            const button = card.querySelector('.complete-button');
+            if (completedItems.includes(itemStr)) {
+                card.classList.remove('completed'); button.textContent = 'Mark as Complete'; button.style.background = 'var(--primary-orange)'; button.style.color = 'var(--text-light)';
+                completedItems = completedItems.filter(i => i !== itemStr);
+            } else {
+                card.classList.add('completed'); button.textContent = 'Undo'; button.style.background = 'var(--border-gray)'; button.style.color = 'var(--text-dark)';
+                completedItems.push(itemStr); window.awardXP(moduleConfig.xp, `Completed module!`);
+            }
+            localStorage.setItem(completedKey, JSON.stringify(completedItems));
+            updateProgressUI();
+        };
+
+        // --- Default Study Sets ---
+        const defaultSets = [
+            { id: "set-greetings", title: "Greetings & Basics", category: "vocab", author: "Paso a Paso", isPublic: true, resourceType: "mixed", terms: [{term: "Hola", def: "Hello"}, {term: "Adiós", def: "Goodbye"}, {term: "Por favor", def: "Please"}, {term: "Gracias", def: "Thank you"}], notes: "", links: [] },
+            { id: "set-numbers", title: "Numbers 1-10", category: "vocab", author: "Paso a Paso", isPublic: true, resourceType: "flashcards", terms: [{term: "Uno", def: "One"}, {term: "Dos", def: "Two"}, {term: "Tres", def: "Three"}, {term: "Cuatro", def: "Four"}], notes: "", links: [] },
+            { id: "set-present", title: "Present Tense -AR", category: "conjugation", author: "Paso a Paso", isPublic: true, resourceType: "mixed", terms: [{term: "Yo", def: "-o"}, {term: "Tú", def: "-as"}, {term: "Él/Ella", def: "-a"}, {term: "Nosotros", def: "-amos"}], notes: "Regular verbs drop the AR and add these endings.", links: [{title: "Video Lesson", url: "https://www.youtube.com/watch?v=1234567890", description: "Watch this explanation"}] },
+            { id: "set-gender", title: "Gender Rules", category: "grammar", author: "Paso a Paso", isPublic: true, resourceType: "notes", terms: [], notes: "- O ending = Usually Masculine (el chico)\n- A ending = Usually Feminine (la chica)", links: [] },
+            // Adding fallbacks so buttons on the pages work
+            { id: "set-family", title: "Family Vocab", category: "vocab", author: "Paso a Paso", isPublic: true, resourceType: "flashcards", terms: [{term:"Madre", def:"Mother"},{term:"Padre", def:"Father"},{term:"Hermano", def:"Brother"},{term:"Hermana", def:"Sister"}], notes: "", links: [] },
+            { id: "set-food", title: "Food Vocab", category: "vocab", author: "Paso a Paso", isPublic: true, resourceType: "flashcards", terms: [{term:"Manzana", def:"Apple"},{term:"Pan", def:"Bread"},{term:"Agua", def:"Water"},{term:"Leche", def:"Milk"}], notes: "", links: [] }
+        ];
+
+        if(!localStorage.getItem('studySets')) localStorage.setItem('studySets', JSON.stringify(defaultSets));
+
+        window.switchResourceTab = function(tab) {
+            document.getElementById('tab-community')?.classList.remove('active');
+            document.getElementById('tab-my')?.classList.remove('active');
+            document.getElementById(`tab-${tab}`)?.classList.add('active');
+            window.renderStudySets(); 
+        };
+
+        // YouTube Detector
+        function getYouTubeID(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        window.openYouTubeModal = function(videoId) {
+            const container = document.getElementById('videoContainer');
+            container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            document.getElementById('videoModal').classList.remove('hidden');
+        };
+
+        // --- Render Community Sets with Search & Filter ---
+        window.renderStudySets = function() {
+            const container = document.getElementById('study-sets-container');
+            if (!container) return;
+            const allSets = JSON.parse(localStorage.getItem('studySets')) || [];
+            let filteredSets = allSets.filter(s => s.category === currentModuleType);
+
+            const activeTab = document.querySelector('.tab-btn.active')?.id.replace('tab-', '') || 'community';
+            if(activeTab === 'community') {
+                filteredSets = filteredSets.filter(s => s.isPublic);
+            } else if (activeTab === 'my') {
+                if(!currentUser) return container.innerHTML = '<p style="color:var(--text-dark); grid-column: 1 / -1;">Please log in to view your sets.</p>';
+                filteredSets = filteredSets.filter(s => s.author === currentUser.username);
+            }
+
+            // Search
+            const searchQuery = document.getElementById('set-search')?.value.toLowerCase() || '';
+            if (searchQuery) filteredSets = filteredSets.filter(s => s.title.toLowerCase().includes(searchQuery) || s.author.toLowerCase().includes(searchQuery));
+
+            // Type Filter
+            const typeFilter = document.getElementById('set-filter')?.value || 'all';
+            if (typeFilter !== 'all') filteredSets = filteredSets.filter(s => s.resourceType === typeFilter || s.resourceType === 'mixed');
+
+            if(filteredSets.length === 0) return container.innerHTML = '<p style="font-size: 1.5rem; color:var(--text-dark); grid-column: 1 / -1;">No sets found.</p>';
+
+            container.innerHTML = filteredSets.map(set => {
+                const isMine = currentUser && set.author === currentUser.username;
+                const deleteBtn = isMine ? `<button onclick="deleteStudySet('${set.id}', event)" style="margin-top:10px; background:#e74c3c; color:white; border:none; padding:5px; border-radius:5px; width:100%; font-size: 1.25rem; cursor:pointer;">Delete Set</button>` : '';
+                let preview = '';
+                if (set.terms?.length) preview += `<img src="stack.svg" style="width: 50px; height: 50px; display:inline; vertical-align:middle; margin-right:5px;"> ${set.terms.length} terms `;
+                if (set.notes) preview += `<img src="memopencil.svg" style="width: 50px; height: 50px; display:inline; vertical-align:middle; margin-left:10px; margin-right:5px;"> notes `;
+                if (set.links?.length) preview += `<img src="download.svg" style="width: 50px; height: 50px; display:inline; vertical-align:middle; margin-left:10px; margin-right:5px;"> ${set.links.length} links`;
+                
+                return `
+                <div class="card" style="align-items: flex-start; text-align: left; cursor:pointer; position:relative;" onclick="openStudySet('${set.id}')">
+                    <span style="position:absolute; top:10px; right:10px; background:var(--bg-white); padding:3px 8px; border-radius:10px; font-size:1.25rem; border:1px solid var(--border-gray); font-weight:bold;">${set.resourceType || 'flashcards'}</span>
+                    <h3 style="color:var(--primary-orange); margin-bottom:5px; width:80%;">${set.title}</h3>
+                    <p style="font-size:1.5rem; color:var(--text-dark); margin-bottom:10px;">By: ${set.author}</p>
+                    <div style="font-size:1.25rem; color:#666;">${preview}</div>
+                    ${deleteBtn}
+                </div>`;
+            }).join('');
+        };
+
+        // For Hardcoded HTML Buttons on the page (Fallback routing)
+        window.openOldFlashcards = function(moduleName) { openStudySet(`set-${moduleName}`); };
+        window.openQuiz = function(moduleName) { startMCQ(`set-${moduleName}`); };
+        window.openLesson = function(moduleName) { openStudySet(`set-${moduleName}`); };
+
+        window.openStudySet = function(id) {
+            const allSets = JSON.parse(localStorage.getItem('studySets')) || [];
+            const set = allSets.find(s => s.id === id);
+            
+            // If the user clicks a hardcoded HTML button for a set that doesn't exist, show a toast.
+            if (!set) {
+                showToast("Set not created yet! Check the Community section.");
+                return;
+            }
+            
+            const container = document.getElementById('lessonContent');
+            let contentHTML = '';
+            
+            if (set.terms?.length >= 4) { 
+                contentHTML += `
+                <div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-gray); display: flex; gap: 10px;">
+                    <button class="form-button" onclick="startCustomFlashcardsFromSet('${set.id}')" style="flex:1; align-items: center; display: flex; justify-content:center; gap:5px;"><img src="stack.svg" style="width: 50px;"> Flashcards</button>
+                    <button class="form-button secondary" onclick="startMCQ('${set.id}')" style="flex:1; align-items: center; display: flex; justify-content:center; gap:5px;"><img src="memopencil.svg" style="width: 50px;"> Take Quiz</button>
+                </div>`;
+            } else if (set.terms?.length > 0) {
+                contentHTML += `<div style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-gray); padding-bottom: 1.5rem;"><button class="form-button" onclick="startCustomFlashcardsFromSet('${set.id}')" style="width:100%; display: flex; align-items: center; justify-content:center; gap:5px;"><img src="stack.svg" style="width: 50px;"> Learn Flashcards</button></div>`;
+            }
+        
+            if (set.notes) {
+                contentHTML += `
+                <h4 style="color: var(--accent-blue-dark); display: flex; align-items: center; gap:5px; font-size: 1.5rem; margin-bottom:10px;"><img src="memopencil.svg" style="width: 50px;">Notes</h4>
+                <div style="background: var(--bg-light-orange); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-gray); margin-bottom: 1.5rem; font-size: 1.5rem; white-space: pre-wrap; color: var(--text-dark);">${set.notes}</div>`;
+            }
+        
+            if (set.links && set.links.length > 0) {
+                contentHTML += `<h4 style="color: var(--accent-blue-dark); display: flex; align-items: center; gap:5px; font-size: 1.5rem; margin-bottom:10px;"><img src="download.svg" style="width: 50px;">Resources</h4>`;
+                set.links.forEach(link => {
+                    const videoId = getYouTubeID(link.url);
+                    if (videoId) {
+                        contentHTML += `
+                        <div style="background: var(--bg-light-orange); padding: 15px; border-radius: 8px; border-left: 4px solid #FF0000; border-top: 1px solid var(--border-gray); border-right: 1px solid var(--border-gray); border-bottom: 1px solid var(--border-gray); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="color: var(--text-dark); font-size: 1.1.5rem;">${link.title}</strong>
+                                <p style="margin:0; font-size:1.25rem; color: #666;">YouTube Video</p>
+                            </div>
+                            <button class="form-button" style="background: #FF0000; display: flex; width: 200px; padding: 8px 50px; border-radius: 5px; margin:0;" onclick="openYouTubeModal('${videoId}')">▶ Play</button>
+                        </div>`;
+                    } else {
+                        contentHTML += `
+                        <a href="${link.url}" target="_blank" style="display: block; background: var(--bg-light-orange); padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary-orange); border-top: 1px solid var(--border-gray); border-right: 1px solid var(--border-gray); border-bottom: 1px solid var(--border-gray); margin-bottom: 10px; text-decoration: none; color: var(--text-dark);">
+                            <strong style="font-size: 1.1.5rem;">${link.title}</strong>
+                            <p style="margin:0; font-size:1.25rem; color: var(--accent-blue-light); margin-top: 5px;">Click to open link ↗</p>
+                        </a>`;
+                    }
+                });
+            }
+                
+            document.getElementById('lessonTitle').textContent = set.title;
+            document.getElementById('lessonContent').innerHTML = contentHTML;
+            document.getElementById('lessonModal').classList.remove('hidden');
+        };
+
+        // --- SMART FLASHCARDS (Quizlet Learn Mode) ---
+        window.currentPlayingSetId = null;
+        let fcKnownCount = 0;
+        let fcLearningCount = 0;
+
+        window.startCustomFlashcardsFromSet = function(setId) {
+            const allSets = JSON.parse(localStorage.getItem('studySets')) || [];
+            const set = allSets.find(s => s.id === setId);
+            if (!set || !set.terms?.length) return;
+            
+            window.currentPlayingSetId = setId;
+            customFlashcards = [...set.terms].sort(() => Math.random() - 0.5); // Shuffle
+            customCardIndex = 0;
+            fcKnownCount = 0;
+            fcLearningCount = 0;
+
+            document.getElementById('lessonModal').classList.add('hidden');
+            document.getElementById('flashcard-summary-area').classList.add('hidden');
+            document.getElementById('flashcard-play-area').classList.remove('hidden');
+            
+            document.getElementById('customFlashcardTitle').textContent = set.title;
+            document.getElementById('customFlashcardModal').classList.remove('hidden');
+            updateCustomFlashcardUI();
+        };
+
+        function updateCustomFlashcardUI() {
+            if(customCardIndex >= customFlashcards.length) {
+                // End of stack summary
+                document.getElementById('flashcard-play-area').classList.add('hidden');
+                document.getElementById('fc-known-score').textContent = fcKnownCount;
+                document.getElementById('fc-learning-score').textContent = fcLearningCount;
+                document.getElementById('flashcard-summary-area').classList.remove('hidden');
+                if(fcKnownCount > 0) awardXP(15, "Flashcard session completed!");
+                return;
+            }
+
+            const card = customFlashcards[customCardIndex];
+            const front = document.getElementById('customFlashcardFront');
+            const back = document.getElementById('customFlashcardBack');
+            const box = document.getElementById('customFlashcard');
+
+            front.textContent = card.term;
+            back.textContent = card.def;
+            front.classList.remove('hidden');
+            back.classList.add('hidden');
+            
+            // Re-trigger animation hack
+            box.style.transform = 'none';
+            box.offsetHeight; /* trigger reflow */
+            box.style.transform = null; 
+
+            document.getElementById('customCardCounter').textContent = `${customCardIndex + 1} / ${customFlashcards.length}`;
+        }
+
+        document.getElementById('customFlashcard')?.addEventListener('click', function() {
+            document.getElementById('customFlashcardFront').classList.toggle('hidden');
+            document.getElementById('customFlashcardBack').classList.toggle('hidden');
+        });
+
+        window.markFlashcard = function(knewIt) {
+            if(knewIt) fcKnownCount++; else fcLearningCount++;
+            customCardIndex++;
+            updateCustomFlashcardUI();
+        };
+
+        // --- MULTIPLE CHOICE QUIZ GENERATOR ---
+        let quizData = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        window.startMCQ = function(setId) {
+            const allSets = JSON.parse(localStorage.getItem('studySets')) || [];
+            const set = allSets.find(s => s.id === setId);
+            if (!set || set.terms?.length < 4) return showToast("Need at least 4 terms for a quiz!");
+
+            document.getElementById('lessonModal')?.classList.add('hidden');
+            
+            quizData = [];
+            const terms = [...set.terms].sort(() => Math.random() - 0.5); 
+            
+            terms.forEach(t => {
+                const wrongAnswers = terms.filter(x => x.def !== t.def).sort(() => Math.random() - 0.5).slice(0, 3).map(x => x.def);
+                const options = [...wrongAnswers, t.def].sort(() => Math.random() - 0.5);
+                quizData.push({ question: t.term, answer: t.def, options: options });
+            });
+
+            currentQuizIndex = 0;
+            quizScore = 0;
+            
+            document.getElementById('quizTitle').textContent = `Quiz: ${set.title}`;
+            document.getElementById('quiz-summary-area').classList.add('hidden');
+            document.getElementById('quiz-play-area').classList.remove('hidden');
+            document.getElementById('quizModal').classList.remove('hidden');
+            
+            renderQuizQuestion();
+        };
+
+        function renderQuizQuestion() {
+            const q = quizData[currentQuizIndex];
+            document.getElementById('quizCounter').textContent = `Q: ${currentQuizIndex + 1}/${quizData.length}`;
+            document.getElementById('quizQuestion').textContent = q.question;
+            
+            const container = document.getElementById('quizOptionsContainer');
+            container.innerHTML = '';
+            
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.textContent = opt;
+                btn.onclick = () => handleQuizAnswer(btn, opt === q.answer);
+                container.appendChild(btn);
+            });
+            document.getElementById('quizNextBtn').classList.add('hidden');
+        }
+
+        function handleQuizAnswer(selectedBtn, isCorrect) {
+            const buttons = document.querySelectorAll('.quiz-option');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if(btn.textContent === quizData[currentQuizIndex].answer) btn.classList.add('correct');
+            });
+
+            if(isCorrect) {
+                selectedBtn.classList.add('correct');
+                quizScore++;
+            } else {
+                selectedBtn.classList.add('wrong');
+            }
+            document.getElementById('quizNextBtn').classList.remove('hidden');
+        }
+
+        window.nextQuizQuestion = function() {
+            currentQuizIndex++;
+            if(currentQuizIndex >= quizData.length) {
+                document.getElementById('quiz-play-area').classList.add('hidden');
+                const finalPercentage = Math.round((quizScore / quizData.length) * 100);
+                document.getElementById('quizFinalScore').textContent = `${finalPercentage}% (${quizScore}/${quizData.length})`;
+                
+                // Color grading
+                const scoreDisplay = document.getElementById('quizFinalScore');
+                if(finalPercentage >= 80) scoreDisplay.style.color = '#2ecc71';
+                else if(finalPercentage >= 60) scoreDisplay.style.color = 'var(--secondary-orange)';
+                else scoreDisplay.style.color = '#e74c3c';
+
+                document.getElementById('quiz-summary-area').classList.remove('hidden');
+                
+                if(finalPercentage >= 80) awardXP(50, "Aced the Quiz!");
+                else if(finalPercentage > 0) awardXP(20, "Completed Quiz Practice!");
+                
+            } else {
+                renderQuizQuestion();
+            }
+        };
+
+        // --- CREATE SET MODAL & QUIZLET IMPORT ---
+        window.openCreateSetModal = function() {
+            if(!currentUser) return alert("Log in to create sets.");
+            document.getElementById('createSetModal').classList.remove('hidden');
+            document.getElementById('terms-container').innerHTML = '';
+            document.getElementById('links-container').innerHTML = '';
+            document.getElementById('quizlet-import-text').value = '';
+            addTermRow(); addTermRow();
+        };
+        
+        window.importFromQuizlet = function() {
+            const text = document.getElementById('quizlet-import-text').value.trim();
+            if(!text) return alert("Paste text from Quizlet first!");
+            
+            const lines = text.split('\n');
+            let addedCount = 0;
+            
+            lines.forEach(line => {
+                const parts = line.split('\t'); 
+                if(parts.length >= 2) {
+                    const row = document.createElement('div');
+                    row.className = 'term-row';
+                    row.innerHTML = `
+                        <input type="text" class="term-input" value="${parts[0].trim()}" style="flex:1; padding:8px; border:1px solid var(--border-gray); border-radius:4px; font-size: 1.75rem; color: var(--text-dark);">
+                        <input type="text" class="def-input" value="${parts[1].trim()}" style="flex:1; padding:8px; border:1px solid var(--border-gray); border-radius:4px; font-size: 1.75rem; color: var(--text-dark);">
+                        <button type="button" class="remove-term-btn" onclick="this.parentElement.remove()" style="background:#e74c3c; color:white; border:none; padding:5px 15px; border-radius:4px; cursor:pointer; font-weight: bold;">X</button>
+                    `;
+                    document.getElementById('terms-container').appendChild(row);
+                    addedCount++;
+                }
+            });
+            
+            if(addedCount > 0) {
+                document.getElementById('quizlet-import-text').value = '';
+                showToast(`Successfully imported ${addedCount} terms!`);
+                // Auto check the flashcards option so they see their imported terms
+                document.querySelector('input[name="resource-type"][value="flashcards"]').checked = true;
+                toggleResourceFields();
+            } else {
+                alert("Could not parse text. Make sure it's copied directly from Quizlet (Term [TAB] Definition).");
+            }
+        };
+
+        window.toggleResourceFields = function() {
+            const type = document.querySelector('input[name="resource-type"]:checked')?.value || 'flashcards';
+            const fcSec = document.getElementById('flashcards-section');
+            const ntSec = document.getElementById('notes-section');
+            const lkSec = document.getElementById('links-section');
+            
+            if(fcSec) fcSec.classList.toggle('hidden', type !== 'flashcards' && type !== 'mixed');
+            if(ntSec) ntSec.classList.toggle('hidden', type !== 'notes' && type !== 'mixed');
+            if(lkSec) lkSec.classList.toggle('hidden', type !== 'links' && type !== 'mixed');
+        };
+        
+        window.addTermRow = function() {
+            const row = document.createElement('div');
+            row.className = 'term-row';
+            row.innerHTML = `
+                <input type="text" class="term-input" placeholder="Term" style="flex:1; padding:8px; border:1px solid var(--border-gray); border-radius:4px; font-size: 1.5rem; color: var(--text-dark);">
+                <input type="text" class="def-input" placeholder="Definition" style="flex:1; padding:8px; border:1px solid var(--border-gray); border-radius:4px; font-size: 1.5rem; color: var(--text-dark);">
+                <button type="button" class="remove-term-btn" onclick="this.parentElement.remove()" style="background:#e74c3c; color:white; border:none; padding:5px 15px; border-radius:4px; cursor:pointer; font-weight: bold;">X</button>
+            `;
+            document.getElementById('terms-container').appendChild(row);
+        };
+        
+        window.addLinkRow = function() {
+            const container = document.getElementById('links-container');
+            const row = document.createElement('div');
+            row.className = 'link-row';
+            row.style.cssText = 'background:var(--bg-light-orange); padding:15px; border-radius:8px; border:1px solid var(--border-gray); margin-bottom:10px; display: flex; flex-direction:column; gap:10px;';
+            row.innerHTML = `
+                <input type="text" placeholder="Title (e.g. Intro Video)" class="link-title" required style="width:100%; padding:10px; border:1px solid var(--border-gray); border-radius:4px; font-size:1.25rem;">
+                <input type="url" placeholder="URL (e.g. YouTube link)" class="link-url" required style="width:100%; padding:10px; border:1px solid var(--border-gray); border-radius:4px; font-size:1.25rem;">
+                <button type="button" class="form-button secondary" onclick="this.parentElement.remove()" style="width:auto; align-self:flex-start; padding:5px 15px;">Remove Link</button>
+            `;
+            container.appendChild(row);
+        };
+        
+        window.saveStudySet = function() {
+            const type = document.querySelector('input[name="resource-type"]:checked')?.value || 'flashcards';
+            const setTitle = document.getElementById('set-title').value.trim();
+            const setDesc = document.getElementById('set-desc').value.trim();
+            
+            if (!setTitle) return alert("Title is required!");
+            
+            const newSet = { id: Date.now().toString(), title: setTitle, description: setDesc, category: currentModuleType, resourceType: type, author: currentUser.username, isPublic: document.getElementById('set-public').checked, terms: [], notes: '', links: [] };
+            
+            if (type === 'flashcards' || type === 'mixed') {
+                document.querySelectorAll('.term-row').forEach(row => {
+                    const term = row.querySelector('.term-input')?.value.trim();
+                    const def = row.querySelector('.def-input')?.value.trim();
+                    if (term && def) newSet.terms.push({ term, def });
+                });
+            }
+            if ((type === 'notes' || type === 'mixed') && document.getElementById('notes-content')) newSet.notes = document.getElementById('notes-content').value.trim();
+            if (type === 'links' || type === 'mixed') {
+                document.querySelectorAll('.link-row').forEach(row => {
+                    const title = row.querySelector('.link-title')?.value.trim();
+                    const url = row.querySelector('.link-url')?.value.trim();
+                    if (title && url) newSet.links.push({ title, url });
+                });
+            }
+            
+            const sets = JSON.parse(localStorage.getItem('studySets')) || [];
+            sets.push(newSet);
+            localStorage.setItem('studySets', JSON.stringify(sets));
+            
+            closeCreateSetModal();
+            showToast(`Study Set Created! <img src="sparkle.svg" style="width: 30px; height: 30px;">`);
+            awardXP(25, "Created a Study Set!");
+            window.renderStudySets();
+            document.getElementById('tab-my').click(); 
+        };
+
+        window.deleteStudySet = function(id, event) {
+            event.stopPropagation();
+            if(confirm("Delete this study set?")) {
+                let sets = JSON.parse(localStorage.getItem('studySets')) || [];
+                localStorage.setItem('studySets', JSON.stringify(sets.filter(s => s.id !== id)));
+                window.renderStudySets();
+            }
+        };
+
+        // Initialize sets on load
+        window.renderStudySets();
+    }
+
+    // Modal Helpers
     window.closeLesson = function() { document.getElementById('lessonModal')?.classList.add('hidden'); };
-    window.openOldFlashcards = function() { document.getElementById('flashcardModal')?.classList.remove('hidden'); };
-    window.closeOldFlashcards = function() { document.getElementById('flashcardModal')?.classList.add('hidden'); };
-    window.openQuiz = function() { document.getElementById('quizModal')?.classList.remove('hidden'); };
+    window.closeCreateSetModal = function() { document.getElementById('createSetModal')?.classList.add('hidden'); };
     window.closeQuiz = function() { document.getElementById('quizModal')?.classList.add('hidden'); };
-    window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) e.target.classList.add('hidden'); });
+    window.closeCustomFlashcards = function() { document.getElementById('customFlashcardModal')?.classList.add('hidden'); };
+    
+    // Global click listener to close modals when clicking the dark background overlay
+    window.addEventListener('click', (e) => { 
+        if (e.target.classList.contains('modal')) {
+            e.target.classList.add('hidden');
+            window.closeYouTubeModal(); // ensure videos stop if they click outside
+        }
+    });
+
 });
 
 // --- SETTINGS ---
 window.updateProfile = function() {
     const newName = document.getElementById('edit-username')?.value;
-    const newPass = document.getElementById('edit-password')?.value;
     let users = JSON.parse(localStorage.getItem('users')) || [];
     if(!currentUser) return;
     const userIndex = users.findIndex(u => u.id === currentUser.id);
-    if(userIndex > -1) {
-        if(newName) users[userIndex].username = newName;
-        if(newPass) users[userIndex].password = newPass;
+    if(userIndex > -1 && newName) {
+        users[userIndex].username = newName;
         localStorage.setItem('users', JSON.stringify(users));
         localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
         alert("Profile Updated!"); window.location.reload();
@@ -1066,30 +1131,13 @@ window.deleteMyAccount = function() {
 };
 
 // Tool Placeholders
-window.downloadAllCheatSheets = function() { window.showToast(`📥 Downloading...`); };
-window.downloadCheatSheet = function() { window.showToast(`📥 Downloading...`); };
-window.downloadPracticeWorkbook = function() { window.showToast('📘 Downloading...'); };
-window.startRandomDrill = function() { window.showToast('🎲 Starting Drill...'); };
-window.startSpeedMatch = function() { window.showToast('⏱️ Starting Game...'); };
-window.openVerbFinder = function() { window.showToast('🔎 Finding verb...'); };
-window.openGrammarChecker = function() { window.showToast('🔍 Checking...'); };
-window.downloadAudioPack = function() { window.showToast('📘 Downloading...'); };
-window.startChallenge = function() { window.showToast('⚡️ Starting Challenge!'); };
-
-// Word of the Day
-const words = [
-    { spanish: 'El mar', english: 'The sea' },
-    { spanish: 'La playa', english: 'The beach' },
-    { spanish: 'El libro', english: 'The book' },
-    { spanish: 'La casa', english: 'The house' },
-    { spanish: 'El amigo', english: 'The friend' }
-];
-
-let wordOfDay = JSON.parse(localStorage.getItem('wordOfDay'));
-if (!wordOfDay || new Date().toDateString() !== wordOfDay.date) {
-    wordOfDay = { date: new Date().toDateString(), word: words[Math.floor(Math.random() * words.length)] };
-    localStorage.setItem('wordOfDay', JSON.stringify(wordOfDay));
-}
-
-document.getElementById('word-spanish').textContent = wordOfDay.word.spanish;
-document.getElementById('word-english').textContent = wordOfDay.word.english;
+window.downloadAllCheatSheets = function() { window.showToast(`<img src="pdf.svg" style="width: 30px;"> Downloading...`); };
+window.downloadCheatSheet = function() { window.showToast(`<img src="pdf.svg" style="width: 30px;"> Downloading...`); };
+window.downloadPracticeWorkbook = function() { window.showToast(`<img src="pdf.svg" style="width: 30px;"> Downloading...`); };
+window.startRandomDrill = function() { window.showToast(`<img src="dice.svg" style="width: 30px;">Starting Drill...`); };
+window.startSpeedMatch = function() { window.showToast(`<img src="clock.svg" style="width: 30px;"> Starting Game...`); };
+window.openVerbFinder = function() { window.showToast(`<img src="search.svg" style="width: 30px;"> Finding verb...`); };
+window.openGrammarChecker = function() { window.showToast(`<img src="search.svg" style="width: 30px;"> Checking...`); };
+window.downloadAudioPack = function() { window.showToast(`<img src="pdf.svg" style="width: 30px;" Downloading...`); };
+window.startChallenge = function() { window.showToast(`<img src="volt.svg" style="width: 30px; height: 30px;">️ Starting Challenge!`); };
+window.downloadWordList = function() { window.showToast(`<img src="pdf.svg" style="width: 30px;"> Downloading...`); };

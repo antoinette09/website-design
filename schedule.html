@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        // This is the ONLY bit that MUST be here to kill the flash
+        const s = JSON.parse(localStorage.getItem('a11ySettings') || '{}');
+        if (s.dark || s.colorblind) document.documentElement.style.backgroundColor = '#121212';
+        if (s.dark) document.documentElement.classList.add('dark-mode');
+        if (s.colorblind) document.documentElement.classList.add('colorblind-mode');
+        if (s.dyslexia) document.documentElement.classList.add('dyslexia-mode');
+
+      </script>
     <title>Paso a Paso - Q&A Forum</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +21,30 @@
 </head>
 
 <body>
-    <div id="announcement-banner"></div>
+<div id="announcement-banner">
+    <span id="announcement-text"></span> <!-- Use a span for the text -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('siteAnnouncement');
+            if (saved && saved.trim() !== "") {
+                const textEl = document.getElementById('announcement-text');
+                if (textEl) {
+                    textEl.textContent = saved;
+                    // Tell the whole page we are ready to show the banner
+                    document.documentElement.classList.add('banner-ready');
+                }
+            } else {
+                // If there's truly no announcement, collapse the box
+                document.getElementById('announcement-banner').style.display = 'none';
+            }
+        })();
+    </script>
+</div>
     <header class="main-header">
         <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
             <a href="index.html" class="logo-link"><span>Paso a Paso</span> <img src="orange.svg" alt="Logo"></a>
+            <button class="hamburger" onclick="document.getElementById('nav-menu').classList.toggle('show')">☰</button>
             <nav class="main-nav">
                 <a href="index.html">Home</a>
                 <a href="resources.html">Resources</a>
@@ -31,50 +59,58 @@
         <section class="hero-section">
             <div class="hero-card">
                 <h1 style="color: var(--primary-orange);">Meeting Schedule</h1>
-                <p style="color: var(--secondary-orange); font-size: 1.1rem;">Book sessions or propose your own study groups!</p>
+                <p style="color: var(--secondary-orange); font-size: 1.75rem;">Book sessions or propose your own study groups!</p>
             </div>
         </section>
 
         <section class="card-section">
             <div class="card" style="width: 100%; max-width: 900px; padding: var(--spacing-lg);">
                 <div class="calendar-header">
-                    <button id="prevMonth" class="nav-btn"><img src="leftarrow.svg" alt="Prev" style="height: 25px; filter: opacity(0.7);"></button>
+                    <button id="prevMonth" class="nav-btn"><img src="leftarrow.svg" alt="Prev" style="height: 80px; filter: opacity(0.7);"></button>
                     <h2 id="monthYear" style="color: var(--primary-orange);">Month Year</h2>
-                    <button id="nextMonth" class="nav-btn"><img src="rightarrow.svg" alt="Next" style="height: 25px; filter: opacity(0.7);"></button>
+                    <button id="nextMonth" class="nav-btn"><img src="rightarrow.svg" alt="Next" style="height: 80px; filter: opacity(0.7);"></button>
                 </div>
                 <div id="calendar" class="calendar-grid"></div>
                 
                 <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem; font-weight: 600; color: var(--text-dark); flex-wrap: wrap;">
-                    <div style="display: flex; align-items: center; gap: 8px;"><span class="event-dot dot-tutoring" style="margin: 0;"></span> Tutoring</div>
-                    <div style="display: flex; align-items: center; gap: 8px;"><span class="event-dot dot-group" style="margin: 0;"></span> Group Study</div>
-                    <div style="display: flex; align-items: center; gap: 8px;"><span class="event-dot dot-pending" style="margin: 0;"></span> Your Pending Request</div>
+                    <div style="display: flex; align-items: center; gap: 8px;font-size: 1.5rem;"><span class="event-dot dot-tutoring" style="margin: 0;"></span> Tutoring</div>
+                    <div style="display: flex; align-items: center; gap: 8px;font-size: 1.5rem;"><span class="event-dot dot-group" style="margin: 0;"></span> Group Study</div>
+                    <div style="display: flex; align-items: center; gap: 8px;font-size: 1.5rem;"><span class="event-dot dot-pending" style="margin: 0;"></span> Your Pending Request</div>
                 </div>
             </div>
         </section>
     </main>
 
     <div id="eventModal" class="modal hidden">
-        <div class="modal-content">
+        <div class="modal-content" style="height: 750px; width: 750px; max-width: 1000px; max-height: 1000px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); overflow: scroll;">
             <span class="close-modal">&times;</span>
             <h3 id="modalDate" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Date</h3>
-            <div id="existingEvents" style="margin-top: 1rem;"></div>
+            <div id="existingEvents" style="margin-top: 1.5rem;"></div>
 
             <!-- Everyone sees this form now, text changes via JS -->
             <form id="adminEventForm" style="margin-top: 1.5rem; border-top: 2px solid var(--border-gray); padding-top: 1.5rem;">
-                <h4 id="scheduleFormTitle" style="color: var(--accent-blue-dark); margin-bottom: 1rem;">Schedule Meeting</h4>
-                <div class="form-group"><input type="text" id="eventTitle" placeholder="Session Title" required></div>
-                <div class="form-group" style="display: flex; gap: 1rem;">
-                    <div style="flex: 1;">
+                <h4 id="scheduleFormTitle" style="color: var(--accent-blue-dark); font-size: 1.5rem; margin-bottom: 1.5rem;">Schedule Meeting</h4>
+                <div class="form-group"><input type="text" id="eventTitle" placeholder="Session Title" style="font-size: 1.5rem;"required></div>
+                <div class="form-group" style="display: flex; gap: 1.5rem;">
+                    <div style="flex: 1; font-size: 1.25rem;">
                         <select id="eventType">
                             <option value="tutoring">Tutoring</option>
                             <option value="group">Group Study</option>
                         </select>
                     </div>
-                    <div style="flex: 1;"><input type="number" id="eventSpots" placeholder="Spots" min="1" required></div>
+                    <div style="flex: 1; font-weight: 1.25rem;"><input type="number" id="eventSpots" placeholder="Spots" min="1"></div>
                 </div>
-                <button type="button" id="scheduleBtn" class="form-button" onclick="addEvent()" style="width: 100%; margin-top: 1rem;">Add Session</button>
+                <button type="button" id="scheduleBtn" class="form-button" onclick="addEvent()" style="width: 100%; margin-top: 1.5rem;">Add Session</button>
             </form>
         </div>
+    </div>
+    <!-- Floating Accessibility Button -->
+<button class="a11y-fab" onclick="document.getElementById('a11y-menu').classList.toggle('show')"><img src="eye.svg"></button>
+    <div id="a11y-menu" class="a11y-menu">
+        <h4 style="margin-bottom: 5px; font-size: 2rem;">Accessibility</h4>
+        <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-dark" onchange="toggleA11y('dark')"> Dark Mode</label>
+        <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-dyslexia" onchange="toggleA11y('dyslexia')"> Dyslexia Font</label>
+        <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-colorblind" onchange="toggleA11y('colorblind')"> High Contrast</label>
     </div>
 </body>
 </html>

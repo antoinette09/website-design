@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        // This is the ONLY bit that MUST be here to kill the flash
+        const s = JSON.parse(localStorage.getItem('a11ySettings') || '{}');
+        if (s.dark || s.colorblind) document.documentElement.style.backgroundColor = '#121212';
+        if (s.dark) document.documentElement.classList.add('dark-mode');
+        if (s.colorblind) document.documentElement.classList.add('colorblind-mode');
+        if (s.dyslexia) document.documentElement.classList.add('dyslexia-mode');
+
+      </script>
     <title>Paso a Paso - Q&A Forum</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +21,30 @@
 </head>
 
 <body>
-    <div id="announcement-banner"></div>
+<div id="announcement-banner">
+    <span id="announcement-text"></span> <!-- Use a span for the text -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('siteAnnouncement');
+            if (saved && saved.trim() !== "") {
+                const textEl = document.getElementById('announcement-text');
+                if (textEl) {
+                    textEl.textContent = saved;
+                    // Tell the whole page we are ready to show the banner
+                    document.documentElement.classList.add('banner-ready');
+                }
+            } else {
+                // If there's truly no announcement, collapse the box
+                document.getElementById('announcement-banner').style.display = 'none';
+            }
+        })();
+    </script>
+</div>
     <header class="main-header">
         <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
             <a href="index.html" class="logo-link"><span>Paso a Paso</span> <img src="orange.svg" alt="Logo"></a>
+            <button class="hamburger" onclick="document.getElementById('nav-menu').classList.toggle('show')">☰</button>
             <nav class="main-nav">
                 <a href="index.html">Home</a>
                 <a href="resources.html">Resources</a>
@@ -33,30 +61,30 @@
         <section class="hero-section">
             <div class="hero-card">
                 <h1 style="color: var(--primary-orange);">Verb Conjugation</h1>
-                <p style="color: var(--secondary-orange); font-size: 1.1rem;">Track your progress through Spanish verb tenses</p>
+                <p style="color: var(--secondary-orange); font-size: 1.75rem;">Track your progress through Spanish verb tenses</p>
                 
                 <div class="stats-container" style="margin-top: 1.5rem;">
                     <div class="stat-box">
                         <img src="chart.svg" alt="Progress">
                         <span id="conjugation-progress" style="color: var(--secondary-orange);">0</span>
-                        <span style="color: var(--secondary-orange); font-size: 0.9rem;">% Complete</span>
+                        <span style="color: var(--secondary-orange); font-size: 1.5rem;">% Complete</span>
                     </div>
                     <div class="stat-box">
                         <img src="fire.svg" alt="Verbs">
                         <span id="verbs-mastered" style="color: var(--secondary-orange);">0</span>
-                        <span style="color: var(--secondary-orange); font-size: 0.9rem;">Verbs Mastered</span>
+                        <span style="color: var(--secondary-orange); font-size: 1.5rem;">Verbs Mastered</span>
                     </div>
                     <div class="stat-box">
                         <img src="plus.svg" alt="Level">
                         <span id="conjugation-level" style="color: var(--secondary-orange);">1</span>
-                        <span style="color: var(--secondary-orange); font-size: 0.9rem;">Level</span>
+                        <span style="color: var(--secondary-orange); font-size: 1.5rem;">Level</span>
                     </div>
                 </div>
 
-                <div style="margin: 1rem auto; width: 100%; max-width: 400px; height: 12px; background: rgb(237, 237, 237); border-radius: 10px; overflow: hidden;">
+                <div style="margin: 1.5rem auto; width: 100%; max-width: 400px; height: 15px; background: rgb(237, 237, 237); border-radius: 10px; overflow: hidden;">
                     <div id="conjugationProgressBar" style="width: 0%; height: 100%; background: var(--secondary-orange); transition: width 0.3s ease;"></div>
                 </div>
-                <p id="conjugationProgressText" style="font-size: 0.9rem; color: var(--secondary-orange);">0 of 6 modules completed</p>
+                <p id="conjugationProgressText" style="font-size: 1.5rem; color: var(--secondary-orange);">0 of 6 modules completed</p>
             </div>
         </section>
 
@@ -64,82 +92,88 @@
         <section class="card-section">
             <h2 class="section-title">Choose a Verb Tense</h2>
             
-            <div class="dashboard-grid" style="max-width: 1000px;">
+            <div class="dashboard-grid" style=" max-width: 2000px; max-height: 5000px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
                 
                 <div class="card activity-card" data-module="present">
-                    <img src="sun.svg" alt="Present" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <img src="sun.svg" alt="Present" style="height: 80px; width: 80px; margin-bottom: 10px;">
                     <h3 style="color: var(--accent-blue-dark);">Present Tense</h3>
-                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Regular -ar, -er, -ir verbs + common irregulars</p>
+                    <p style="font-size: 1.25rem; text-align: center; margin-bottom: 1.5rem;">Regular -ar, -er, -ir verbs + common irregulars</p>
                     
-                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('present')"><img src="play.svg" alt="Play"> Watch Lesson</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('present')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('present')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    <div style="gap: 8px; width: 100%; justify-content: center; align-items: center; margin-bottom: 1.5rem;">
+                        <a class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="openStudySet('1774412350909')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a class="view-all-link" onclick="openStudySet('1774412159455')" style="font-size: 1.75rem; margin-top: 0; justify-content: center;"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="https://www.bucks.edu/media/bcccmedialibrary/tutoring/documents/writingareahandoutrevision/spanish/Direct-Indirect-Double-Object-Pronouns.pdf" download="PresentTense" class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="downloadWordList('greetings')"><img src="download.svg" alt="Download"> Word List</a>
+           
                     </div>
                     <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('present')">Mark as Complete</button>
                 </div>
 
                 <div class="card activity-card" data-module="preterite">
-                    <img src="bolt.svg" alt="Preterite" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <img src="bolt.svg" alt="Preterite" style="height: 80px; width: 80px; margin-bottom: 10px;">
                     <h3 style="color: var(--accent-blue-dark);">Preterite</h3>
-                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Past actions with clear beginnings/endings</p>
+                    <p style="font-size: 1.25rem; text-align: center; margin-bottom: 1.5rem;">Past actions with clear beginnings/endings</p>
                     
-                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('preterite')"><img src="play.svg" alt="Play"> Watch Lesson</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('preterite')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('preterite')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    <div style="gap: 8px; width: 100%; justify-content: center; align-items: center; margin-bottom: 1.5rem;">
+                        <a class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="openStudySet('1774412374047')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a class="view-all-link" onclick="openStudySet('1774412192823')" style="font-size: 1.75rem; margin-top: 0; justify-content: center;"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="https://www.bucks.edu/media/bcccmedialibrary/tutoring/documents/writingareahandoutrevision/spanish/Regular-and-Irregular-Verbs-Past-Tense.pdf" download="Preterite" class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="downloadWordList('greetings')"><img src="download.svg" alt="Download"> Word List</a>
+           
                     </div>
                     <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('preterite')">Mark as Complete</button>
                 </div>
 
                 <div class="card activity-card" data-module="imperfect">
-                    <img src="cloud.svg" alt="Imperfect" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <img src="cloud.svg" alt="Imperfect" style="height: 80px; width: 80px; margin-bottom: 10px;">
                     <h3 style="color: var(--accent-blue-dark);">Imperfect</h3>
-                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Ongoing past actions, descriptions, habits</p>
+                    <p style="font-size: 1.25rem; text-align: center; margin-bottom: 1.5rem;">Ongoing past actions, descriptions, habits</p>
                     
-                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('imperfect')"><img src="play.svg" alt="Play"> Watch Lesson</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('imperfect')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('imperfect')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    <div style="gap: 8px; width: 100%; justify-content: center; align-items: center; margin-bottom: 1.5rem;">
+                        <a class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="openStudySet('1774412406060')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a class="view-all-link" onclick="openStudySet('1774412222920')" style="font-size: 1.75rem; margin-top: 0; justify-content: center;"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="https://www.vhstigers.org/ourpages/auto/2007/9/25/1190740155256/imperfect%20cheat%20sheet.pdf" download="Imperfect" class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="downloadWordList('greetings')"><img src="download.svg" alt="Download"> Word List</a>
+           
                     </div>
                     <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('imperfect')">Mark as Complete</button>
                 </div>
 
                 <div class="card activity-card" data-module="future">
-                    <img src="rocket.svg" alt="Future" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <img src="rocket.svg" alt="Future" style="height: 80px; width: 80px; margin-bottom: 10px;">
                     <h3 style="color: var(--accent-blue-dark);">Future</h3>
-                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Simple future + irregular stems</p>
+                    <p style="font-size: 1.25rem; text-align: center; margin-bottom: 1.5rem;">Simple future + irregular stems</p>
                     
-                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('future')"><img src="play.svg" alt="Play"> Watch Lesson</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('future')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('future')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    <div style="gap: 8px; width: 100%; justify-content: center; align-items: center; margin-bottom: 1.5rem;">
+                        <a class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="openStudySet('1774412433969')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a class="view-all-link" onclick="openStudySet('1774412248052')" style="font-size: 1.75rem; margin-top: 0; justify-content: center;"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="https://www.spanish.academy/wp-content/uploads/2021/01/Master-the-18-Spanish-Tenses-Cheat-Sheet-PDF.pdf" download="Future" class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="downloadWordList('greetings')"><img src="download.svg" alt="Download"> Word List</a>
+           
                     </div>
                     <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('future')">Mark as Complete</button>
                 </div>
 
                 <div class="card activity-card" data-module="subjunctive">
-                    <img src="magic.svg" alt="Subjunctive" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <img src="magic.svg" alt="Subjunctive" style="height: 80px; width: 80px; margin-bottom: 10px;">
                     <h3 style="color: var(--accent-blue-dark);">Present Subjunctive</h3>
-                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Wishes, doubts, emotions, uncertainty</p>
+                    <p style="font-size: 1.25rem; text-align: center; margin-bottom: 1.5rem;">Wishes, doubts, emotions, uncertainty</p>
                     
-                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('subjunctive')"><img src="play.svg" alt="Play"> Watch Lesson</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('subjunctive')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('subjunctive')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    <div style="gap: 8px; width: 100%; justify-content: center; align-items: center; margin-bottom: 1.5rem;">
+                        <a class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="openStudySet('1774412464474')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a class="view-all-link" onclick="openStudySet('1774412279734')" style="font-size: 1.75rem; margin-top: 0; justify-content: center;"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="https://spanishwithtati.com/wp-content/uploads/2020/10/Present-Subjunctive-Conjugation-Sheet.pdf" download="PresentSubjunctive" class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="downloadWordList('greetings')"><img src="download.svg" alt="Download"> Word List</a>
+           
                     </div>
                     <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('subjunctive')">Mark as Complete</button>
                 </div>
 
                 <div class="card activity-card" data-module="commands">
-                    <img src="speaker.svg" alt="Commands" style="height: 40px; width: 40px; margin-bottom: 10px;">
+                    <img src="speaker.svg" alt="Commands" style="height: 80px; width: 80px; margin-bottom: 10px;">
                     <h3 style="color: var(--accent-blue-dark);">Commands</h3>
-                    <p style="font-size: 0.9rem; text-align: center; margin-bottom: 1rem;">Tú, Usted, Nosotros, Ustedes forms</p>
+                    <p style="font-size: 1.25rem; text-align: center; margin-bottom: 1.5rem;">Tú, Usted, Nosotros, Ustedes forms</p>
                     
-                    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: flex-start; margin-bottom: 1rem;">
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openLesson('commands')"><img src="play.svg" alt="Play"> Watch Lesson</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="openQuiz('commands')"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
-                        <a href="#" class="view-all-link" style="margin-top: 0;" onclick="downloadCheatSheet('commands')"><img src="download.svg" alt="Download"> Cheat Sheet</a>
+                    <div style="gap: 8px; width: 100%; justify-content: center; align-items: center; margin-bottom: 1.5rem;">
+                        <a class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="openStudySet('1774415006983')"><img src="play.svg" alt="Play"> Watch Lesson</a>
+                        <a class="view-all-link" onclick="openStudySet('1774412314564')" style="font-size: 1.75rem; margin-top: 0; justify-content: center;"><img src="memopencil.svg" alt="Quiz"> Practice Quiz</a>
+                        <a href="https://germanna.edu/sites/default/files/2022-03/Spanish%20Commands.pdf" download="Commands" class="view-all-link" style="font-size: 1.75rem; margin-top: 0; justify-content: center;" onclick="downloadWordList('greetings')"><img src="download.svg" alt="Download"> Word List</a>
+           
                     </div>
                     <button class="form-button complete-button" style="width: 100%;" onclick="toggleModuleComplete('commands')">Mark as Complete</button>
                 </div>
@@ -147,235 +181,257 @@
             </div>
         </section>
 
-        <!-- Quick Practice Tools -->
-        <section class="card-section">
-            <h2 class="section-title">🔁 Quick Practice</h2>
-            <div class="dashboard-grid">
-                
-                <div class="card">
-                    <img src="dice.svg" alt="Drill" style="height: 50px; width: 50px; margin-bottom: 15px;">
-                    <h3 style="color: var(--primary-orange);">Random Verb Drill</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Test yourself on a random verb + tense</p>
-                    <button class="form-button" onclick="startRandomDrill()">Start Drill</button>
+            <!-- Quick Practice Tools -->
+            <section class="card-section">
+                <h2 class="section-title" style="display: flex;"><img src="volt.svg" style="width: 60px; height: 60px;">Quick Practice</h2>
+                <div class="dashboard-grid" style=" max-width: 2000px; max-height: 5000px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                            
+                            <div class="card">
+                                <img src="dice.svg" alt="Drill" style="height: 50px; width: 50px; margin-bottom: 15px;">
+                                <h3 style="color: var(--primary-orange);">Random Drill</h3>
+                                <p style="font-size: 1.25rem; margin-bottom: 1.5rem;">Test yourself on a random grammar concept</p>
+                                <button class="form-button" onclick="startRandomDrill()">Start Drill</button>
+                            </div>
+            
+                            <div class="card">
+                                <img src="search.svg" alt="Checker" style="height: 50px; width: 50px; margin-bottom: 15px;">
+                                <h3 style="color: var(--primary-orange);">Grammar Checker</h3>
+                                <p style="font-size: 1.25rem; margin-bottom: 1.5rem;">Identify errors in sample sentences</p>
+                                <button class="form-button" onclick="openGrammarChecker()">Start Checker</button>
+                            </div>
+            
+                            <div class="card">
+                                <img src="noplus.svg" alt="Challenge" style="height: 50px; width: 50px; margin-bottom: 15px;">
+                                <h3 style="color: var(--primary-orange);">Challenge Mode</h3>
+                                <p style="font-size: 1.25rem; margin-bottom: 1.5rem;">Timed quiz: 15 questions in 3 minutes</p>
+                                <button class="form-button" style="background-color: var(--accent-blue-light);" onclick="startChallenge()">Start Challenge</button>
+                            </div>
+            
+                        </div>
+                    </section>
+            
+            <!-- Downloadable Resources -->
+            <section class="card-section">
+                <h2 class="section-title" style="display: flex;"><img src="download.svg" style="width: 60px; height: 60px;">Downloadables</h2>
+                <div class="dashboard-grid" style=" max-width: 2000px; max-height: 5000px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <a href="#" class="card" style="text-decoration: none;" onclick="downloadAllCheatSheets()">
+                        <img src="pdf.svg" alt="PDF" style="height: 80px; width: 80px; margin-bottom: 10px;">
+                        <h4 style="color: var(--primary-orange); font-size: 1.5rem;">Complete Grammar Pack</h4>
+                        <p style="font-size: 1.25rem; color: var(--text-dark);">All 8 topics reference guide (3.2 MB)</p>
+                    </a>
+                    <a href="#" class="card" style="text-decoration: none;" onclick="downloadPracticeWorkbook()">
+                        <img src="nobook.svg" alt="Workbook" style="height: 80px; width: 80px; margin-bottom: 10px;">
+                        <h4 style="color: var(--primary-orange); font-size: 1.5rem;">Grammar Workbook</h4>
+                        <p style="font-size: 1.25rem; color: var(--text-dark);">100+ exercises with answer key (2.5 MB)</p>
+                    </a>
+                    <a href="#" class="card" style="text-decoration: none;" onclick="downloadFlashcards()">
+                        <img src="stack.svg" alt="Flashcards" style="height: 80px; width: 80px; margin-bottom: 10px;">
+                        <h4 style="color: var(--primary-orange); font-size: 1.5rem;">Printable Flashcards</h4>
+                        <p style="font-size: 1.25rem; color: var(--text-dark);">Study cards for all topics (PDF, 1.1 MB)</p>
+                    </a>
                 </div>
-
-                <div class="card">
-                    <img src="search.svg" alt="Finder" style="height: 50px; width: 50px; margin-bottom: 15px;">
-                    <h3 style="color: var(--primary-orange);">Verb Finder</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Look up any verb's full conjugation table</p>
-                    <button class="form-button" onclick="openVerbFinder()">Find Verb</button>
-                </div>
-
-                <div class="card">
-                    <img src="noplus.svg" alt="Challenge" style="height: 50px; width: 50px; margin-bottom: 15px;">
-                    <h3 style="color: var(--primary-orange);">Challenge Mode</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Timed quiz: 20 verbs in 5 minutes</p>
-                    <button class="form-button" style="background-color: var(--accent-blue-light);" onclick="startChallenge()">Start Challenge</button>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Downloadable Resources -->
-        <section class="card-section">
-            <h2 class="section-title">📥 Downloadables</h2>
-            <div class="dashboard-grid">
-                <a href="#" class="card" style="text-decoration: none;" onclick="downloadAllCheatSheets()">
-                    <img src="pdf.svg" alt="PDF Pack" style="height: 40px; width: 40px; margin-bottom: 10px;">
-                    <h4 style="color: var(--primary-orange);">All Tenses PDF Pack</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-dark);">Complete conjugation reference (2.1 MB)</p>
-                </a>
-                <a href="#" class="card" style="text-decoration: none;" onclick="downloadPracticeWorkbook()">
-                    <img src="nobook.svg" alt="Workbook" style="height: 40px; width: 40px; margin-bottom: 10px;">
-                    <h4 style="color: var(--primary-orange);">Practice Workbook</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-dark);">50+ exercises with answer key (1.8 MB)</p>
-                </a>
-                <a href="#" class="card" style="text-decoration: none;" onclick="downloadAudioPack()">
-                    <img src="headphones.svg" alt="Audio Pack" style="height: 40px; width: 40px; margin-bottom: 10px;">
-                    <h4 style="color: var(--primary-orange);">Pronunciation Pack</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-dark);">Native speaker recordings (ZIP, 15 MB)</p>
-                </a>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Lesson Modal -->
-    <div id="lessonModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeLesson()">&times;</span>
-            <h3 id="lessonTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Verb Lesson</h3>
-            <div id="lessonContent" style="margin-top: 1rem; text-align: left;">
-                <p>Loading lesson...</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quiz Modal -->
-    <div id="quizModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeQuiz()">&times;</span>
-            <h3 id="quizTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Practice Quiz</h3>
-            <div id="quizContent" style="margin-top: 1rem; text-align: left;">
-                <!-- Quiz loads here -->
-            </div>
-        </div>
-    </div>
-    <!-- Community Sets Section -->
-    <section class="card-section" style="margin-top: 2rem;">
-        <h2 class="section-title">Community Sets</h2>
-        <p style="margin-bottom: 1.5rem; color: var(--text-dark);">Study flashcards, notes, and links created by other students!</p>
+            </section>
         
+    <!-- Common Mistakes Reference -->
+    <section class="card-section">
+        <h2 class="section-title" style="display: flex;"><img src="hazard.svg" style="width: 60px; height: 60px;">Common Mistakes</h2>
+        <div class="dashboard-grid" style="max-width: 1000px; max-height: 1000px; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+            <div class="card" style="align-items: center; text-align: center;">
+                <h4 style="color: var(--primary-orange); margin-bottom: 5px; font-size: 1.5rem;">Misusing Irregular Present Tense (e.g., "Sabo" vs "Sé")</h4>
+                <p style="font-size: 1.25rem; margin: 0; display: flex;" ><img src="close.svg" style="width: 40px; height: 40px;"> Yo sabo la verdad. (I know the truth.)<br>
+                <p style="font-size: 1.25rem; margin: 0; display: flex;" ><img src="check.svg" style="width: 40px; height: 40px;"> Yo sé la verdad. (I know the truth.)<br>
+            </div>
+            <div class="card" style="align-items: center; text-align: center;">
+                <h4 style="color: var(--primary-orange); margin-bottom: 5px; font-size: 1.5rem;">Using Infinitive Instead of Conjugated Verb</h4>
+                <p style="font-size: 1.25rem; margin: 0; display: flex;" ><img src="close.svg" style="width: 40px; height: 40px;"> Yo comer pizza ahora. (I eat pizza now.)<br>
+                <p style="font-size: 1.25rem; margin: 0; display: flex;" ><img src="check.svg" style="width: 40px; height: 40px;"> Yo como pizza ahora. (I eat pizza now.) <br>
+            </div>
+            <div class="card" style="align-items: center; text-align: center;">
+                <h4 style="color: var(--primary-orange); margin-bottom: 5px; font-size: 1.5rem;">3. Adding an 'S' to the Preterite Tense (Tú form)</h4>
+                <p style="font-size: 1.25rem; margin: 0; display: flex;" ><img src="close.svg" style="width: 40px; height: 40px;"> ¿Qué comprastes? (What did you buy?)<br>
+                <p style="font-size: 1.25rem; margin: 0; display: flex;" ><img src="check.svg" style="width: 40px; height: 40px;"> ¿Qué compraste? (What did you buy?)<br>
+            </div>
+            <div class="card" style="align-items: center; text-align: center;">
+                <h4 style="color: var(--primary-orange); margin-bottom: 5px; font-size: 1.5rem;">Overusing the Subject Pronoun</h4>
+                <p style="font-size: 1.25rem; margin: 0; display: flex;" ><img src="close.svg" style="width: 40px; height: 40px;"> Yo tengo un perro, yo vivo en Madrid. (I have a dog, I live in Madrid.)<br>
+                <p style="font-size: 1.25rem; margin: 0; display: flex;" ><img src="check.svg" style="width: 40px; height: 40px;"> Tengo un perro, vivo en Madrid. (I have a dog, I live in Madrid.)<br>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Sets Section -->
+    <section class="card-section" style=" margin-top: 2rem; max-width: 1000px; max-height: 1000px; overflow: scroll; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+        <h2 class="section-title">Community Sets</h2>
+        <button class="form-button" style="margin-bottom: 2rem;" onclick="openCreateSetModal()">+ Create New Set</button>
+
         <div class="tabs-container">
-            <button class="tab-btn active" onclick="switchResourceTab('community')" id="tab-community">Community Sets</button>
-            <button class="tab-btn" onclick="switchResourceTab('my')" id="tab-my">My Sets</button>
+            <button class="tab-btn active" onclick="switchResourceTab('community')" id="tab-community" style="font-size: 1.5rem;">Community Sets</button>
+            <button class="tab-btn" onclick="switchResourceTab('my')" id="tab-my" style="font-size: 1.5rem;">My Sets</button>
         </div>
 
         <!-- NEW: Search and Filter Bar -->
         <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; max-width: 1000px; width: 100%; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 200px; position: relative;">
-                <img src="search.svg" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); height: 15px; filter: opacity(0.5);">
-                <input type="text" id="set-search" placeholder="Search by title or author..." onkeyup="renderStudySets()" style="width: 100%; padding: 10px 10px 10px 35px; border-radius: 8px; border: 1px solid var(--border-gray); font-family: var(--font-body);">
+                <img src="search.svg" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); height: 50px;">
+                <input type="text" id="set-search" placeholder="Search by title or author..." onkeyup="renderStudySets()" style="width: 100%; padding: 10px 10px 10px 35px; border-radius: 8px; border: 1px solid var(--border-gray); font-family: var(--font-body); font-size: 1.25rem;">
             </div>
-            <select id="set-filter" onchange="renderStudySets()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-gray); font-family: var(--font-body); min-width: 150px;">
-                <option value="all">All Types</option>
-                <option value="flashcards">🃏 Flashcards Only</option>
-                <option value="notes">📝 Notes Only</option>
-                <option value="links">🔗 Links Only</option>
+            <select id="set-filter" onchange="renderStudySets()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-gray); font-family: var(--font-body); min-width: 150px; display: flex; align-items: center; font-size: 1.25rem;">
+                <option value="all" style="font-size: 1.25rem;">All Types</option>
+                <option value="flashcards">Flashcards Only</option>
+                <option value="notes">Notes Only</option>
+                <option value="links">Links Only</option>
             </select>
         </div>
         
-        <div class="dashboard-grid" id="study-sets-container" style="max-width: 1000px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+        <div class="dashboard-grid" id="study-sets-container" style="width: 500px; max-width: 1000px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
             <!-- Sets loaded by JS -->
         </div>
 
-            <button class="form-button" style="margin-top: 2rem;" onclick="openCreateSetModal()">+ Create New Set</button>
+
         </section>
 
     </main>
 
-    <!-- ====== MODALS ====== -->
-    
-    <!-- Generic Lesson/Content Modal (CRITICAL FIX: REQUIRED TO OPEN STUDY SETS) -->
+<!-- ====== NEW MODALS (Paste below </main>) ====== -->
+
+    <!-- Generic Lesson/Content Modal -->
     <div id="lessonModal" class="modal hidden">
         <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
             <span class="close-modal" onclick="closeLesson()">&times;</span>
             <h3 id="lessonTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Study Set</h3>
-            <div id="lessonContent" style="margin-top: 1rem; text-align: left;">
-                <!-- Content loads here -->
-            </div>
+            <div id="lessonContent" style="margin-top: 1.5rem; text-align: left;"></div>
         </div>
     </div>
 
-    <!-- Create Set Modal -->
+    <!-- Create Set Modal (Now with Quizlet Import) -->
     <div id="createSetModal" class="modal hidden">
         <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
             <span class="close-modal" onclick="closeCreateSetModal()">&times;</span>
-            <h3 style="color: var(--primary-orange); margin-bottom: 1rem;">Create a Study Set</h3>
+            <h3 style="color: var(--primary-orange); margin-bottom: 1.5rem;">Create a Study Set</h3>
             
-            <!-- Basic Info -->
             <div class="form-group"><input type="text" id="set-title" placeholder="Set Title (e.g. Test 1 Review)" required></div>
             <div class="form-group"><input type="text" id="set-desc" placeholder="Short description" required></div>
             
-            <!-- Resource Type Selector -->
+            <!-- QUIZLET IMPORT TOOL -->
+            <div class="import-box">
+                <h4 style="font-size: 1.5rem; color: var(--accent-blue-dark); margin-bottom: 5px; display: flex;"><img src="volt.svg" style="width: 30px; height: 30px;"> Import from Quizlet</h4>
+                <p style="font-size: 1.25rem; margin-bottom: 10px; color: var(--text-dark);">Copy your terms from Quizlet (Export > Copy text) and paste them below.</p>
+                <textarea id="quizlet-import-text" rows="3" placeholder="Term    Definition" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid var(--border-gray); margin-bottom: 10px; font-size: 1.5rem;"></textarea>
+                <button type="button" class="form-button secondary" onclick="importFromQuizlet()" style="padding: 5px 15px; font-size: 1.5rem;">Import Terms</button>
+            </div>
+
             <div class="form-group">
                 <label style="color: var(--text-dark); font-weight: 600; display: block; margin-bottom: 0.5rem;">Resource Type</label>
                 <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <label class="resource-type-option">
-                        <input type="radio" name="resource-type" value="flashcards" checked onchange="toggleResourceFields()">
-                        <span class="resource-type-chip">🃏 Flashcards</span>
-                    </label>
-                    <label class="resource-type-option">
-                        <input type="radio" name="resource-type" value="notes" onchange="toggleResourceFields()">
-                        <span class="resource-type-chip">📝 Notes</span>
-                    </label>
-                    <label class="resource-type-option">
-                        <input type="radio" name="resource-type" value="links" onchange="toggleResourceFields()">
-                        <span class="resource-type-chip">🔗 Resources</span>
-                    </label>
-                    <label class="resource-type-option">
-                        <input type="radio" name="resource-type" value="mixed" onchange="toggleResourceFields()">
-                        <span class="resource-type-chip">✨ Mixed</span>
-                    </label>
+                    <label class="resource-type-option"><input type="radio" name="resource-type" value="flashcards" checked onchange="toggleResourceFields()"><span class="resource-type-chip"><img src="cards.svg" style="width: 30px; height: 30px;"> Flashcards</span></label>
+                    <label class="resource-type-option"><input type="radio" name="resource-type" value="notes" onchange="toggleResourceFields()"><span class="resource-type-chip"><img src="memopencil.svg" style="width: 30px; height: 30px;"> Notes</span></label>
+                    <label class="resource-type-option"><input type="radio" name="resource-type" value="links" onchange="toggleResourceFields()"><span class="resource-type-chip"><img src="pdf.svg" style="width: 30px; height: 30px;"> Resources</span></label>
+                    <label class="resource-type-option"><input type="radio" name="resource-type" value="mixed" onchange="toggleResourceFields()"><span class="resource-type-chip"><img src="sparkle.svg" style="width: 30px; height: 30px;"> Mixed</span></label>
                 </div>
             </div>
 
-            <!-- Flashcards Section -->
             <div id="flashcards-section">
-                <h4 style="color: var(--accent-blue-dark); margin: 1rem 0 0.5rem;">Flashcard Terms</h4>
+                <h4 style="color: var(--accent-blue-dark); margin: 1.5rem 0 0.5rem;">Flashcard Terms</h4>
                 <div id="terms-container"></div>
                 <button class="form-button secondary" onclick="addTermRow()" style="width: 100%; margin: 0.5rem 0;">+ Add Term</button>
             </div>
 
-            <!-- Notes Section -->
             <div id="notes-section" class="hidden">
-                <h4 style="color: var(--accent-blue-dark); margin: 1rem 0 0.5rem;">Your Notes</h4>
-                <div class="form-group">
-                    <textarea id="notes-content" rows="10" placeholder="Write your study notes here... Supports basic markdown: **bold**, *italic*, - lists" style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-gray); border-radius: 8px; font-family: inherit; resize: vertical;"></textarea>
-                </div>
+                <h4 style="color: var(--accent-blue-dark); margin: 1.5rem 0 0.5rem;">Your Notes</h4>
+                <div class="form-group"><textarea id="notes-content" rows="6" placeholder="Write study notes here..." style="width: 100%; padding: 1.25rem; border: 2px solid var(--border-gray); border-radius: 8px; font-size: 1.25rem;"></textarea></div>
             </div>
 
-            <!-- Links Section -->
             <div id="links-section" class="hidden">
-                <h4 style="color: var(--accent-blue-dark); margin: 1rem 0 0.5rem;">Resource Links</h4>
+                <h4 style="color: var(--accent-blue-dark); margin: 1.5rem 0 0.5rem; font-size:1.5rem;">Resource Links</h4>
+                <p style="font-size: 1.25rem; color: #666; margin-bottom: 10px; font-size:1.25rem;">Paste a YouTube link and we'll embed the video automatically!</p>
                 <div id="links-container"></div>
                 <button class="form-button secondary" onclick="addLinkRow()" style="width: 100%; margin: 0.5rem 0;">+ Add Link</button>
             </div>
 
-            <!-- Visibility & Tags -->
-            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0;">
-                <div class="form-group" style="flex: 1; min-width: 200px;">
-                    <label style="color: var(--text-dark);">Tags (comma-separated)</label>
-                    <input type="text" id="set-tags" placeholder="e.g. preterite, irregular">
-                </div>
-                <div class="form-group" style="display:flex; align-items:center; gap: 10px;">
-                    <input type="checkbox" id="set-public" checked style="width: auto;"> 
-                    <label style="color: var(--text-dark);">Make public to community?</label>
-                </div>
+            <div style="display: flex; align-items:center; gap: 10px; margin: 1.5rem 0;">
+                <input type="checkbox" id="set-public" checked style="width: auto;"> <label style=" font-size: 1.5rem; color: var(--text-dark);">Make public to community?</label>
             </div>
-
             <button class="form-button" onclick="saveStudySet()" style="width: 100%; background: var(--accent-blue-light);">Save & Publish Set</button>
         </div>
     </div>
 
-    <!-- Custom Flashcard Modal (For opening User Sets) -->
+    <!-- Smart Flashcard Modal (With Right/Wrong tracking) -->
     <div id="customFlashcardModal" class="modal hidden">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 600px;">
             <span class="close-modal" onclick="closeCustomFlashcards()">&times;</span>
-            <h3 id="customFlashcardTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Study Set</h3>
-            <div style="margin-top: 1rem; text-align: center;">
-                <div id="customFlashcard" style="background: var(--bg-light-orange); padding: 3rem; border-radius: 15px; cursor: pointer; min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; border: 2px solid var(--border-gray);">
-                    <p id="customFlashcardFront" style="font-size: 2rem; color: var(--primary-orange); font-family: var(--font-heading);">Click to flip</p>
-                    <p id="customFlashcardBack" class="hidden" style="font-size: 1.5rem; color: var(--accent-blue-dark);">Translation</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">
+                <h3 id="customFlashcardTitle" style="color: var(--primary-orange); margin: 0;">Study Set</h3>
+                <span id="customCardCounter" style="font-weight: bold; color: var(--accent-blue-dark); font-size:1.25rem;">1 / 10</span>
+            </div>
+            
+            <div id="flashcard-play-area" style="margin-top: 1.5rem; text-align: center;">
+                <div id="customFlashcard" style="background: var(--bg-white); padding: 4rem 2rem; border-radius: 15px; cursor: pointer; min-height: 250px; display: flex; align-items: center; justify-content: center; flex-direction: column; border: 2px solid var(--border-gray); box-shadow: var(--shadow-sm); transition: 0.3s;">
+                    <p id="customFlashcardFront" style="font-size: 2.5rem; color: var(--primary-orange); font-family: var(--font-heading); margin:0;">Word</p>
+                    <p id="customFlashcardBack" class="hidden" style="font-size: 1.8rem; color: var(--text-dark); margin:0;">Definition</p>
+                    <p style="font-size: 1.25rem; color: #aaa; margin-top: 50px; position: absolute; bottom: 10px;">Click card to flip</p>
                 </div>
-                <div style="margin-top: 1rem; display: flex; gap: 10px; justify-content: center; align-items: center;">
-                    <button class="form-button secondary" onclick="prevCustomCard()">Prev</button>
-                    <span id="customCardCounter" style="padding: 10px; font-weight: 600;">1 / 10</span>
-                    <button class="form-button secondary" onclick="nextCustomCard()">Next</button>
+                
+                <div style="margin-top: 1.5rem; display: flex; gap: 15px; justify-content: center;">
+                    <button class="flashcard-action-btn btn-wrong" onclick="markFlashcard(false)" style="font-size: 1.5rem; display: flex;"><img src="close.svg" style="width: 50px;"> Still Learning</button>
+                    <button class="flashcard-action-btn btn-right" onclick="markFlashcard(true)" style="font-size: 1.5rem; display: flex;"><img src="check.svg" style="width: 50px;">Know It</button>
                 </div>
+            </div>
+
+            <!-- Flashcard Summary Screen (Hidden initially) -->
+            <div id="flashcard-summary-area" class="hidden" style="text-align: center; padding: 2rem 0;">
+                <h2 style="color: var(--primary-orange); font-size: 2.5rem; margin-bottom: 10px; display: flex; justify-content: center; align-items: center;">Great Job! <img src="party.svg" style="width: 50px;"></h2>
+                <div style="display: flex; justify-content: center; gap: 2rem; margin: 1.5rem 0;">
+                    <div><span style="font-size: 2rem; color: #2ecc71; font-weight: bold;" id="fc-known-score">0</span><p>Mastered</p></div>
+                    <div><span style="font-size: 2rem; color: #e74c3c; font-weight: bold;" id="fc-learning-score">0</span><p>Learning</p></div>
+                </div>
+                <button class="form-button" onclick="startCustomFlashcardsFromSet(currentPlayingSetId)" style="width: 100%;">Study Again</button>
             </div>
         </div>
     </div>
 
-    <!-- Original Flashcard Modal (For the hard-coded vocab buttons) -->
-    <div id="flashcardModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeOldFlashcards()">&times;</span>
-            <h3 id="flashcardTitle" style="color: var(--primary-orange); border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">Flashcards</h3>
-            <div id="flashcardContent" style="margin-top: 1rem; text-align: center;">
-                <div id="flashcard" style="background: var(--bg-light-orange); padding: 3rem; border-radius: 15px; cursor: pointer; min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; border: 2px solid var(--border-gray);">
-                    <p id="flashcardFront" style="font-size: 2rem; color: var(--primary-orange); font-family: var(--font-heading);">Click to flip</p>
-                    <p id="flashcardBack" class="hidden" style="font-size: 1.5rem; color: var(--accent-blue-dark);">Translation</p>
+    <!-- Multiple Choice Quiz Modal -->
+    <div id="quizModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" onclick="closeQuiz()">&times;</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-gray); padding-bottom: 10px;">
+                <h3 id="quizTitle" style="color: var(--primary-orange); margin: 0;">Practice Quiz</h3>
+                <span id="quizCounter" style="font-weight: bold; color: var(--accent-blue-dark); font-size: 1.25rem;">Q: 1/10</span>
+            </div>
+            
+            <div id="quiz-play-area" style="margin-top: 1.5rem;">
+                <h2 id="quizQuestion" style="text-align: center; margin-bottom: 2rem; color: var(--text-dark); font-size: 2rem;">Question</h2>
+                <div id="quizOptionsContainer">
+                    <!-- Buttons generated by JS -->
                 </div>
-                <div style="margin-top: 1rem; display: flex; gap: 10px; justify-content: center; align-items: center;">
-                    <button class="form-button secondary" onclick="prevCard()">Prev</button>
-                    <span id="cardCounter" style="padding: 10px; font-weight: 600;">1 / 10</span>
-                    <button class="form-button secondary" onclick="nextCard()">Next</button>
-                </div>
+                <button id="quizNextBtn" class="form-button hidden" onclick="nextQuizQuestion()" style="width: 100%; margin-top: 1.5rem;">Next Question</button>
+            </div>
+
+            <!-- Quiz Summary Screen -->
+            <div id="quiz-summary-area" class="hidden" style="text-align: center; padding: 2rem 0;">
+                <h2 style="color: var(--primary-orange); font-size: 2.5rem; margin-bottom: 10px;">Quiz Complete!</h2>
+                <p style="font-size: 1.5rem; margin-bottom: 1.5rem;">Your Score: <strong id="quizFinalScore" style="color: var(--accent-blue-dark); font-size: 1.5rem;">0%</strong></p>
+                <button class="form-button" onclick="closeQuiz()" style="width: 100%;">Return to Resources</button>
             </div>
         </div>
     </div>
 
+    <!-- YouTube Video Modal -->
+    <div id="videoModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 800px; padding: 15px; background: black;">
+            <span class="close-modal" onclick="document.getElementById('videoModal').classList.add('hidden')" style="color: white; top: -5px; right: 5px;">&times;</span>
+            <div class="video-container" id="videoContainer">
+                <!-- iframe injected by JS -->
+            </div>
+        </div>
+    </div>
+<!-- Floating Accessibility Button -->
+<button class="a11y-fab" onclick="document.getElementById('a11y-menu').classList.toggle('show')"><img src="eye.svg"></button>
+<div id="a11y-menu" class="a11y-menu">
+    <h4 style="margin-bottom: 5px; font-size: 2rem;">Accessibility</h4>
+    <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-dark" onchange="toggleA11y('dark')"> Dark Mode</label>
+    <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-dyslexia" onchange="toggleA11y('dyslexia')"> Dyslexia Font</label>
+    <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-colorblind" onchange="toggleA11y('colorblind')"> High Contrast</label>
+</div>
     <footer>
         <p>&copy; 2026 Paso a Paso. Good luck! ¡Buena suerte!</p>
     </footer>

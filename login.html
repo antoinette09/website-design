@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        // This is the ONLY bit that MUST be here to kill the flash
+        const s = JSON.parse(localStorage.getItem('a11ySettings') || '{}');
+        if (s.dark || s.colorblind) document.documentElement.style.backgroundColor = '#121212';
+        if (s.dark) document.documentElement.classList.add('dark-mode');
+        if (s.colorblind) document.documentElement.classList.add('colorblind-mode');
+        if (s.dyslexia) document.documentElement.classList.add('dyslexia-mode');
+
+      </script>
     <title>Paso a Paso - Q&A Forum</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +21,30 @@
 </head>
 
 <body>
-    <div id="announcement-banner"></div>
+<div id="announcement-banner">
+    <span id="announcement-text"></span> <!-- Use a span for the text -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('siteAnnouncement');
+            if (saved && saved.trim() !== "") {
+                const textEl = document.getElementById('announcement-text');
+                if (textEl) {
+                    textEl.textContent = saved;
+                    // Tell the whole page we are ready to show the banner
+                    document.documentElement.classList.add('banner-ready');
+                }
+            } else {
+                // If there's truly no announcement, collapse the box
+                document.getElementById('announcement-banner').style.display = 'none';
+            }
+        })();
+    </script>
+</div>
     <header class="main-header">
         <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
             <a href="index.html" class="logo-link"><span>Paso a Paso</span> <img src="orange.svg" alt="Logo"></a>
+            <button class="hamburger" onclick="document.getElementById('nav-menu').classList.toggle('show')">☰</button>
             <nav class="main-nav">
                 <a href="index.html">Home</a>
                 <a href="resources.html">Resources</a>
@@ -32,7 +60,7 @@
             <div class="auth-header">
                 <h2 id="form-title" style="color: var(--primary-orange);">Student Login</h2>
             </div>
-            <div id="message-area" class="message-box" style="margin-bottom: 1rem;"></div>
+            <div id="message-area" class="message-box" style="margin-bottom: 1.5rem;"></div>
             <form id="auth-form" style="text-align: left;">
                 <div class="form-group"><input type="text" id="username" placeholder="Username" required></div>
                 <div class="form-group"><input type="password" id="password" placeholder="Password" required></div>
@@ -40,42 +68,81 @@
                 <div id="admin-code-group" class="form-group hidden"><input type="password" id="admin-code" placeholder="Admin Code (Optional)"></div>
                 <button type="submit" id="submitbutton" class="form-button" style="width: 100%;">Log In</button>
             </form>
-            <div style="margin-top: 1rem;">
+            <div style="margin-top: 1.5rem;">
                 <span id="toggle-text-span" style="color: var(--text-dark);">Don't have an account? </span>
-                <button class="form-button secondary" onclick="toggleAuthMode()" style="padding: 0.4rem 1rem;">Sign Up</button>
+                <button class="form-button secondary" onclick="toggleAuthMode()" style="padding: 0.4rem 1.5rem;">Sign Up</button>
             </div>
         </div>
 
-        <div id="admin-view" class="hidden" style="width: 100%; max-width: 900px; margin: 0 auto;">
-            <div class="admin-header">
-                <h2 style="color: var(--accent-blue-dark); margin: 0;">Admin Dashboard</h2>
-                <button class="form-button secondary" style="max-width: 300px;" onclick="handleLogout()">Log Out</button>
+        <div id="admin-view" class="hidden" style="width: 100%; max-width: 1000px; margin: 0 auto;">
+            <div class="admin-header" style="background: var(--bg-white); padding: 1.5rem; border-radius: 10px; display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+                <h2 style="color: var(--accent-blue-dark); margin: 0;">Admin Control Panel</h2>
+                <button class="form-button secondary" style="font-size: 1.25rem; width: 200px;"onclick="handleLogout()">Log Out</button>
             </div>
             
-            <div class="card" style="text-align: left; margin-bottom: 2rem;">
-                <h3 style="color: #e67e22; margin-bottom: 1rem;">⏳ Pending Meeting Requests</h3>
-                <div id="pending-requests-container">
-                    <!-- Pending Requests loaded by JS -->
+            <div class="two-col-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <!-- Pending Requests -->
+                <div class="card" style="text-align: left; display: block;">
+                    <div class="card">
+                    <h3 style="color: #e67e22; margin-bottom: 1.5rem; display: flex;"><img src="hourglass.svg" style="width: 50px; height: 50px; display: flex;">Pending Approvals</h3>
+                    </div>
+                    <div id="pending-requests-container" style="max-height: 200px; overflow-y: auto;"></div>
                 </div>
-            </div>
 
-            <div class="two-col-grid">
-                <div class="card" style="text-align: left; height: fit-content;">
-                    <h3 style="color: var(--primary-orange);">Post Announcement</h3>
+                <!-- Post Announcement -->
+                <div class="card" style="text-align: left;">
+                    <h3 style="color: var(--primary-orange);">Global Announcement</h3>
                     <form onsubmit="saveAnnouncement(event)">
-                        <div class="form-group"><textarea id="announcement-input" class="admin-textarea" rows="3" style="width: 100%; padding: 10px;"></textarea></div>
-                        <div style="display: flex; gap: 10px;">
-                            <button type="submit" class="form-button" style="flex: 1;">Post</button>
-                            <button type="button" class="form-button secondary" onclick="clearAnnouncement()" style="flex: 1;">Remove</button>
+                        <textarea id="announcement-input" rows="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-gray); font-size: 1.25rem;" placeholder="Message all students..."></textarea>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button type="submit" class="form-button" style="flex: 1;">Broadcast</button>
+                            <button type="button" class="form-button secondary" onclick="clearAnnouncement()" style="flex: 1;">Clear</button>
                         </div>
                     </form>
                 </div>
-                <div class="card" style="text-align: left;">
-                    <h3 style="color: var(--primary-orange);">Manage Accounts</h3>
-                    <div id="user-list-container" class="user-list"></div>
+            </div>
+
+            <!-- Student Metrics Table -->
+            <div class="card" style="text-align: center; width: 100%;">
+                <h3 style="color: var(--primary-orange); margin-bottom: 10px;">Student Metrics & Progress</h3>
+                <div style="overflow-x: auto;">
+                    <table class="admin-metrics-table">
+                        <thead>
+                            <tr>
+                                <th style="font-size: 1.5rem; padding: 60px;">Student</th>
+                                <th style="font-size: 1.5rem; padding: 60px;">Joined</th>
+                                <th style="font-size: 1.5rem; padding: 60px;">Last Active</th>
+                                <th style="font-size: 1.5rem; padding: 60px;">XP / Level</th>
+                                <th style="font-size: 1.5rem; padding: 60px;">Recent Module</th>
+                                <th style="font-size: 1.5rem; padding: 60px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-metrics-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
+        <!-- DM Mockup Modal -->
+        <div id="dmModal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-modal" onclick="document.getElementById('dmModal').classList.add('hidden')">&times;</span>
+                <h3 id="dm-title" style="color: var(--primary-orange); margin-bottom: 1.5rem;">Message Student</h3>
+                <textarea id="dm-message" rows="4" style="width: 100%; padding: 10px; border-radius: 8px; font-size: 1.5rem;" placeholder="Type your message to the student here..."></textarea>
+                <button class="form-button" style="width: 100%; margin-top: 1.5rem;" onclick="sendDM()">Send Direct Message</button>
+            </div>
+        </div>
+        </div>
     </main>
+    <!-- Floating Accessibility Button -->
+<button class="a11y-fab" onclick="document.getElementById('a11y-menu').classList.toggle('show')"><img src="eye.svg"></button>
+    <div id="a11y-menu" class="a11y-menu">
+        <h4 style="margin-bottom: 5px; font-size: 2rem;">Accessibility</h4>
+        <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-dark" onchange="toggleA11y('dark')"> Dark Mode</label>
+        <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-dyslexia" onchange="toggleA11y('dyslexia')"> Dyslexia Font</label>
+        <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-colorblind" onchange="toggleA11y('colorblind')"> High Contrast</label>
+    </div>
 </body>
 </html>

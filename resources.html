@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        // This is the ONLY bit that MUST be here to kill the flash
+        const s = JSON.parse(localStorage.getItem('a11ySettings') || '{}');
+        if (s.dark || s.colorblind) document.documentElement.style.backgroundColor = '#121212';
+        if (s.dark) document.documentElement.classList.add('dark-mode');
+        if (s.colorblind) document.documentElement.classList.add('colorblind-mode');
+        if (s.dyslexia) document.documentElement.classList.add('dyslexia-mode');
+
+      </script>
     <title>Paso a Paso - Q&A Forum</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +21,30 @@
 </head>
 
 <body>
-    <div id="announcement-banner"></div>
+<div id="announcement-banner">
+    <span id="announcement-text"></span> <!-- Use a span for the text -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('siteAnnouncement');
+            if (saved && saved.trim() !== "") {
+                const textEl = document.getElementById('announcement-text');
+                if (textEl) {
+                    textEl.textContent = saved;
+                    // Tell the whole page we are ready to show the banner
+                    document.documentElement.classList.add('banner-ready');
+                }
+            } else {
+                // If there's truly no announcement, collapse the box
+                document.getElementById('announcement-banner').style.display = 'none';
+            }
+        })();
+    </script>
+</div>
     <header class="main-header">
         <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
             <a href="index.html" class="logo-link"><span>Paso a Paso</span> <img src="orange.svg" alt="Logo"></a>
+            <button class="hamburger" onclick="document.getElementById('nav-menu').classList.toggle('show')">☰</button>
             <nav class="main-nav">
                 <a href="index.html">Home</a>
                 <a href="resources.html"  class="active">Resources</a>
@@ -32,38 +60,45 @@
         <section class="hero-section" style="padding: var(--spacing-lg);">
             <div class="hero-card" style="gap: var(--spacing-xs);">
                 <h1 style="color: var(--primary-orange);">Explore Resources</h1>
-                <p style="color: var(--secondary-orange); font-size: 1.2rem; font-weight: 600;">Made by Students, for Students</p>
+                <p style="color: var(--secondary-orange); font-size: 1.75rem; font-weight: 600;">Made by Students, for Students</p>
             </div>
         </section>
 
         <section class="card-section">
-            <div class="dashboard-grid" style="max-width: 1000px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            <div class="dashboard-grid" style=" max-width: 10000px; max-height: 10000px; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
                 
                 <a href="vocabulary.html" class="quick-link-btn card">
-                    <div class="circle-icon" style="width: 80px; height: 80px;"><img src="spring.svg" alt="Vocabulary"></div>
-                    <span style="font-size: 1.2rem; margin-top: 10px;">Vocabulary</span>
+                    <div class="circle-icon" style="width: 150px; height: 150px;"><img src="spring.svg" alt="Vocabulary" style="width:150px; height: 150px;"></div>
+                    <span style="font-size: 1.75rem; margin-top: 10px;">Vocabulary</span>
                 </a>
 
                 <a href="grammar.html" class="quick-link-btn card">
-                    <div class="circle-icon" style="width: 80px; height: 80px;"><img src="summer.svg" alt="Grammar"></div>
-                    <span style="font-size: 1.2rem; margin-top: 10px;">Grammar</span>
+                    <div class="circle-icon" style="width: 150px; height: 150px;"><img src="summer.svg" alt="Grammar" style="width:150px; height: 150px;"></div>
+                    <span style="font-size: 1.75rem; margin-top: 10px">Grammar</span>
                 </a>
                 
                 <a href="conjugation.html" class="quick-link-btn card">
-                    <div class="circle-icon" style="width: 80px; height: 80px;"><img src="fall.svg" alt="Conjugation"></div>
-                    <span style="font-size: 1.2rem; margin-top: 10px;">Conjugation</span>
+                    <div class="circle-icon" style="width: 150px; height: 150px;"><img src="fall.svg" alt="Conjugation" style="width:150px; height: 150px;"></div>
+                    <span style="font-size: 1.75rem; margin-top: 10px;">Conjugation</span>
                 </a>
 
                 <a href="dictionary.html" class="quick-link-btn card">
-                    <div class="circle-icon" style="width: 80px; height: 80px;"><img src="winter.svg" alt="Dictionary"></div>
-                    <span style="font-size: 1.2rem; margin-top: 10px;">Dictionary</span>
+                    <div class="circle-icon" style="width: 150px; height: 150px;"><img src="winter.svg" alt="Dictionary" style="width:150px; height: 150px;"></div>
+                    <span style="font-size: 1.75rem; margin-top: 10px;">Dictionary</span>
                 </a>
 
             </div>
         </section>
 
     </main>
-
+<!-- Floating Accessibility Button -->
+<button class="a11y-fab" onclick="document.getElementById('a11y-menu').classList.toggle('show')"><img src="eye.svg"></button>
+<div id="a11y-menu" class="a11y-menu">
+    <h4 style="margin-bottom: 5px; font-size: 2rem;">Accessibility</h4>
+    <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-dark" onchange="toggleA11y('dark')"> Dark Mode</label>
+    <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-dyslexia" onchange="toggleA11y('dyslexia')"> Dyslexia Font</label>
+    <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-colorblind" onchange="toggleA11y('colorblind')"> High Contrast</label>
+</div>
     <footer>
         <p>&copy; 2024 Paso a Paso. ¡Buena suerte!</p>
     </footer>

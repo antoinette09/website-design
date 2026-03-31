@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        // This is the ONLY bit that MUST be here to kill the flash
+        const s = JSON.parse(localStorage.getItem('a11ySettings') || '{}');
+        if (s.dark || s.colorblind) document.documentElement.style.backgroundColor = '#121212';
+        if (s.dark) document.documentElement.classList.add('dark-mode');
+        if (s.colorblind) document.documentElement.classList.add('colorblind-mode');
+        if (s.dyslexia) document.documentElement.classList.add('dyslexia-mode');
+      </script>
     <title>Paso a Paso - Q&A Forum</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +20,30 @@
 </head>
 
 <body>
-    <div id="announcement-banner"></div>
+<div id="announcement-banner">
+    <span id="announcement-text"></span> <!-- Use a span for the text -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('siteAnnouncement');
+            if (saved && saved.trim() !== "") {
+                const textEl = document.getElementById('announcement-text');
+                if (textEl) {
+                    textEl.textContent = saved;
+                    // Tell the whole page we are ready to show the banner
+                    document.documentElement.classList.add('banner-ready');
+                }
+            } else {
+                // If there's truly no announcement, collapse the box
+                document.getElementById('announcement-banner').style.display = 'none';
+            }
+        })();
+    </script>
+</div>
     <header class="main-header">
         <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
             <a href="index.html" class="logo-link"><span>Paso a Paso</span> <img src="orange.svg" alt="Logo"></a>
+            <button class="hamburger" onclick="document.getElementById('nav-menu').classList.toggle('show')">☰</button>
             <nav class="main-nav">
                 <a href="index.html"  class="active">Home</a>
                 <a href="resources.html">Resources</a>
@@ -59,7 +86,7 @@
 
                 <!-- Continue Button -->
                 <button id="continue-lesson-btn" class="cta-btn">
-                    <img src="refresh.svg" alt="Continue Lesson Icon"> Continue Lesson
+                    <img src="arrows.svg" alt="Continue Lesson Icon"> Continue Lesson
                 </button>
             </div>
         </section>
@@ -82,7 +109,7 @@
             <div id="coming-up-list" class="coming-up-list">
                 <p>Loading schedule...</p>
             </div>
-            <a href="schedule.html" class="view-all-link">
+            <a href="schedule.html" class="view-all-link" style="font-size: 1.75rem;">
                 View Full Schedule <img src="rightarrow.svg" alt="Arrow Right">
             </a>
         </section>
@@ -147,7 +174,14 @@
         </section>
 
     </main>
-
+<!-- Floating Accessibility Button -->
+<button class="a11y-fab" onclick="document.getElementById('a11y-menu').classList.toggle('show')"><img src="eye.svg"></button>
+<div id="a11y-menu" class="a11y-menu">
+    <h4 style="margin-bottom: 5px; font-size: 2rem;">Accessibility</h4>
+    <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-dark" onchange="toggleA11y('dark')"> Dark Mode</label>
+    <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-dyslexia" onchange="toggleA11y('dyslexia')"> Dyslexia Font</label>
+    <label style="font-size: 1.5rem;"><input type="checkbox" id="toggle-colorblind" onchange="toggleA11y('colorblind')"> High Contrast</label>
+</div>
     <!-- Footer -->
     <footer>
         <p>&copy; 2026 Paso a Paso. Good luck! ¡Buena suerte!</p>
