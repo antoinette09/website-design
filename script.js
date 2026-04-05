@@ -1090,20 +1090,32 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialize sets on load
         window.renderStudySets();
     }
-
-    // Modal Helpers
-    window.closeLesson = function() { document.getElementById('lessonModal')?.classList.add('hidden'); };
-    window.closeCreateSetModal = function() { document.getElementById('createSetModal')?.classList.add('hidden'); };
-    window.closeQuiz = function() { document.getElementById('quizModal')?.classList.add('hidden'); };
-    window.closeCustomFlashcards = function() { document.getElementById('customFlashcardModal')?.classList.add('hidden'); };
     
-    // Global click listener to close modals when clicking the dark background overlay
-    window.addEventListener('click', (e) => { 
+    // 1. Separate the Hamburger Toggle
+    const hamburgerBtn = document.querySelector('.hamburger');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburgerBtn.addEventListener('click', (e) => {
+        // This stops the click from "bubbling" up to the window listener
+        e.stopPropagation(); 
+        navMenu.classList.toggle('show');
+    });
+
+    // 2. Global listener for closing when clicking OUTSIDE
+    window.addEventListener('click', (e) => {
+        // If the menu is open and we click anywhere else, close it
+        if (navMenu.classList.contains('show') && !navMenu.contains(e.target)) {
+            navMenu.classList.remove('show');
+        }
+
+        // Your existing Modal Logic
         if (e.target.classList.contains('modal')) {
             e.target.classList.add('hidden');
-            window.closeYouTubeModal(); // ensure videos stop if they click outside
+            if (typeof window.closeYouTubeModal === 'function') window.closeYouTubeModal();
         }
     });
+
+    
 
 });
 

@@ -74,20 +74,42 @@ html { background-color: var(--bg-white); }
 /* Hamburger Menu (Mobile Only) */
 .hamburger { display: none; background: none; border: none; font-size: 1.8rem; color: var(--primary-orange); cursor: pointer; }
 
-@media (max-width: 768px) {
-    .hamburger { display: block; }
-    .main-nav { 
-        display: none; 
-        flex-direction: column; 
-        position: absolute; 
-        top: 100%; left: 0; width: 100%; 
-        background: var(--bg-white); 
-        padding: 1.5rem; 
-        box-shadow: 0 5px 10px rgba(0,0,0,0.1); 
-    }
-    .main-nav.show { display: flex; }
-    .login-link { margin-top: 10px; text-align: center; }
+/* --- DESKTOP STYLES (Window is LARGER than 768px) --- */
+.hamburger {
+    display: none; /* Hidden on big screens */
 }
+
+.main-nav {
+    display: flex; /* Visible on big screens */
+}
+
+/* --- MOBILE STYLES (Window is SMALLER than 768px) --- */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block !important; /* Force it to show when window shrinks */
+    }
+
+    @media (max-width: 768px) {
+        /* 1. Force it to hide by default on small screens */
+        .main-nav { 
+            display: none !important; /* The !important ensures it stays hidden */
+            flex-direction: column; 
+            position: absolute; 
+            top: 100%; left: 0; width: 100%; 
+            background: white; 
+            padding: 1.5rem; 
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1); 
+            z-index: 1000;
+        }
+    
+        /* 2. Only show it when the 'show' class is added by JS */
+        .main-nav.show { 
+            display: flex !important; 
+        }
+    }
+    
+}
+
 
 /* Base Styles */
 * {

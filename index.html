@@ -43,8 +43,9 @@
         <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
             <a href="index.html" class="logo-link"><span>Paso a Paso</span> <img src="orange.svg" alt="Logo"></a>
-            <button class="hamburger" onclick="document.getElementById('nav-menu').classList.toggle('show')">☰</button>
-            <nav class="main-nav">
+            <button class="hamburger">☰</button>
+            <nav id="nav-menu" class="main-nav">
+
                 <a href="index.html"  class="active">Home</a>
                 <a href="resources.html">Resources</a>
                 <a href="schedule.html">Schedule</a>
@@ -53,6 +54,20 @@
             </nav>
         </div>
     </header>
+
+    <!-- Anti-Flash Script for Login Button -->
+    <script>
+        (function() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (user) {
+                const loginLink = document.getElementById('login-status-link');
+                if (loginLink) {
+                    loginLink.innerHTML = user.role === 'admin' ? 'Admin Panel' : 'Log Out';
+                    loginLink.href = user.role === 'admin' ? 'login.html' : '#';
+                }
+            }
+        })();
+    </script>
 
     <!-- Main Content -->
     <main class="container">

@@ -44,8 +44,9 @@
         <div class="header-content">
             <a href="login.html" id="login-status-link" class="login-link">Login</a>
             <a href="index.html" class="logo-link"><span>Paso a Paso</span> <img src="orange.svg" alt="Logo"></a>
-            <button class="hamburger" onclick="document.getElementById('nav-menu').classList.toggle('show')">☰</button>
-            <nav class="main-nav">
+            <button class="hamburger">☰</button>
+            <nav id="nav-menu" class="main-nav">
+
                 <a href="index.html">Home</a>
                 <a href="resources.html">Resources</a>
                 <a href="schedule.html">Schedule</a>
@@ -54,6 +55,20 @@
             </nav>
         </div>
     </header>
+
+    <!-- Anti-Flash Script for Login Button -->
+    <script>
+        (function() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (user) {
+                const loginLink = document.getElementById('login-status-link');
+                if (loginLink) {
+                    loginLink.innerHTML = user.role === 'admin' ? 'Admin Panel' : 'Log Out';
+                    loginLink.href = user.role === 'admin' ? 'login.html' : '#';
+                }
+            }
+        })();
+    </script>
 
     <main class="container">
         
@@ -209,57 +224,6 @@
 
             </div>
         </section>
-
-            <!-- Quick Practice Tools -->
-            <section class="card-section">
-                <h2 class="section-title" style="display: flex;"><img src="volt.svg" style="width: 60px; height: 60px;">Quick Practice</h2>
-                <div class="dashboard-grid" style=" max-width: 2000px; max-height: 5000px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                            
-                            <div class="card">
-                                <img src="dice.svg" alt="Drill" style="height: 50px; width: 50px; margin-bottom: 15px;">
-                                <h3 style="color: var(--primary-orange);">Random Drill</h3>
-                                <p style="font-size: 1.25rem; margin-bottom: 1.5rem;">Test yourself on a random grammar concept</p>
-                                <button class="form-button" onclick="startRandomDrill()">Start Drill</button>
-                            </div>
-            
-                            <div class="card">
-                                <img src="search.svg" alt="Checker" style="height: 50px; width: 50px; margin-bottom: 15px;">
-                                <h3 style="color: var(--primary-orange);">Grammar Checker</h3>
-                                <p style="font-size: 1.25rem; margin-bottom: 1.5rem;">Identify errors in sample sentences</p>
-                                <button class="form-button" onclick="openGrammarChecker()">Start Checker</button>
-                            </div>
-            
-                            <div class="card">
-                                <img src="noplus.svg" alt="Challenge" style="height: 50px; width: 50px; margin-bottom: 15px;">
-                                <h3 style="color: var(--primary-orange);">Challenge Mode</h3>
-                                <p style="font-size: 1.25rem; margin-bottom: 1.5rem;">Timed quiz: 15 questions in 3 minutes</p>
-                                <button class="form-button" style="background-color: var(--accent-blue-light);" onclick="startChallenge()">Start Challenge</button>
-                            </div>
-            
-                        </div>
-                    </section>
-            
-            <!-- Downloadable Resources -->
-            <section class="card-section">
-                <h2 class="section-title" style="display: flex;"><img src="download.svg" style="width: 60px; height: 60px;">Downloadables</h2>
-                <div class="dashboard-grid" style=" max-width: 2000px; max-height: 5000px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                    <a href="#" class="card" style="text-decoration: none;" onclick="downloadAllCheatSheets()">
-                        <img src="pdf.svg" alt="PDF" style="height: 80px; width: 80px; margin-bottom: 10px;">
-                        <h4 style="color: var(--primary-orange); font-size: 1.5rem;">Complete Grammar Pack</h4>
-                        <p style="font-size: 1.25rem; color: var(--text-dark);">All 8 topics reference guide (3.2 MB)</p>
-                    </a>
-                    <a href="#" class="card" style="text-decoration: none;" onclick="downloadPracticeWorkbook()">
-                        <img src="nobook.svg" alt="Workbook" style="height: 80px; width: 80px; margin-bottom: 10px;">
-                        <h4 style="color: var(--primary-orange); font-size: 1.5rem;">Grammar Workbook</h4>
-                        <p style="font-size: 1.25rem; color: var(--text-dark);">100+ exercises with answer key (2.5 MB)</p>
-                    </a>
-                    <a href="#" class="card" style="text-decoration: none;" onclick="downloadFlashcards()">
-                        <img src="stack.svg" alt="Flashcards" style="height: 80px; width: 80px; margin-bottom: 10px;">
-                        <h4 style="color: var(--primary-orange); font-size: 1.5rem;">Printable Flashcards</h4>
-                        <p style="font-size: 1.25rem; color: var(--text-dark);">Study cards for all topics (PDF, 1.1 MB)</p>
-                    </a>
-                </div>
-            </section>
         
     <!-- Common Mistakes Reference -->
     <section class="card-section">
